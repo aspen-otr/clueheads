@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dm7vuwxtg3460"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0r1bn"]
+font_size = 50
+font_color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" unique_id=942190368]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=28929102]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.5
+offset_top = -185.5
+offset_right = 168.5
+offset_bottom = 185.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect" unique_id=1498583068]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer" unique_id=286763521]
+layout_mode = 2
+text = "Title"
+label_settings = SubResource("LabelSettings_0r1bn")
+horizontal_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect/VBoxContainer" unique_id=2106113602]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0, 0, 1, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer" unique_id=1004694984]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Button" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer" unique_id=145161978]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Btn1"
+
+[node name="Button2" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer" unique_id=1196587035]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Btn2"

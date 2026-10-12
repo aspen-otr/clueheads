@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Clueheads"
-run/main_scene="uid://dm7vuwxtg3460"
+run/main_scene="uid://cavnxmxg3cyrl"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Popups="*uid://ihynpbig6t2e"
 
 [display]
 

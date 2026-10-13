@@ -2,10 +2,15 @@ extends Node
 class_name Card
 
 enum Type { SUSPECT, ROOM, WEAPON  }
+const DEFAULT_TYPES: Array[Type] = [Type.SUSPECT, Type.ROOM, Type.WEAPON]
 
 enum Suspect { MissScarlett, ColonelMustard, ProfessorPlum, MrGreen }
 enum Weapon { Revolver, Candlestick }
 enum Room { Library, Kitchen, Conservatory, BilliardsRoom }
+
+static var suspect_lut: Array[Suspect] = []
+static var weapon_lut: Array[Weapon] = []
+static var room_lut: Array[Room] = []
 
 @export var type: Type
 @export var image: Texture2D
@@ -15,4 +20,9 @@ enum Room { Library, Kitchen, Conservatory, BilliardsRoom }
 @export var room: Room
 
 func _init():
-	pass
+	for key in Suspect.keys():
+		suspect_lut[Suspect[key]] = key
+	for key in Weapon.keys():
+		weapon_lut[Weapon[key]] = key
+	for key in Room.keys():
+		room_lut[Room[key]] = key

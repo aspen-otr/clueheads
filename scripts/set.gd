@@ -5,7 +5,7 @@ static var types: Array[Card.Type] = [Card.Type.SUSPECT, Card.Type.ROOM, Card.Ty
 var cards: Array[Card]
 
 static func add_type(type: Card.Type):
-	if not type in Set.types:
+	if type not in Set.types:
 		Set.types.append(type)
 
 static func remove_type(type: Card.Type):

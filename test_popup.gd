@@ -1,5 +1,6 @@
 extends Button
 
-
 func _on_pressed() -> void:
-	Popups.show_popup_accept_deny("Testing")
+	var result = await Popups.accept_deny("Testing")
+	print(result)
+	

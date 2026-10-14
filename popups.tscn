@@ -2,10 +2,6 @@
 
 [ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://popup_accept_deny.gd" id="1_w2jk7"]
 
-[sub_resource type="Theme" id="Theme_2lnam"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2jgpx"]
-
 [sub_resource type="LabelSettings" id="LabelSettings_0r1bn"]
 font_size = 32
 font_color = Color(0, 0, 0, 1)
@@ -23,20 +19,37 @@ script = ExtResource("1_w2jk7")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=266537817]
 
-[node name="PopupAcceptDeny" type="PopupPanel" parent="CanvasLayer" unique_id=1838951175]
+[node name="PopupAcceptDeny" type="Window" parent="CanvasLayer" unique_id=1195537575]
 unique_name_in_owner = true
+transparent_bg = true
+canvas_item_default_texture_filter = 4
+canvas_item_default_texture_repeat = 3
 oversampling_override = 1.0
 initial_position = 1
-size = Vector2i(258, 107)
-theme = SubResource("Theme_2lnam")
-theme_override_styles/panel = SubResource("StyleBoxFlat_2jgpx")
+size = Vector2i(253, 100)
+visible = false
+wrap_controls = true
+transient = true
+exclusive = true
+unresizable = true
+borderless = true
+transparent = true
+popup_wm_hint = true
+minimize_disabled = true
+maximize_disabled = true
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PopupAcceptDeny" unique_id=1154376760]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.74978, 0.74978, 0.74977994, 1)
 
 [node name="Contents" type="VBoxContainer" parent="CanvasLayer/PopupAcceptDeny" unique_id=1498583068]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 258.0
-offset_bottom = 107.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1

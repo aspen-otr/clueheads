@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ihynpbig6t2e"]
 
-[ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://popups.gd" id="1_w2jk7"]
+[ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://popup_accept_deny.gd" id="1_w2jk7"]
 
 [sub_resource type="Theme" id="Theme_2lnam"]
 
@@ -23,7 +23,7 @@ script = ExtResource("1_w2jk7")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=266537817]
 
-[node name="BasicPopup" type="PopupPanel" parent="CanvasLayer" unique_id=1838951175]
+[node name="PopupAcceptDeny" type="PopupPanel" parent="CanvasLayer" unique_id=1838951175]
 unique_name_in_owner = true
 oversampling_override = 1.0
 initial_position = 1
@@ -31,31 +31,36 @@ size = Vector2i(258, 107)
 theme = SubResource("Theme_2lnam")
 theme_override_styles/panel = SubResource("StyleBoxFlat_2jgpx")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/BasicPopup" unique_id=1498583068]
+[node name="Contents" type="VBoxContainer" parent="CanvasLayer/PopupAcceptDeny" unique_id=1498583068]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 258.0
+offset_bottom = 107.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Text" type="Label" parent="CanvasLayer/BasicPopup/VBoxContainer" unique_id=286763521]
+[node name="Text" type="Label" parent="CanvasLayer/PopupAcceptDeny/Contents" unique_id=286763521]
 layout_mode = 2
 text = "Title"
 label_settings = SubResource("LabelSettings_0r1bn")
 horizontal_alignment = 1
 
-[node name="Buttons" type="HBoxContainer" parent="CanvasLayer/BasicPopup/VBoxContainer" unique_id=1004694984]
+[node name="Buttons" type="HBoxContainer" parent="CanvasLayer/PopupAcceptDeny/Contents" unique_id=1004694984]
 layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="Btn1" type="Button" parent="CanvasLayer/BasicPopup/VBoxContainer/Buttons" unique_id=145161978]
+[node name="AcceptBtn" type="Button" parent="CanvasLayer/PopupAcceptDeny/Contents/Buttons" unique_id=145161978]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Btn1"
 
-[node name="Btn2" type="Button" parent="CanvasLayer/BasicPopup/VBoxContainer/Buttons" unique_id=1196587035]
+[node name="DenyBtn" type="Button" parent="CanvasLayer/PopupAcceptDeny/Contents/Buttons" unique_id=1196587035]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Btn2"
+
+[connection signal="pressed" from="CanvasLayer/PopupAcceptDeny/Contents/Buttons/AcceptBtn" to="." method="_accept_pressed"]
+[connection signal="pressed" from="CanvasLayer/PopupAcceptDeny/Contents/Buttons/DenyBtn" to="." method="_deny_pressed"]

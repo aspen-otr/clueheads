@@ -1,15 +1,15 @@
 extends Node
 
-signal player_connected(peer_id)
-signal player_disconnected(peer_id)
+signal player_connected(peer_id, peer_data)
+signal player_disconnected(peer_id, peer_data)
 signal server_disconnected()
 
 const PORT: int = 7000
 const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
 const MAX_CLIENTS: int = 6 # According to Clue rules
 
-var local_data: Dictionary[int, PlayerData]
-var player_info: PlayerData
+var local_data: Dictionary[int, Dictionary]
+var player_info := {}
 
 func _ready():
 	multiplayer.peer_connected.connect(on_player_connect)
@@ -25,9 +25,7 @@ func create_game():
 		return error
 	multiplayer.multiplayer_peer = peer
 
-	player_info = PlayerData.new()
-	player_info.player_number = 1
-	player_info.player_id = multiplayer.get_unique_id()
+	new_player_data()
 	local_data[1] = player_info
 
 func join_game(address: String = ""):
@@ -39,25 +37,35 @@ func join_game(address: String = ""):
 		return error
 	multiplayer.multiplayer_peer = peer
 
-	player_info = PlayerData.new()
-	player_info.player_number = local_data.size() + 1
-	player_info.player_id = multiplayer.get_unique_id()
-	local_data[player_info.player_number] = player_info
-
 func remove_player():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 func on_player_connect(id: int) -> void:
-	player_connected.emit(id)
+	register_player.rpc_id(id, player_info)
+
+@rpc("any_peer")
+func register_player(new_player_info):
+	var new_id = multiplayer.get_remote_sender_id()
+	local_data[new_id] = new_player_info
+	player_connected.emit(new_id, local_data[new_id])
 
 func on_player_disconnect(id: int) -> void:
-	player_disconnected.emit(id)
+	player_disconnected.emit(id, local_data[id])
 
 func on_connect() -> void:
-	pass
+	new_player_data()
+	local_data[player_info["id"]] = player_info
 
 func on_connection_fail() -> void:
 	pass
 
 func on_server_disconnect() -> void:
 	server_disconnected.emit()
+
+func new_player_data():
+	player_info["player number"] = multiplayer.get_peers().size() + 1
+	player_info["id"] = multiplayer.get_unique_id()
+	player_info["chat text"] = ""
+
+func debug_data_display():
+	print(local_data)

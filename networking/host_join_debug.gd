@@ -25,14 +25,18 @@ func _on_join_button_pressed() -> void:
 	if error:
 		print(error)
 		return
-	client_data = Lobby.player_info
-	update_label("Server joined")
-	update_label(str("You are: Player ", client_data["player number"]))
+	#client_data = Lobby.player_info
+	#update_label("Server joined")
+	#update_label(str("You are: Player ", client_data["player number"]))
 
 func on_player_connect(id: int, data: Dictionary) -> void:
+	client_data = Lobby.player_info
 	if id != client_data["id"]:
 		printt(id, client_data["id"])
 		update_label(str("Player ", data["player number"], " has joined"))
+	else:
+		update_label("Server joined")
+		update_label(str("You are: Player ", client_data["player number"]))
 
 func on_player_disconnect(id: int, data: Dictionary) -> void:
 	if id != client_data["id"]:

@@ -3,6 +3,8 @@ extends Node
 @export var return_text: Label
 @export var text_box: TextEdit
 
+@onready var local_data: PlayerData = Lobby.player_info
+
 func _ready() -> void:
 	Lobby.player_connected.connect(on_player_connect)
 	Lobby.player_disconnected.connect(on_player_disconnect)
@@ -13,14 +15,14 @@ func _on_host_button_pressed() -> void:
 	if error:
 		print(error)
 		return
-	update_label("Server created")
+	update_label("Server created", true)
 
 func _on_join_button_pressed() -> void:
 	var error = Lobby.join_game(text_box.text)
 	if error:
 		print(error)
 		return
-	update_label("Server joined")
+	update_label("Server joined", true)
 
 func on_player_connect(id: int) -> void:
 	update_label(str("Player ", id, " has joined"))
@@ -34,5 +36,6 @@ func on_server_disconnect() -> void:
 @rpc
 func update_label(text: String, reset: bool = false):
 	if reset:
-		return_text.text = ""
-	return_text.text += str(text, "\n")
+		local_data.chat_text = ""
+	local_data.chat_text += str(text, "\n")
+	text_box.text = local_data.chat_text

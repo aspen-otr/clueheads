@@ -1,6 +1,7 @@
 extends Node
 
 @export var return_text: Label
+@export var text_box: TextEdit
 
 func _ready() -> void:
 	Lobby.player_connected.connect(on_player_connect)
@@ -9,18 +10,18 @@ func _ready() -> void:
 
 func _on_host_button_pressed() -> void:
 	var error = Lobby.create_game()
-	if error: 
+	if error:
 		print(error)
 		return
 	update_label("Server created")
 
 func _on_join_button_pressed() -> void:
-	var error = Lobby.join_game()
-	if error: 
+	var error = Lobby.join_game(text_box.text)
+	if error:
 		print(error)
 		return
 	update_label("Server joined")
-	
+
 func on_player_connect(id: int) -> void:
 	update_label(str("Player ", id, " has joined"))
 

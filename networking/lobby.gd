@@ -24,7 +24,7 @@ func create_game():
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
-	
+
 	player_data[1] = player_info
 
 func join_game(address: String = ""):
@@ -38,7 +38,7 @@ func join_game(address: String = ""):
 
 func remove_player():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-	
+
 func on_player_connect(id: int) -> void:
 	player_connected.emit(id)
 

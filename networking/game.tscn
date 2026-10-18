@@ -19,7 +19,7 @@ corner_detail = 5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=553049263]
 
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=886459192 node_paths=PackedStringArray("return_text", "text_box")]
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=886459192 node_paths=PackedStringArray("return_text", "text_input")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,7 +30,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_xvjfa")
 return_text = NodePath("MarginContainer/VBoxContainer/ReturnText")
-text_box = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/TextBox")
+text_input = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/TextInput")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=450040629]
 layout_mode = 1
@@ -76,7 +76,7 @@ theme_override_constants/separation = 12
 layout_mode = 2
 text = "IP:"
 
-[node name="TextBox" type="TextEdit" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1643284693]
+[node name="TextInput" type="TextEdit" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1643284693]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -85,4 +85,4 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_xvjfa")
 
 [connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/HostButton" to="CanvasLayer/Control" method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/JoinButton" to="CanvasLayer/Control" method="_on_join_button_pressed"]
-[connection signal="text_set" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2/TextBox" to="CanvasLayer/Control" method="on_text_edit_text_set"]
+[connection signal="text_set" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2/TextInput" to="CanvasLayer/Control" method="on_text_edit_text_set"]

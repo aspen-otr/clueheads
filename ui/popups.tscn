@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ihynpbig6t2e"]
 
-[ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://popup_accept_deny.gd" id="1_w2jk7"]
+[ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://ui/popup_yn.gd" id="1_yypk8"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0r1bn"]
 font_size = 32
@@ -15,11 +15,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_w2jk7")
+script = ExtResource("1_yypk8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=266537817]
 
-[node name="PopupAcceptDeny" type="Window" parent="CanvasLayer" unique_id=1195537575]
+[node name="PopupYN" type="Window" parent="CanvasLayer" unique_id=1195537575]
 unique_name_in_owner = true
 transparent_bg = true
 canvas_item_default_texture_filter = 4
@@ -38,7 +38,7 @@ popup_wm_hint = true
 minimize_disabled = true
 maximize_disabled = true
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PopupAcceptDeny" unique_id=1154376760]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PopupYN" unique_id=1154376760]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -46,7 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.74978, 0.74978, 0.74977994, 1)
 
-[node name="Contents" type="VBoxContainer" parent="CanvasLayer/PopupAcceptDeny" unique_id=1498583068]
+[node name="Contents" type="VBoxContainer" parent="CanvasLayer/PopupYN" unique_id=1498583068]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -54,26 +54,26 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Text" type="Label" parent="CanvasLayer/PopupAcceptDeny/Contents" unique_id=286763521]
+[node name="Text" type="Label" parent="CanvasLayer/PopupYN/Contents" unique_id=286763521]
 layout_mode = 2
 text = "Title"
 label_settings = SubResource("LabelSettings_0r1bn")
 horizontal_alignment = 1
 
-[node name="Buttons" type="HBoxContainer" parent="CanvasLayer/PopupAcceptDeny/Contents" unique_id=1004694984]
+[node name="Buttons" type="HBoxContainer" parent="CanvasLayer/PopupYN/Contents" unique_id=1004694984]
 layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="AcceptBtn" type="Button" parent="CanvasLayer/PopupAcceptDeny/Contents/Buttons" unique_id=145161978]
+[node name="YesBtn" type="Button" parent="CanvasLayer/PopupYN/Contents/Buttons" unique_id=145161978]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Btn1"
 
-[node name="DenyBtn" type="Button" parent="CanvasLayer/PopupAcceptDeny/Contents/Buttons" unique_id=1196587035]
+[node name="NoBtn" type="Button" parent="CanvasLayer/PopupYN/Contents/Buttons" unique_id=1196587035]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Btn2"
 
-[connection signal="pressed" from="CanvasLayer/PopupAcceptDeny/Contents/Buttons/AcceptBtn" to="." method="_accept_pressed"]
-[connection signal="pressed" from="CanvasLayer/PopupAcceptDeny/Contents/Buttons/DenyBtn" to="." method="_deny_pressed"]
+[connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/YesBtn" to="." method="_yes_pressed"]
+[connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/NoBtn" to="." method="_no_pressed"]

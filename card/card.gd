@@ -4,9 +4,9 @@ class_name Card
 enum Type { SUSPECT, ROOM, WEAPON  }
 const DEFAULT_TYPES: Array[Type] = [Type.SUSPECT, Type.ROOM, Type.WEAPON]
 
-enum Suspect { MissScarlett, ColonelMustard, ProfessorPlum, MrGreen }
-enum Weapon { Revolver, Candlestick }
-enum Room { Library, Kitchen, Conservatory, BilliardsRoom }
+enum Suspect { MissScarlett, ColonelMustard, ProfessorPlum, MrGreen, MrsPeacock, DrOrchid }
+enum Weapon { Revolver, Candlestick, Knife, Rope, LeadPipe, Wrench }
+enum Room { Library, Kitchen, Conservatory, BilliardsRoom, Lounge, Ballroom, DiningRoom, Study, Hall }
 
 static var suspect_lut: Array[Suspect] = []
 static var weapon_lut: Array[Weapon] = []

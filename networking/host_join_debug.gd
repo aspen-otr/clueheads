@@ -3,51 +3,46 @@ extends Node
 @export var return_text: Label
 @export var text_input: TextEdit
 
-var client_data := {}
-
 func _ready() -> void:
 	Lobby.player_connected.connect(on_player_connect)
 	Lobby.player_disconnected.connect(on_player_disconnect)
 	Lobby.server_disconnected.connect(on_server_disconnect)
+	
+	Lobby.client_chat_update.connect(update_label)
 
 
 func _on_host_button_pressed() -> void:
-	var error = await Lobby.create_game()
+	var error = Lobby.create_game()
 	if error:
 		print(error)
 		return
-	client_data = Lobby.player_info
-	update_label("Server created")
-	update_label(str("You are: Player ", client_data["player number"]))
+	
+	Lobby.update_chat("Server Created")
+	Lobby.update_chat("You are: Player 1")
 
 func _on_join_button_pressed() -> void:
-	var error = await Lobby.join_game(text_input.text)
+	var error = Lobby.join_game(text_input.text)
 	if error:
 		print(error)
 		return
-	#client_data = Lobby.player_info
-	#update_label("Server joined")
-	#update_label(str("You are: Player ", client_data["player number"]))
+	
+	Lobby.update_chat("Server Joined")
 
-func on_player_connect(id: int, data: Dictionary) -> void:
-	client_data = Lobby.player_info
-	if id != client_data["id"]:
-		printt(id, client_data["id"])
-		update_label(str("Player ", data["player number"], " has joined"))
-	else:
-		update_label("Server joined")
-		update_label(str("You are: Player ", client_data["player number"]))
+func on_player_connect(id: int) -> void:
+	var data = Lobby.get_local_states()
+	var new_player: LocalGameState = data[id]
+	for i in data.keys():
+		if i != id:
+			Lobby.update_chat.rpc_id(i, str("Player ", new_player.number, " joined"))
+		else:
+			Lobby.update_chat.rpc_id(i, str("You are: Player ", new_player.number))
 
-func on_player_disconnect(id: int, data: Dictionary) -> void:
-	if id != client_data["id"]:
-		update_label(str("Player ", data["player number"], " has left"))
+func on_player_disconnect(id: int) -> void:
+	pass
 
 func on_server_disconnect() -> void:
-	update_label("Lost connection to server")
+	pass
 
-func update_label(text: String, reset: bool = false):
-	if reset:
-		client_data["chat text"] = ""
-	client_data["chat text"] += str(text, "\n")
-	return_text.text = client_data["chat text"]
-	Lobby.debug_data_display()
+@rpc
+func update_label():
+	return_text.text = Lobby.client_info.chat

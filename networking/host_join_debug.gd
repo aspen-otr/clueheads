@@ -10,7 +10,6 @@ func _ready() -> void:
 	
 	Lobby.client_chat_update.connect(update_label)
 
-
 func _on_host_button_pressed() -> void:
 	var error = Lobby.create_game()
 	if error:
@@ -38,10 +37,12 @@ func on_player_connect(id: int) -> void:
 			Lobby.update_chat.rpc_id(i, str("You are: Player ", new_player.number))
 
 func on_player_disconnect(id: int) -> void:
-	pass
+	var data = Lobby.get_local_states()
+	var player: LocalGameState = data[id]
+	Lobby.update_chat.rpc(str("Player ", player.number, " disconnected"))
 
 func on_server_disconnect() -> void:
-	pass
+	Lobby.update_chat("Server disconnected")
 
 @rpc
 func update_label():

@@ -23,7 +23,7 @@ func add_room_to_grid(added_room: room) -> void:
 	var added_room_grid: Array = added_room.room_grid
 	for i in range(added_room_grid.size()):
 		for k in range(added_room_grid[i].size()):
-			var added_board_tile: board_tile = rooms.get_room_tile([i, k])
+			var added_board_tile: board_tile = added_room.get_room_tile([i, k])
 			change_board_tile([i,k], added_board_tile)
 
 func initialize_board() -> void:

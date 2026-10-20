@@ -2,12 +2,13 @@
 extends RefCounted  # Inheriting RefCounted ensures automatic memory cleanup
 class_name board_tile # This registers the class globally in Godot
 
-enum ROOM_TYPE {NONE, DOOR, HALLWAY, LIBRARY, KITCHEN, BILLIARD, STUDY, HALL, CONSERVATORY, DINING, LOUNGE, BALLROOM, STAIRCASE }
+enum ROOM_TYPE {NONE, SPAWN, DOOR, HALLWAY, LIBRARY, KITCHEN, BILLIARD, STUDY, HALL, CONSERVATORY, DINING, LOUNGE, BALLROOM, STAIRCASE }
 
 
 var tile_x: int
 var tile_y: int
 var room_type: ROOM_TYPE = ROOM_TYPE.NONE
+
 var is_walkable: bool = true
 var occupied_by: Node = null # Tracks if a player/clue is standing here
 

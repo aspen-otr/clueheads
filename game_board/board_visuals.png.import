@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvubh04p6tn2w"
-path="res://.godot/imported/clue hallway tile.png-d3f467a2ba8a33b1ba1a625cc79d2396.ctex"
+uid="uid://d1uiqw008y30j"
+path="res://.godot/imported/board_visuals.png-d489e5c77746759f1ed3f45a33044535.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://room_objects/clue hallway tile.png"
-dest_files=["res://.godot/imported/clue hallway tile.png-d3f467a2ba8a33b1ba1a625cc79d2396.ctex"]
+source_file="res://game_board/board_visuals.png"
+dest_files=["res://.godot/imported/board_visuals.png-d489e5c77746759f1ed3f45a33044535.ctex"]
 
 [params]
 

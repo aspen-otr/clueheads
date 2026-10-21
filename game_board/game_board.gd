@@ -10,21 +10,17 @@ func _ready() -> void:
 	initialize_board1()
 	
 	
-
+#replaces a tile on the board grid with the board tile object passed as a perameter 
 func change_board_tile(coords: Array, p_board_tile: board_tile ) -> void:
 	var x = coords[0] + p_board_tile.tile_x
 	var y = coords[1] + p_board_tile.tile_y
 	if x >= 0 and x < board_width and y >= 0 and y < board_height:
 		board_grid[x][y].room_type = p_board_tile.room_type
 
+
 func add_room_to_grid(added_room: room) -> void:
-	var x: int = added_room.room_coords[0]
-	var y: int = added_room.room_coords[1]
 	for i in range(added_room.doors.size()):
 		var door_coords: Array = added_room.doors[i]
-		door_coords[0] += x
-		door_coords[1] += y
-		added_room.doors[i] = door_coords
 		board_grid[door_coords[0]][door_coords[1]].room_type = board_tile.ROOM_TYPE.DOOR
 	for i in range(added_room.room_grid.size()):
 		for k in range(added_room.room_grid[i].size()):

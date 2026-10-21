@@ -109,8 +109,6 @@ func initialize_room(p_room_type: board_tile.ROOM_TYPE) -> room:
 		new_room.room_grid.append(column)
 	for tile_coord in new_room.hallway_tiles:
 		new_room.change_room_tile(tile_coord, board_tile.ROOM_TYPE.HALLWAY)
-	for door_coord in new_room.doors:
-		new_room.change_room_tile(door_coord, board_tile.ROOM_TYPE.DOOR)
 	return new_room
 
 func _init(x: int, y: int, p_room_type: board_tile.ROOM_TYPE) -> void:

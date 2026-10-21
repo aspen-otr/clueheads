@@ -51,3 +51,7 @@ func is_npc(index: int) -> bool:
 func _init(real_players: Array[Card.Suspect]): # TODO: Give NPC personalities, how to track network connections, etc.
 	for idx in range(Card.Suspect.size()):
 		self._real_player_lut[idx as int] = idx in real_players
+	
+	# initialize card lookup tables
+	Card.set_all_lut()	
+	

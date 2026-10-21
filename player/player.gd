@@ -13,7 +13,7 @@ func _init(ident_: Card.Suspect):
 class HumanPlayer extends Player:
 	func pick_card_to_show(suggestion: Set) -> int:
 		# popups to pick
-		pass
+		return 0
 
 	func pick_square_to_move_to(possible_squares):
 		# allow clicking on board

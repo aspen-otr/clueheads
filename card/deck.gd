@@ -36,33 +36,5 @@ func deal_to_player(total_players: int, target: int) -> Array[Card]:
 func _init():
 	gen_case_file()
 	shuffle()
-	
-	# test case file & shuffle
-	print("Case File:")
-	for c in case_file.cards:
-		print(c.value)
-	print("\nDeck:")
-	for c in cards:
-		print(c.value)
-		
-	# test deal_to_player (4 players)
-	var player_count: int = 4
-	var player0: Array[Card] = deal_to_player(player_count, 0)
-	var player1: Array[Card] = deal_to_player(player_count, 1)
-	var player2: Array[Card] = deal_to_player(player_count, 2)
-	var player3: Array[Card] = deal_to_player(player_count, 3)
-	
-	print("\nPlayer 0:")
-	for p0 in player0:
-		print(p0.value)
-	print("\nPlayer 1:")
-	for p1 in player1:
-		print(p1.value)
-	print("\nPlayer 2:")
-	for p2 in player2:
-		print(p2.value)
-	print("\nPlayer 3:")
-	for p3 in player3:
-		print(p3.value)
 
 	

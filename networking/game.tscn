@@ -68,6 +68,12 @@ size_flags_horizontal = 3
 text = "Join
 "
 
+[node name="LeaveButton" type="Button" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1296027594]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.33
+text = "Leave"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/MarginContainer/VBoxContainer" unique_id=208843521]
 layout_mode = 2
 theme_override_constants/separation = 12
@@ -85,4 +91,5 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_xvjfa")
 
 [connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/HostButton" to="CanvasLayer/Control" method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/JoinButton" to="CanvasLayer/Control" method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/LeaveButton" to="CanvasLayer/Control" method="_on_leave_button_pressed"]
 [connection signal="text_set" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2/TextInput" to="CanvasLayer/Control" method="on_text_edit_text_set"]

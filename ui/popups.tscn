@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://ihynpbig6t2e"]
 
-[ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://ui/popup_yn.gd" id="1_yypk8"]
+[ext_resource type="Script" uid="uid://4wa4q3ydv4vl" path="res://ui/popup_suggest_accuse.gd" id="1_yypk8"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0r1bn"]
 font_size = 32
-font_color = Color(0, 0, 0, 1)
 
 [node name="Popups" type="Control" unique_id=942190368]
 layout_mode = 3
@@ -74,6 +73,66 @@ text = "Btn1"
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Btn2"
+
+[node name="PopupSuggestAccuse" type="Window" parent="CanvasLayer" unique_id=1745163875]
+unique_name_in_owner = true
+transparent_bg = true
+canvas_item_default_texture_filter = 4
+canvas_item_default_texture_repeat = 3
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(382, 459)
+visible = false
+wrap_controls = true
+transient = true
+exclusive = true
+unresizable = true
+borderless = true
+transparent = true
+popup_wm_hint = true
+minimize_disabled = true
+maximize_disabled = true
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PopupSuggestAccuse" unique_id=182845209]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.18896917, 0.18896914, 0.18896925, 1)
+
+[node name="Contents" type="VBoxContainer" parent="CanvasLayer/PopupSuggestAccuse" unique_id=297627540]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Text" type="Label" parent="CanvasLayer/PopupSuggestAccuse/Contents" unique_id=987671049]
+layout_mode = 2
+text = "Who are you suggesting?"
+label_settings = SubResource("LabelSettings_0r1bn")
+horizontal_alignment = 1
+
+[node name="Selections" type="GridContainer" parent="CanvasLayer/PopupSuggestAccuse/Contents" unique_id=779429075]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Buttons" type="HBoxContainer" parent="CanvasLayer/PopupSuggestAccuse/Contents" unique_id=1195815270]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="YesBtn" type="Button" parent="CanvasLayer/PopupSuggestAccuse/Contents/Buttons" unique_id=490684197]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Suggest"
+
+[node name="NoBtn" type="Button" parent="CanvasLayer/PopupSuggestAccuse/Contents/Buttons" unique_id=336124725]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Cancel"
 
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/YesBtn" to="." method="_yes_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/NoBtn" to="." method="_no_pressed"]

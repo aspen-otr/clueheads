@@ -12,8 +12,8 @@ func _init(ident_: Card.Suspect):
 
 class HumanPlayer extends Player:
 	func pick_card_to_show(suggestion: Set) -> int:
-		# popups to pick
-		pass
+		# TODO: Show a popup and let the human player choose a matching card.
+		return -1
 
 	func pick_square_to_move_to(possible_squares):
 		# allow clicking on board

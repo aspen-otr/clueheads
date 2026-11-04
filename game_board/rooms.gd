@@ -3,11 +3,12 @@ class_name room
 
 var room_width: int 
 var room_height: int 
-var room_grid: Array = []
+var room_grid: Array 
+var tileset_coords: Vector2i = Vector2i(0, 0)
 
 #coordinates of the room within the game board, 
 #bound to the bottom left corner of each room
-var room_coords: Array = []
+var room_coords: Array 
 
 #keeps track of the coordinates of each door 
 #of that room object. These coordinates are updated 
@@ -21,12 +22,12 @@ var room_coords: Array = []
 #player movement. Because if a player wants to get to the dining room for 
 #example, you just look up the doordinates of the doors of the dining room object, 
 #and check which is closer using the player's coordinates
-var doors: Array = []
+var doors: Array 
 
 #keeps track of which tiles in the room grid are actually 
 #hallway tiles. Not all rooms are standard rectangles, 
 #so this is nessesary if the board is to look like a normal one
-var hallway_tiles: Array = []
+var hallway_tiles: Array 
 
 var room_type: board_tile.ROOM_TYPE = board_tile.ROOM_TYPE.NONE
 
@@ -47,8 +48,9 @@ class kitchen extends room:
 	func _init():
 		room_width = 6
 		room_height = 6
-		doors = [[2, 7]] # Fixed to 2D matching structure
+		doors = [[1, 6]] 
 		room_type = board_tile.ROOM_TYPE.KITCHEN
+		#tileset_coords = Vector2i(6, 39)
 class study extends room:
 	func _init():
 		room_width = 7
@@ -59,47 +61,47 @@ class billiard extends room:
 	func _init():
 		room_width = 6
 		room_height = 5
-		doors = [[2, 6], [7, 2]]
+		doors = [[1, 5], [6, 1]]
 		room_type = board_tile.ROOM_TYPE.BILLIARD
 class ballroom extends room:
 	func _init():
 		room_width = 8
 		room_height = 7
-		doors = [[-1, 5],[2, 8],[7,8],[9,5]]
-		hallway_tiles = [[1,1], [1, 2], [1, 7], [1, 8]]
+		doors = [[-1, 4],[1, 7],[6,7],[8,5]]
+		hallway_tiles = [[0,0], [1, 0], [6, 0], [7, 0]]
 		room_type = board_tile.ROOM_TYPE.BALLROOM
 class conservatory extends room:
 	func _init():
 		room_width = 6
 		room_height = 5
-		doors = [[6, 5]]
-		hallway_tiles = [[6, 5]]
+		doors = [[5, 4]]
+		#hallway_tiles = [[5, 4]]
 		room_type = board_tile.ROOM_TYPE.CONSERVATORY
 class library extends room:
 	func _init():
 		room_width = 7
 		room_height = 5
-		doors = [[3,-1], [8,3]]
-		hallway_tiles = [[1, 7], [5, 7]]
+		doors = [[3,-1], [7,2]]
+		hallway_tiles = [[6, 0], [6, 4]]
 		room_type = board_tile.ROOM_TYPE.LIBRARY
 class hall extends room:
 	func _init():
 		room_width = 6
 		room_height = 7
-		doors = [[-1,3], [3, -1], [4, -1]]
+		doors = [[-1,2], [2, -1], [3, -1]]
 		room_type = board_tile.ROOM_TYPE.HALL
 class dining extends room:
 	func _init():
 		room_width = 8
 		room_height = 7
-		doors = [[-1, 4], [2, 8]]
-		hallway_tiles = [[1,1], [1,2], [1, 3]]
+		doors = [[-1, 3], [1, 7]]
+		hallway_tiles = [[0,0], [1,0], [2, 0]]
 		room_type = board_tile.ROOM_TYPE.DINING 
 class lounge extends room:
 	func _init():
 		room_width = 6
 		room_height = 6
-		doors = [[1, -1]]
+		doors = [[0, -1]]
 		room_type = board_tile.ROOM_TYPE.LOUNGE # Fixed copy-paste bug
 class staircase extends room:
 	func _init():
@@ -125,28 +127,37 @@ func make_new_room(p_room_type: board_tile.ROOM_TYPE) -> room:
 #fills the room grid with tiles of the appropiate room type. 
 #Its also the function that updates the door coords with the 
 #room coords
-func initialize_room(p_room_type: board_tile.ROOM_TYPE) -> room:
-	var new_room: room = make_new_room(p_room_type)
-	for x in range(new_room.room_width):
+func initialize_room() -> void:
+	room_grid.clear()
+	for x in range(room_width):
 		var column: Array = []
-		for y in range(new_room.room_height):
-			var new_tile = board_tile.new(x, y, true, p_room_type)
-			column.append(new_tile)
-		new_room.room_grid.append(column)
-	for tile_coord in new_room.hallway_tiles:
-		new_room.change_room_tile(tile_coord, board_tile.ROOM_TYPE.HALLWAY)
-	for i in range(new_room.doors.size()):
-		var door_coords: Array = new_room.doors[i]
-		door_coords[0] += new_room.room_coords[0]
-		door_coords[1] += new_room.room_coords[1]
-		new_room.doors[i] = door_coords
-	return new_room
-
-
-func _init(x: int, y: int, p_room_type: board_tile.ROOM_TYPE) -> void:
-	room_coords = [x, y]
-	initialize_room(p_room_type)
+		for y in range(room_height):
+			column.append(board_tile.new(x, y, false, true, room_type))
+		room_grid.append(column)
+	for tile_coord in hallway_tiles:
+		change_room_tile(tile_coord, board_tile.ROOM_TYPE.HALLWAY)
+	for i in range(doors.size()):
+		doors[i] = [doors[i][0] + room_coords[0], doors[i][1] + room_coords[1]]
 		
+static func create(x: int, y: int, p_room_type: board_tile.ROOM_TYPE) -> room:
+	var instance: room = null
+	match p_room_type:
+		board_tile.ROOM_TYPE.BALLROOM: instance = ballroom.new()
+		board_tile.ROOM_TYPE.BILLIARD: instance = billiard.new()
+		board_tile.ROOM_TYPE.STUDY: instance = study.new()
+		board_tile.ROOM_TYPE.KITCHEN: instance = kitchen.new()
+		board_tile.ROOM_TYPE.CONSERVATORY: instance = conservatory.new()
+		board_tile.ROOM_TYPE.LIBRARY: instance = library.new()
+		board_tile.ROOM_TYPE.HALL: instance = hall.new()
+		board_tile.ROOM_TYPE.LOUNGE: instance = lounge.new()
+		board_tile.ROOM_TYPE.DINING: instance = dining.new()
+		board_tile.ROOM_TYPE.STAIRCASE: instance = staircase.new()
+
+	if instance != null:
+		instance.room_coords = [x, y]
+		instance.initialize_room()
+	return instance
+
 
 
 

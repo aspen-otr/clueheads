@@ -52,4 +52,12 @@ func _init(real_players: Array[Card.Suspect]) -> void:
 	self._real_player_lut.resize(Card.Suspect.size())
 
 	for idx in range(Card.Suspect.size()):
+<<<<<<< HEAD
 		self._real_player_lut[idx] = idx in real_players
+=======
+		self._real_player_lut[idx as int] = idx in real_players
+	
+	# initialize card lookup tables
+	Card.set_all_lut()	
+	
+>>>>>>> a2d0e50991d162429e1b28f91d4e49c49b81ddb7

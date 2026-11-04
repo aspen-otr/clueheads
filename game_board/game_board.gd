@@ -1,35 +1,63 @@
-extends Node
+extends Node2D
 
-@onready var board_visuals: TileMapLayer = $"res://game_board/board_tile.gd"
+#@onready var board_visuals: TileMapLayer = $"res://game_board/board_visuals.png"
 
-var board_width: int = 24
-var board_height: int = 23
+
 var board_grid: Array = []
+var board_width: int
+var board_height: int
 
-func _ready() -> void:
-	initialize_board1()
-	
-	
+var active_rooms: Array[room] 
+
+var default_font: Font = Control.new().get_theme_font("font")
+const ROOM_COLORS = {
+	board_tile.ROOM_TYPE.NONE: Color(0.0, 0.0, 0.0, 1.0),       
+	board_tile.ROOM_TYPE.HALLWAY: Color(0.877, 0.843, 0.74, 1.0),    
+	board_tile.ROOM_TYPE.DOOR: Color(0.85, 0.35, 0.25),       
+	board_tile.ROOM_TYPE.KITCHEN: Color(0.25, 0.55, 0.75),    
+	board_tile.ROOM_TYPE.BILLIARD: Color(0.20, 0.60, 0.35),   
+	board_tile.ROOM_TYPE.BALLROOM: Color(0.65, 0.40, 0.75),   
+	board_tile.ROOM_TYPE.CONSERVATORY: Color(0.30, 0.70, 0.65),
+	board_tile.ROOM_TYPE.LIBRARY: Color(0.65, 0.50, 0.35),    
+	board_tile.ROOM_TYPE.STUDY: Color(0.45, 0.55, 0.65),      
+	board_tile.ROOM_TYPE.HALL: Color(0.80, 0.60, 0.20),       
+	board_tile.ROOM_TYPE.DINING: Color(0.70, 0.30, 0.30),     
+	board_tile.ROOM_TYPE.LOUNGE: Color(0.85, 0.55, 0.30),     
+	board_tile.ROOM_TYPE.STAIRCASE: Color(0.245, 0.245, 0.245, 1.0)   
+}
+const ROOM_NAMES = {
+	board_tile.ROOM_TYPE.KITCHEN: "KITCHEN",
+	board_tile.ROOM_TYPE.BILLIARD: "BILLIARD",
+	board_tile.ROOM_TYPE.BALLROOM: "BALLROOM",
+	board_tile.ROOM_TYPE.CONSERVATORY: "CONSERVATORY",
+	board_tile.ROOM_TYPE.LIBRARY: "LIBRARY",
+	board_tile.ROOM_TYPE.STUDY: "STUDY",
+	board_tile.ROOM_TYPE.HALL: "HALL",
+	board_tile.ROOM_TYPE.DINING: "DINING",
+	board_tile.ROOM_TYPE.LOUNGE: "LOUNGE",
+	board_tile.ROOM_TYPE.STAIRCASE: "STAIRS"
+}
 #replaces a tile on the board grid with the board tile object passed as a perameter 
 func change_board_tile(coords: Array, p_board_tile: board_tile ) -> void:
 	var x = coords[0] + p_board_tile.tile_x
 	var y = coords[1] + p_board_tile.tile_y
-	if (p_board_tile.is_walkable == true):
-		if (x >= 0 and x < board_width and y >= 0 and y < board_height):
+	
+	if (x >= 0 and x < board_width and y >= 0 and y < board_height):
 			board_grid[x][y].room_type = p_board_tile.room_type
-	else:
-		print("tile is not walkable")
+	
 		
 
 func add_room_to_grid(added_room: room) -> void:
-	for i in range(added_room.doors.size()):
-		var door_coords: Array = added_room.doors[i]
-		board_grid[door_coords[0]][door_coords[1]].room_type = board_tile.ROOM_TYPE.DOOR
+	active_rooms.append(added_room)
 	for i in range(added_room.room_grid.size()):
 		for k in range(added_room.room_grid[i].size()):
 			var added_board_tile: board_tile = added_room.get_room_tile([i, k])
-			var target_coords = [added_room.room_cords[0], added_room.room_cords[1]]
+			var target_coords = [added_room.room_coords[0], added_room.room_coords[1]]
 			change_board_tile(target_coords, added_board_tile)
+	for i in range(added_room.doors.size()):
+		var door_coords: Array = added_room.doors[i]
+		if door_coords[0] >= 0 and door_coords[0] < board_width and door_coords[1] >= 0 and door_coords[1] < board_height:
+			board_grid[door_coords[0]][door_coords[1]].room_type = board_tile.ROOM_TYPE.DOOR
 
 #adds a spawn tile at the coords given. Spawn tile can 
 #be at any viable location on the board. the function takes 
@@ -40,46 +68,46 @@ func add_spawn_tile(coords: Array) -> void :
 	var target_tile_room_type = get_tile_room_type(coords)
 	var spawn_tile = board_tile.new(0, 0, true, true, target_tile_room_type)
 	change_board_tile(coords, spawn_tile)
-
-
-
+	
 
 func add_board1_spawn_tiles():
-	add_spawn_tile([10, 1])
-	add_spawn_tile([16, 1])
-	add_spawn_tile([1, 8])
-	add_spawn_tile([1, 20])
-	add_spawn_tile([24, 7])
-	add_spawn_tile([24, 18])
-	add_spawn_tile([17, 23])
-	add_spawn_tile([8, 23])
+	add_spawn_tile([8, 0])
+	#add_spawn_tile([13, 0])
+	#add_spawn_tile([0, 7])
+	#add_spawn_tile([0, 19])
+	#add_spawn_tile([23, 5])
+	#add_spawn_tile([23, 17])
+	#add_spawn_tile([16, 23])
+	#add_spawn_tile([7, 23])
 func initialize_board1() -> void:
-	board_grid = []
+	board_grid.clear()
+	board_height = 24
+	board_width = 24
 	for x in range(board_width):
 		var column = []
 		for y in range(board_height):
 			column.append(board_tile.new(x, y, false, true, board_tile.ROOM_TYPE.HALLWAY))
 		board_grid.append(column)
 	
-	var conservatory_room = room.new(1, 1, board_tile.ROOM_TYPE.CONSERVATORY)
+	var conservatory_room = room.create(0, 0, board_tile.ROOM_TYPE.CONSERVATORY)
 	add_room_to_grid(conservatory_room)
-	var billiard_room = room.new(1, 8, board_tile.ROOM_TYPE.BILLIARD)
+	var billiard_room = room.create(0, 7, board_tile.ROOM_TYPE.BILLIARD)
 	add_room_to_grid(billiard_room)
-	var library_room = room.new(1, 14, board_tile.ROOM_TYPE.LIBRARY)
+	var library_room = room.create(0, 13, board_tile.ROOM_TYPE.LIBRARY)
 	add_room_to_grid(library_room)
-	var study_room = room.new(1, 21, board_tile.ROOM_TYPE.STUDY)
+	var study_room = room.create(0, 20, board_tile.ROOM_TYPE.STUDY)
 	add_room_to_grid(study_room)
-	var ballroom_room = room.new(9, 1, board_tile.ROOM_TYPE.BALLROOM)
+	var ballroom_room = room.create(8, 0, board_tile.ROOM_TYPE.BALLROOM)
 	add_room_to_grid(ballroom_room)
-	var kitchen_room = room.new(19, 8, board_tile.ROOM_TYPE.KITCHEN)
+	var kitchen_room = room.create(18, 0, board_tile.ROOM_TYPE.KITCHEN)
 	add_room_to_grid(kitchen_room)
-	var dining_room = room.new(17, 9, board_tile.ROOM_TYPE.DINING)
+	var dining_room = room.create(16, 8, board_tile.ROOM_TYPE.DINING)
 	add_room_to_grid(dining_room)
-	var lounge_room = room.new(18, 19, board_tile.ROOM_TYPE.LOUNGE)
+	var lounge_room = room.create(18, 18, board_tile.ROOM_TYPE.LOUNGE)
 	add_room_to_grid(lounge_room)
-	var hall_room = room.new(10, 18, board_tile.ROOM_TYPE.HALL)
+	var hall_room = room.create(9, 17, board_tile.ROOM_TYPE.HALL)
 	add_room_to_grid(hall_room)
-	var staircase = room.new(10, 10, board_tile.ROOM_TYPE.STAIRCASE)
+	var staircase = room.create(9, 9, board_tile.ROOM_TYPE.STAIRCASE)
 	add_room_to_grid(staircase)
 	add_board1_spawn_tiles()
 
@@ -89,6 +117,55 @@ func get_tile_room_type(cords: Array) -> board_tile.ROOM_TYPE:
 	return board_tile.ROOM_TYPE.NONE
 
 
+
+func _ready() -> void:
+	initialize_board1()
+	queue_redraw()
+
+func _draw() -> void:
+	var window_size: Vector2i = get_window().size
+	var tile_size: int = (window_size.x / 2) / board_width
+	var offset_x = window_size.x / 4
+	var offset_y = window_size.y / 14
+
+
+	for x in range(board_width):
+		for y in range(board_height):
+			var current_tile: board_tile = board_grid[x][y]
+			if (current_tile.is_valid == true):
+				var fill_color: Color
+				if (current_tile.is_spawn_tile == false):
+					fill_color = ROOM_COLORS.get(current_tile.room_type, Color.BLACK)
+				else:
+					fill_color =  Color(0.811, 0.051, 0.562, 1.0)
+				# flip y axis
+				var screen_x = x * tile_size + offset_x
+				var screen_y = (board_height - 1 - y) * tile_size + offset_y
+				var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+
+				draw_rect(cell_rect, fill_color, true)
+				draw_rect(cell_rect, Color.BLACK, false, 1.0)
+
+	#align Labels
+	for current_room in active_rooms:
+		if (not ROOM_NAMES.has(current_room.room_type)):
+			continue
+
+		var room_text: String = ROOM_NAMES[current_room.room_type]
+
+		
+		var center_board_x = current_room.room_coords[0] + (current_room.room_width / 2.0)
+		var center_board_y = current_room.room_coords[1] + (current_room.room_height / 2.0)
+
+		
+		var global_pixel_x = (center_board_x * tile_size) + offset_x
+		var global_pixel_y = ((board_height - 1 - center_board_y) * tile_size) + offset_y
+
+		var font_size = 14
+		var text_size = default_font.get_string_size(room_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+		var label_position = Vector2(global_pixel_x - (text_size.x / 2.0), global_pixel_y + (text_size.y / 4.0))
+
+		draw_string(default_font, label_position, room_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass

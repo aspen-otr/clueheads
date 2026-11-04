@@ -124,15 +124,17 @@ layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="YesBtn" type="Button" parent="CanvasLayer/PopupSuggestAccuse/Contents/Buttons" unique_id=490684197]
+[node name="SuggestBtn" type="Button" parent="CanvasLayer/PopupSuggestAccuse/Contents/Buttons" unique_id=490684197]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Suggest"
 
-[node name="NoBtn" type="Button" parent="CanvasLayer/PopupSuggestAccuse/Contents/Buttons" unique_id=336124725]
+[node name="CancelBtn" type="Button" parent="CanvasLayer/PopupSuggestAccuse/Contents/Buttons" unique_id=336124725]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Cancel"
 
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/YesBtn" to="." method="_yes_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/NoBtn" to="." method="_no_pressed"]
+[connection signal="pressed" from="CanvasLayer/PopupSuggestAccuse/Contents/Buttons/SuggestBtn" to="." method="_suggest_pressed"]
+[connection signal="pressed" from="CanvasLayer/PopupSuggestAccuse/Contents/Buttons/CancelBtn" to="." method="_cancel_pressed"]

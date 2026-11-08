@@ -21,7 +21,8 @@ enum ROOM_TYPE {
 var tile_x: int
 var tile_y: int
 var room_type: ROOM_TYPE = ROOM_TYPE.NONE
-
+var is_hovered: bool = false
+var tile_size: int
 var is_spawn_tile: bool = false
 
 #determines whether or not the player is able to travel on them

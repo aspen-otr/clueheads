@@ -9,6 +9,11 @@ var board_height: int
 
 var active_rooms: Array[room] 
 
+var tile_size: float = 0.0
+var offset_x: float = 0.0
+var offset_y: float = 0.0
+var hovered_tile_coords: Vector2i = Vector2i(-1, -1)
+
 var default_font: Font = Control.new().get_theme_font("font")
 const ROOM_COLORS = {
 	board_tile.ROOM_TYPE.NONE: Color(0.0, 0.0, 0.0, 1.0),       
@@ -37,13 +42,18 @@ const ROOM_NAMES = {
 	board_tile.ROOM_TYPE.LOUNGE: "LOUNGE",
 	board_tile.ROOM_TYPE.STAIRCASE: "STAIRS"
 }
-#replaces a tile on the board grid with the board tile object passed as a perameter 
+
+
+
+
+
 func change_board_tile(coords: Array, p_board_tile: board_tile ) -> void:
 	var x = coords[0] + p_board_tile.tile_x
 	var y = coords[1] + p_board_tile.tile_y
 	
 	if (x >= 0 and x < board_width and y >= 0 and y < board_height):
 			board_grid[x][y].room_type = p_board_tile.room_type
+			board_grid[x][y].is_spawn_tile =  p_board_tile.is_spawn_tile
 	
 		
 
@@ -71,14 +81,14 @@ func add_spawn_tile(coords: Array) -> void :
 	
 
 func add_board1_spawn_tiles():
-	add_spawn_tile([8, 0])
-	#add_spawn_tile([13, 0])
-	#add_spawn_tile([0, 7])
-	#add_spawn_tile([0, 19])
-	#add_spawn_tile([23, 5])
-	#add_spawn_tile([23, 17])
-	#add_spawn_tile([16, 23])
-	#add_spawn_tile([7, 23])
+	add_spawn_tile([9, 0])
+	add_spawn_tile([14, 0])
+	add_spawn_tile([0, 5])
+	add_spawn_tile([0, 19])
+	add_spawn_tile([23, 6])
+	add_spawn_tile([23, 17])
+	add_spawn_tile([16, 23])
+	add_spawn_tile([7, 23])
 func initialize_board1() -> void:
 	board_grid.clear()
 	board_height = 24
@@ -121,13 +131,47 @@ func get_tile_room_type(cords: Array) -> board_tile.ROOM_TYPE:
 func _ready() -> void:
 	initialize_board1()
 	queue_redraw()
+func _process(_delta: float) -> void:
+	
+	if (tile_size <= 0): 
+		return 
+	
+	var local_mouse: Vector2 = get_local_mouse_position()
+	
+	
+	var grid_x: int = floor((local_mouse.x - offset_x) / tile_size)
+	var grid_y: int = board_height - 1 - floor((local_mouse.y - offset_y) / tile_size)
+	
+	var current_hover = Vector2i(-10, -10)
+	
+	# Validate bounds
+	if (grid_x >= 0 and grid_x < board_width and grid_y >= 0 and grid_y < board_height):
+		current_hover = Vector2i(grid_x, grid_y)
+		
+	#  update state and redraw if the hover location changed
+	if (current_hover != hovered_tile_coords):
+		if (hovered_tile_coords.x != -1):
+			board_grid[hovered_tile_coords.x][hovered_tile_coords.y].is_hovered = false
+			
+		if (current_hover.x != -1):
+			board_grid[current_hover.x][current_hover.y].is_hovered = true
+			
+		hovered_tile_coords = current_hover
+		queue_redraw()
+
+func find_path():
+	var screen_x = hovered_tile_coords[0] * tile_size + offset_x
+	var screen_y = (board_height - 1 - hovered_tile_coords[1]) * tile_size + offset_y
+	var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+	draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 1.0), true)
+	draw_rect(cell_rect, Color.BLACK, false, 1.0)
 
 func _draw() -> void:
 	var window_size: Vector2i = get_window().size
-	var tile_size: int = (window_size.x / 2) / board_width
-	var offset_x = window_size.x / 4
-	var offset_y = window_size.y / 14
-
+	tile_size = (window_size.x / 2) / board_width
+	offset_x = window_size.x / 4
+	offset_y = window_size.y / 14
+	
 
 	for x in range(board_width):
 		for y in range(board_height):
@@ -137,7 +181,7 @@ func _draw() -> void:
 				if (current_tile.is_spawn_tile == false):
 					fill_color = ROOM_COLORS.get(current_tile.room_type, Color.BLACK)
 				else:
-					fill_color =  Color(0.811, 0.051, 0.562, 1.0)
+					fill_color =  Color(1.0, 0.0, 0.8, 1.0)
 				# flip y axis
 				var screen_x = x * tile_size + offset_x
 				var screen_y = (board_height - 1 - y) * tile_size + offset_y
@@ -145,7 +189,10 @@ func _draw() -> void:
 
 				draw_rect(cell_rect, fill_color, true)
 				draw_rect(cell_rect, Color.BLACK, false, 1.0)
-
+	
+	find_path()
+	
+	
 	#align Labels
 	for current_room in active_rooms:
 		if (not ROOM_NAMES.has(current_room.room_type)):
@@ -166,6 +213,3 @@ func _draw() -> void:
 		var label_position = Vector2(global_pixel_x - (text_size.x / 2.0), global_pixel_y + (text_size.y / 4.0))
 
 		draw_string(default_font, label_position, room_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

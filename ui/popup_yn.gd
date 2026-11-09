@@ -1,11 +1,9 @@
-extends Control
+extends Window
 
 signal popup_yn_pressed
 
-enum PopupYN {YES, NO}
-
-func popup_yn(title, yes_txt = PopupYN.keys()[PopupYN.YES], no_txt = PopupYN.keys()[PopupYN.NO]) -> PopupYN:
-	%PopupYN/Contents/Text.text = title
+func popup_yn(title_txt, yes_txt = Popups.PopupYN.keys()[Popups.PopupYN.YES], no_txt = Popups.PopupYN.keys()[Popups.PopupYN.NO]) -> Popups.PopupYN:
+	%PopupYN/Contents/Text.text = title_txt
 	%PopupYN/Contents/Buttons/YesBtn.text = yes_txt
 	%PopupYN/Contents/Buttons/NoBtn.text = no_txt
 	%PopupYN.popup()
@@ -14,7 +12,7 @@ func popup_yn(title, yes_txt = PopupYN.keys()[PopupYN.YES], no_txt = PopupYN.key
 	return result
 	
 func _yes_pressed() -> void:
-	popup_yn_pressed.emit(PopupYN.YES)
+	popup_yn_pressed.emit(Popups.PopupYN.YES)
 	
 func _no_pressed() -> void:
-	popup_yn_pressed.emit(PopupYN.NO)
+	popup_yn_pressed.emit(Popups.PopupYN.NO)

@@ -18,7 +18,7 @@ func popup_suggest_accuse(guess_type_: Popups.PopupSuggestAccuse, locked_options
 		child.queue_free()
 	%PopupSuggestAccuse.hide()
 	return result
-	
+
 func _set_text():
 	if guess_type == Popups.PopupSuggestAccuse.ACCUSATION:
 		%PopupSuggestAccuse/Contents/Text.text = "Who are you accusing?"
@@ -27,14 +27,14 @@ func _set_text():
 		%PopupSuggestAccuse/Contents/Text.text = "Who are you suggesting?"
 		%PopupSuggestAccuse/Contents/Buttons/SuggestBtn.text = "Suggest"
 
-	
+
 func _type_labels():
 	%PopupSuggestAccuse/Contents/Selections.columns = Set.types.size()
 	for type in Set.types:
 		var new_label = Label.new()
 		new_label.text = Card.type_lut[type]
 		%PopupSuggestAccuse/Contents/Selections.add_child(new_label)
-		
+
 func _selection_menus(locked_options: Array[Card]):
 	item_lists.clear()
 	for type in Set.types:
@@ -49,8 +49,9 @@ func _selection_menus(locked_options: Array[Card]):
 		item_lists.back().auto_height = true
 		var i = 0
 		for item in Card.TYPE_VALS[type]:
-			item_lists.back().add_item(item)
-			item_lists.back().set_item_metadata(i, Card.new(type, item))
+			var card = Card.new(type, item)
+			item_lists.back().add_item(card.pretty())
+			item_lists.back().set_item_metadata(i, card)
 			if type_disabled:
 				if still_available.has(Card.TYPE_VALS[type][item]):
 					item_lists.back().select(i)
@@ -58,7 +59,7 @@ func _selection_menus(locked_options: Array[Card]):
 					item_lists.back().set_item_disabled(i, true)
 			i += 1
 		%PopupSuggestAccuse/Contents/Selections.add_child(item_lists.back())
-		
+
 func _retrieve_selected():
 	selected.clear()
 	for list in item_lists:
@@ -66,7 +67,7 @@ func _retrieve_selected():
 			if list.is_selected(i):
 				selected.append(list.get_item_metadata(i))
 				break
-				
+
 func _suggest_pressed():
 	_retrieve_selected()
 	if selected.size() == item_lists.size():
@@ -79,6 +80,6 @@ func _suggest_pressed():
 			visible = true
 		if (confirmation == Popups.PopupYN.YES):
 			popup_suggest_accuse_pressed.emit(Set.new(selected))
-	
+
 func _cancel_pressed():
 	popup_suggest_accuse_pressed.emit(null)

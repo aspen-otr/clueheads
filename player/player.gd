@@ -27,11 +27,11 @@ func _init(ident_: Card.Suspect):
 
 class HumanPlayer extends Player:
 	func pick_from_cards(cards_available: Array[Card]) -> Card:
-		pass
+		return await Popups.popup_single_choice(cards_available)
 
 	func pick_card_to_show(suggestion: Set) -> Card:
 		var choose_from = get_matching_cards(suggestion)
-		var pick = pick_from_cards(choose_from)
+		var pick = await pick_from_cards(choose_from)
 		if (pick != null):
 			card_shown.emit(self, pick)
 			return pick

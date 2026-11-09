@@ -1,4 +1,4 @@
-extends Control
+extends Window
 class_name PopupSingleChoice
 
 signal single_choice_made(card_picked)
@@ -12,13 +12,11 @@ func _ready():
 
 	%PopupSC/Contents/ItemList.item_clicked.connect(_item_clicked)
 	%PopupSC/Contents/Submit.button_down.connect(_submit_clicked)
-	#add_choices([Card.new(Card.Type.SUSPECT, Card.Suspect.MissScarlett), Card.new(Card.Type.WEAPON, Card.Weapon.Revolver)])
-	get_choice()
 
-static func with(choices_: Array[Card]) -> Card:
-	var pop = Popup.new()
-	pop.add_choices(choices_)
-	return pop.get_choice()
+func get_single_choice(choices_: Array[Card]) -> Card:
+	clear()
+	add_choices(choices_)
+	return await get_choice()
 
 func add_choices(extra: Array[Card]):
 	choices.append_array(extra)
@@ -29,7 +27,8 @@ func clear():
 func get_choice():
 	var il = %PopupSC/Contents/ItemList as ItemList
 	var btn = %PopupSC/Contents/Submit as Button
-	il.visible = !choices.is_empty()
+	if choices.is_empty():
+		il.hide()
 	il.clear()
 	for choice in choices:
 		il.add_item(choice.pretty(), null, true)

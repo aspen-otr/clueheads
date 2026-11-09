@@ -34,6 +34,23 @@ static func set_all_lut():
 	for key in Room.keys():
 		room_lut.set(Room[key], key)
 
+func pretty() -> String:
+	var str_key
+	if type == Type.WEAPON:
+		str_key = Weapon.keys()[value]
+	elif type == Type.ROOM:
+		str_key = Room.keys()[value]
+	elif type == Type.SUSPECT:
+		str_key = Suspect.keys()[value]
+	return str_key.capitalize()
+
+static func from_string(string: String) -> Card:
+	for ty in Type.values():
+		for key in TYPE_VALS[ty].keys():
+			if key.capitalize() == string:
+				return Card.new(ty, TYPE_VALS[ty][key])
+	return null
+
 func _init(type_: Type, value_):
 	type = type_
 	value = value_

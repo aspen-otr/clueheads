@@ -18,11 +18,16 @@ config/icon="res://icon.svg"
 [autoload]
 
 Lobby="*uid://dv2xy2vetyon7"
+Popups="*uid://ihynpbig6t2e"
 
 [display]
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [physics]
 

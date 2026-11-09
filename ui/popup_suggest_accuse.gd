@@ -11,7 +11,7 @@ func popup_suggest_accuse(guess_type_: Popups.PopupSuggestAccuse, locked_options
 	guess_type = guess_type_
 	_set_text()
 	_type_labels()
-	_selection_menus()
+	_selection_menus(locked_options)
 	%PopupSuggestAccuse.popup()
 	var result = await popup_suggest_accuse_pressed
 	for child in %PopupSuggestAccuse/Contents/Selections.get_children():
@@ -35,9 +35,15 @@ func _type_labels():
 		new_label.text = Card.type_lut[type]
 		%PopupSuggestAccuse/Contents/Selections.add_child(new_label)
 		
-func _selection_menus():
+func _selection_menus(locked_options: Array[Card]):
 	item_lists.clear()
 	for type in Set.types:
+		var type_disabled: bool # whether this type has a locked value
+		var still_available: Array # values that are still available in a lock
+		for lock in locked_options:
+			if lock.type == type:
+				type_disabled = true
+				still_available.append(lock.value)
 		item_lists.append(ItemList.new())
 		item_lists.back().auto_width = true
 		item_lists.back().auto_height = true
@@ -45,6 +51,11 @@ func _selection_menus():
 		for item in Card.TYPE_VALS[type]:
 			item_lists.back().add_item(item)
 			item_lists.back().set_item_metadata(i, Card.new(type, item))
+			if type_disabled:
+				if still_available.has(Card.TYPE_VALS[type][item]):
+					item_lists.back().select(i)
+				else:
+					item_lists.back().set_item_disabled(i, true)
 			i += 1
 		%PopupSuggestAccuse/Contents/Selections.add_child(item_lists.back())
 		

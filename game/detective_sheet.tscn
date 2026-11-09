@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dbkxj36qvfq7e"]
+
+[ext_resource type="Script" uid="uid://0afdq2jut78k" path="res://game/detective_sheet.gd" id="1_mkwqr"]
+[ext_resource type="StyleBox" uid="uid://taijbad26e0t" path="res://game/detective_sheet_stylebox.tres" id="2_j3e0i"]
+
+[sub_resource type="Theme" id="Theme_mkwqr"]
+
+[node name="Detective Sheet" type="Node2D" unique_id=1854618134]
+script = ExtResource("1_mkwqr")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=478015407]
+custom_minimum_size = Vector2(450, 600)
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 39.0
+offset_bottom = 39.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_mkwqr")
+theme_override_styles/panel = ExtResource("2_j3e0i")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel" unique_id=1781736306]
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="Panel/ScrollContainer" unique_id=2032903975]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hovered_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hovered_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_styles/panel = ExtResource("2_j3e0i")
+theme_override_styles/focus = ExtResource("2_j3e0i")
+theme_override_styles/hovered = ExtResource("2_j3e0i")
+theme_override_styles/hovered_selected = ExtResource("2_j3e0i")
+theme_override_styles/hovered_selected_focus = ExtResource("2_j3e0i")
+theme_override_styles/selected = ExtResource("2_j3e0i")
+theme_override_styles/selected_focus = ExtResource("2_j3e0i")
+theme_override_styles/cursor_unfocused = ExtResource("2_j3e0i")
+theme_override_styles/cursor = ExtResource("2_j3e0i")
+allow_reselect = true
+auto_width = true
+auto_height = true

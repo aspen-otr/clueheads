@@ -9,7 +9,7 @@ var _real_player_lut: Array[bool] = []
 
 #region Static functions
 
-static func advance_player(player: Card.Suspect):
+static func advance_player(player: Card.Suspect) -> Card.Suspect:
 	return (((player as int) + 1) % Card.Suspect.size()) as Card.Suspect
 
 #endregion Static functions
@@ -48,10 +48,16 @@ func is_npc(index: int) -> bool:
 
 #endregion
 
-func _init(real_players: Array[Card.Suspect]): # TODO: Give NPC personalities, how to track network connections, etc.
+func _init(real_players: Array[Card.Suspect]) -> void:
+	self._real_player_lut.resize(Card.Suspect.size())
+
 	for idx in range(Card.Suspect.size()):
+<<<<<<< HEAD
+		self._real_player_lut[idx] = idx in real_players
+=======
 		self._real_player_lut[idx as int] = idx in real_players
 	
 	# initialize card lookup tables
 	Card.set_all_lut()	
 	
+>>>>>>> a2d0e50991d162429e1b28f91d4e49c49b81ddb7

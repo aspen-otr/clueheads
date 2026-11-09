@@ -1,0 +1,192 @@
+[gd_scene format=3 uid="uid://cfuntk6a6hq2y"]
+
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/themes/menu_theme.tres" id="1_fs65p"]
+[ext_resource type="Script" uid="uid://bnyfwyraqxnh1" path="res://ui/lobby_buttons.gd" id="2_hckjc"]
+[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/themes/red_button_stylebox.tres" id="2_hh815"]
+
+[node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_name_input", "host_port_input", "host_game", "host_back", "join_name_input", "join_port_input", "join_game", "join_back")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_fs65p")
+script = ExtResource("2_hckjc")
+host_name_input = NodePath("MarginContainer/Host/HBoxContainer/HostNameInput")
+host_port_input = NodePath("MarginContainer/Host/HBoxContainer2/HostPortInput")
+host_game = NodePath("MarginContainer/Host/HBoxContainer3/HostGame")
+host_back = NodePath("MarginContainer/Join/HBoxContainer4/JoinBack")
+join_name_input = NodePath("MarginContainer/Join/HBoxContainer/JoinNameInput")
+join_port_input = NodePath("MarginContainer/Join/HBoxContainer2/JoinPortInput")
+join_game = NodePath("MarginContainer/Join/HBoxContainer4/JoinGame")
+join_back = NodePath("MarginContainer/Join/HBoxContainer4/JoinBack")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1464676030]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 450
+theme_override_constants/margin_right = 450
+
+[node name="Host" type="VBoxContainer" parent="MarginContainer" unique_id=202219339]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Host" unique_id=305390225]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Host/HBoxContainer" unique_id=1504617487]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Host/HBoxContainer/PanelContainer" unique_id=1609204089]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Host/HBoxContainer/PanelContainer/MarginContainer" unique_id=833131179]
+layout_mode = 2
+text = "Name:"
+
+[node name="HostNameInput" type="LineEdit" parent="MarginContainer/Host/HBoxContainer" unique_id=1023492109]
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Host" unique_id=182138372]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Host/HBoxContainer2" unique_id=378375432]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Host/HBoxContainer2/PanelContainer" unique_id=1683621982]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Host/HBoxContainer2/PanelContainer/MarginContainer" unique_id=697121980]
+layout_mode = 2
+text = "Port:"
+
+[node name="HostPortInput" type="LineEdit" parent="MarginContainer/Host/HBoxContainer2" unique_id=1183053430]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = " <optional>"
+caret_blink = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Host" unique_id=1134553838]
+layout_mode = 2
+
+[node name="HostGame" type="Button" parent="MarginContainer/Host/HBoxContainer3" unique_id=771849850]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Host"
+
+[node name="HostBack" type="Button" parent="MarginContainer/Host/HBoxContainer3" unique_id=208165357]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("2_hh815")
+text = "  X  "
+
+[node name="Join" type="VBoxContainer" parent="MarginContainer" unique_id=1200021180]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Join" unique_id=2009987595]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/HBoxContainer" unique_id=1172057234]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Join/HBoxContainer/PanelContainer" unique_id=2053775528]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Join/HBoxContainer/PanelContainer/MarginContainer" unique_id=2086649869]
+layout_mode = 2
+text = "Name:"
+
+[node name="JoinNameInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer" unique_id=279197620]
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1934824430]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/HBoxContainer3" unique_id=1595241679]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Join/HBoxContainer3/PanelContainer" unique_id=661230578]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Join/HBoxContainer3/PanelContainer/MarginContainer" unique_id=1087175125]
+layout_mode = 2
+text = "IP:"
+
+[node name="AddressInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer3" unique_id=698046895]
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Join" unique_id=256309164]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/HBoxContainer2" unique_id=1115629793]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Join/HBoxContainer2/PanelContainer" unique_id=1941632993]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Join/HBoxContainer2/PanelContainer/MarginContainer" unique_id=2055641091]
+layout_mode = 2
+text = "Port:"
+
+[node name="JoinPortInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer2" unique_id=1125261745]
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1835805647]
+layout_mode = 2
+
+[node name="JoinGame" type="Button" parent="MarginContainer/Join/HBoxContainer4" unique_id=331653282]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Join"
+
+[node name="JoinBack" type="Button" parent="MarginContainer/Join/HBoxContainer4" unique_id=1040844586]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("2_hh815")
+text = "  X  "

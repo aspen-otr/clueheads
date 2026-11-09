@@ -1,0 +1,30 @@
+name: Godot Automated Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Run GUT Tests
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Godot 4.7
+        uses: solarlabyrinth/action-setup-godot@v3
+        with:
+          version: 4.7-stable
+
+      - name: Import Godot project
+        run: |
+          godot --headless --editor --quit --path .
+
+      - name: Run GUT automated tests
+        run: |
+          godot --headless -d -s --path . addons/gut/gut_cmdln.gd \
+            -gdir=res://tests \
+            -ginclude_subdirs \
+            -gexit

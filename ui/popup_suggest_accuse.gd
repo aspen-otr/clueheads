@@ -59,8 +59,14 @@ func _retrieve_selected():
 func _suggest_pressed():
 	_retrieve_selected()
 	if selected.size() == item_lists.size():
-		#var confirmation = await Popups.popup_yn("Are you sure you want to make an accusation?")
-		#if (confirmation == Popups.PopupYN.YES):
+		var confirmation = Popups.PopupYN.YES
+		if guess_type == Popups.PopupSuggestAccuse.ACCUSATION:
+			visible = false
+			exclusive = false
+			confirmation = await Popups.popup_yn("Are you sure you want to make an accusation?")
+			exclusive = true
+			visible = true
+		if (confirmation == Popups.PopupYN.YES):
 			popup_suggest_accuse_pressed.emit(Set.new(selected))
 	
 func _cancel_pressed():

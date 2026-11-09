@@ -2,8 +2,8 @@ extends Window
 
 signal popup_yn_pressed
 
-func popup_yn(title, yes_txt = Popups.PopupYN.keys()[Popups.PopupYN.YES], no_txt = Popups.PopupYN.keys()[Popups.PopupYN.NO]) -> Popups.PopupYN:
-	%PopupYN/Contents/Text.text = title
+func popup_yn(title_txt, yes_txt = Popups.PopupYN.keys()[Popups.PopupYN.YES], no_txt = Popups.PopupYN.keys()[Popups.PopupYN.NO]) -> Popups.PopupYN:
+	%PopupYN/Contents/Text.text = title_txt
 	%PopupYN/Contents/Buttons/YesBtn.text = yes_txt
 	%PopupYN/Contents/Buttons/NoBtn.text = no_txt
 	%PopupYN.popup()

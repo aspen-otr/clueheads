@@ -1,12 +1,15 @@
-extends Control
+extends Window
 
 # returns a Set, or null if canceled
 signal popup_suggest_accuse_pressed
 
+var guess_type: Popups.PopupSuggestAccuse
 var item_lists: Array[ItemList]
 var selected: Array[Card]
 
-func popup_suggest_accuse() -> Set:
+func popup_suggest_accuse(guess_type_: Popups.PopupSuggestAccuse, locked_options: Array[Card] = []) -> Set:
+	guess_type = guess_type_
+	_set_text()
 	_type_labels()
 	_selection_menus()
 	%PopupSuggestAccuse.popup()
@@ -15,6 +18,15 @@ func popup_suggest_accuse() -> Set:
 		child.queue_free()
 	%PopupSuggestAccuse.hide()
 	return result
+	
+func _set_text():
+	if guess_type == Popups.PopupSuggestAccuse.ACCUSATION:
+		%PopupSuggestAccuse/Contents/Text.text = "Who are you accusing?"
+		%PopupSuggestAccuse/Contents/Buttons/SuggestBtn.text = "Accuse"
+	elif guess_type == Popups.PopupSuggestAccuse.SUGGESTION:
+		%PopupSuggestAccuse/Contents/Text.text = "Who are you suggesting?"
+		%PopupSuggestAccuse/Contents/Buttons/SuggestBtn.text = "Suggest"
+
 	
 func _type_labels():
 	%PopupSuggestAccuse/Contents/Selections.columns = Set.types.size()
@@ -47,7 +59,9 @@ func _retrieve_selected():
 func _suggest_pressed():
 	_retrieve_selected()
 	if selected.size() == item_lists.size():
-		popup_suggest_accuse_pressed.emit(Set.new(selected))
+		#var confirmation = await Popups.popup_yn("Are you sure you want to make an accusation?")
+		#if (confirmation == Popups.PopupYN.YES):
+			popup_suggest_accuse_pressed.emit(Set.new(selected))
 	
 func _cancel_pressed():
 	popup_suggest_accuse_pressed.emit(null)

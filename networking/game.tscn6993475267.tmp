@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://o38b06m67tyr"]
+
+[ext_resource type="Script" uid="uid://cwl7fweku441o" path="res://networking/host_join_debug.gd" id="1_xvjfa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xvjfa"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="Game" type="Node2D" unique_id=2063469141]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=553049263]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=886459192 node_paths=PackedStringArray("return_text", "text_input")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_xvjfa")
+return_text = NodePath("MarginContainer/VBoxContainer/ReturnText")
+text_input = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/TextInput")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=450040629]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/MarginContainer" unique_id=1391966298]
+layout_mode = 2
+theme_override_constants/separation = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="ReturnText" type="Label" parent="CanvasLayer/Control/MarginContainer/VBoxContainer" unique_id=1716217423]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/MarginContainer/VBoxContainer" unique_id=1714206368]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HostButton" type="Button" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1599804964]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1660717435]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Join
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/MarginContainer/VBoxContainer" unique_id=208843521]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1252782422]
+layout_mode = 2
+text = "IP:"
+
+[node name="TextInput" type="TextEdit" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1643284693]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_xvjfa")
+
+[connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/HostButton" to="CanvasLayer/Control" method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/JoinButton" to="CanvasLayer/Control" method="_on_join_button_pressed"]
+[connection signal="text_set" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer2/TextInput" to="CanvasLayer/Control" method="on_text_edit_text_set"]

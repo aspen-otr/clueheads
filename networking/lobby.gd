@@ -36,9 +36,11 @@ func _ready():
 	client_info = LocalGameState.new()
 
 #region : Scene specific functions
-func create_game():
+func create_game(given_port = null):
+	if !given_port:
+		given_port = PORT
 	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_server(PORT, MAX_CLIENTS)
+	var error = peer.create_server(given_port, MAX_CLIENTS)
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer

@@ -1,0 +1,14 @@
+[gd_resource type="Theme" format=3 uid="uid://dwwkxidyppeaj"]
+
+[ext_resource type="StyleBox" uid="uid://b6dl08uju0uli" path="res://ui/themes/button_hover_stylebox.tres" id="1_2x810"]
+[ext_resource type="StyleBox" uid="uid://6y66mw2mskpg" path="res://ui/themes/basic_stylebox.tres" id="1_bsoan"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk0pr"]
+
+[resource]
+BoxContainer/constants/separation = 12
+Button/styles/hover = ExtResource("1_2x810")
+Button/styles/normal = ExtResource("1_bsoan")
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_wk0pr")
+LineEdit/styles/normal = ExtResource("1_bsoan")
+PanelContainer/styles/panel = ExtResource("1_bsoan")

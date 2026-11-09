@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://c2j4h6v3t7k0d"]
+
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/themes/menu_theme.tres" id="1_gsmdt"]
+[ext_resource type="Script" uid="uid://bqau211hnmiv" path="res://ui/static_modules/lobby_ui.gd" id="2_yswxk"]
+[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/themes/red_button_stylebox.tres" id="3_3ext1"]
+
+[node name="LobbyUi" type="Control" unique_id=232959536 node_paths=PackedStringArray("start_button", "back_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gsmdt")
+script = ExtResource("2_yswxk")
+start_button = NodePath("HBoxContainer/PanelContainer/MarginContainer/HBoxContainer/StartButton")
+back_button = NodePath("HBoxContainer/PanelContainer/MarginContainer/HBoxContainer/BackButton")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=327333946]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=1189571454]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer" unique_id=1728522455]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer" unique_id=1323469723]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer" unique_id=354957924]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="StartButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=476076668]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "START"
+
+[node name="BackButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1384052586]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/hover = ExtResource("3_3ext1")
+text = "LEAVE"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=2123459708]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VBoxContainer" unique_id=1600558240]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/PanelContainer" unique_id=2003136262]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1384077036]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.07

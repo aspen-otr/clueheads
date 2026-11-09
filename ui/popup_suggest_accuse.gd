@@ -32,7 +32,6 @@ func _type_labels():
 		var new_label = Label.new()
 		new_label.text = Card.type_lut[type]
 		%PopupSuggestAccuse/Contents/Selections.add_child(new_label)
-
 func _selection_menus(locked_options: Array[Card]):
 	item_lists.clear()
 	for type in Set.types:

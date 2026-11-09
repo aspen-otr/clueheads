@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bxdvneri6y3bk"]
+
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/themes/menu_theme.tres" id="1_aptaj"]
+[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/themes/red_button_stylebox.tres" id="2_3xxi4"]
+[ext_resource type="Script" uid="uid://hry8rb6hs00d" path="res://ui/main_menu_buttons.gd" id="2_n1xge"]
+
+[node name="MainMenuButtons" type="VBoxContainer" unique_id=393043605 node_paths=PackedStringArray("singleplayer_button", "multiplayer_button", "options_button", "quit_button")]
+offset_right = 316.0
+offset_bottom = 224.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("1_aptaj")
+theme_override_constants/separation = 16
+script = ExtResource("2_n1xge")
+singleplayer_button = NodePath("SingleplayerButton")
+multiplayer_button = NodePath("MultiplayerButton")
+options_button = NodePath("HBoxContainer/OptionsButton")
+quit_button = NodePath("HBoxContainer/QuitButton")
+
+[node name="SingleplayerButton" type="Button" parent="." unique_id=487400590]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = " Singleplayer "
+
+[node name="MultiplayerButton" type="Button" parent="." unique_id=300783604]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "Multiplayer
+"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=276614386]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="OptionsButton" type="Button" parent="HBoxContainer" unique_id=1595110303]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Options
+"
+
+[node name="QuitButton" type="Button" parent="HBoxContainer" unique_id=1168330850]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+theme_override_styles/hover = ExtResource("2_3xxi4")
+text = "Quit Game
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=943538596]
+layout_mode = 2

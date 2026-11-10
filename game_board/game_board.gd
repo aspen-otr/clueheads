@@ -8,11 +8,13 @@ var board_width: int
 var board_height: int
 
 var active_rooms: Array[room] 
+var spawn_tile_coords: Array
+var active_players: Array[player]
 
 var tile_size: float = 0.0
 var offset_x: float = 0.0
 var offset_y: float = 0.0
-var hovered_tile_coords: Vector2i = Vector2i(-1, -1)
+var hovered_tile_coords: Array = [-1, -1]
 
 var default_font: Font = Control.new().get_theme_font("font")
 const ROOM_COLORS = {
@@ -44,8 +46,24 @@ const ROOM_NAMES = {
 }
 
 
+func get_room_by_type(target_type: board_tile.ROOM_TYPE) -> room:
+	for current_room in active_rooms:
+		if (current_room.room_type == target_type):
+			return current_room
+			
+	return null
+func get_tile(cords: Array) -> board_tile:
+	if cords[0] >= 0 and cords[0] < board_width and cords[1] >= 0 and cords[1] < board_height:
+		return board_grid[cords[0]][cords[1]]
+	return null
 
-
+func move_player(p_player: int, destination: Array):
+	var p_player_coords
+	if (active_players[p_player].player_coords != [-1,-1]):
+		p_player_coords = active_players[p_player].player_coords
+		board_grid[p_player_coords[0]][p_player_coords[1]].occupied_by = null
+	board_grid[destination[0]][destination[1]].occupied_by = p_player
+	active_players[p_player].player_coords = destination
 
 func change_board_tile(coords: Array, p_board_tile: board_tile ) -> void:
 	var x = coords[0] + p_board_tile.tile_x
@@ -54,6 +72,7 @@ func change_board_tile(coords: Array, p_board_tile: board_tile ) -> void:
 	if (x >= 0 and x < board_width and y >= 0 and y < board_height):
 			board_grid[x][y].room_type = p_board_tile.room_type
 			board_grid[x][y].is_spawn_tile =  p_board_tile.is_spawn_tile
+			
 	
 		
 
@@ -75,10 +94,18 @@ func add_room_to_grid(added_room: room) -> void:
 #and uses that room type to construct a new spawn tile object to 
 #replace the one at the coords given
 func add_spawn_tile(coords: Array) -> void :
-	var target_tile_room_type = get_tile_room_type(coords)
+	var target_tile_room_type: board_tile.ROOM_TYPE = get_tile(coords).room_type
+	spawn_tile_coords.append(coords)
 	var spawn_tile = board_tile.new(0, 0, true, true, target_tile_room_type)
 	change_board_tile(coords, spawn_tile)
 	
+func setup_board_grid():
+	board_grid.clear()
+	for x in range(board_width):
+		var column = []
+		for y in range(board_height):
+			column.append(board_tile.new(x, y, false, true, board_tile.ROOM_TYPE.HALLWAY))
+		board_grid.append(column)
 
 func add_board1_spawn_tiles():
 	add_spawn_tile([9, 0])
@@ -89,15 +116,18 @@ func add_board1_spawn_tiles():
 	add_spawn_tile([23, 17])
 	add_spawn_tile([16, 23])
 	add_spawn_tile([7, 23])
+func place_players(num_players):
+	for i in range(num_players):
+		active_players.append(player.new(Color(1-(i%4), 0+(i%2), 0+(i%3))))
+	for i in range(len(active_players)):
+		move_player(i, spawn_tile_coords[i])
+		
+	
+	
 func initialize_board1() -> void:
-	board_grid.clear()
 	board_height = 24
 	board_width = 24
-	for x in range(board_width):
-		var column = []
-		for y in range(board_height):
-			column.append(board_tile.new(x, y, false, true, board_tile.ROOM_TYPE.HALLWAY))
-		board_grid.append(column)
+	setup_board_grid()
 	
 	var conservatory_room = room.create(0, 0, board_tile.ROOM_TYPE.CONSERVATORY)
 	add_room_to_grid(conservatory_room)
@@ -121,16 +151,38 @@ func initialize_board1() -> void:
 	add_room_to_grid(staircase)
 	add_board1_spawn_tiles()
 
-func get_tile_room_type(cords: Array) -> board_tile.ROOM_TYPE:
-	if cords[0] >= 0 and cords[0] < board_width and cords[1] >= 0 and cords[1] < board_height:
-		return board_grid[cords[0]][cords[1]].room_type
-	return board_tile.ROOM_TYPE.NONE
+func initialize_board2() -> void:
+	board_height = 35
+	board_width = 50
+	setup_board_grid()
+	
+	var conservatory_room = room.create(-2, -2, board_tile.ROOM_TYPE.CONSERVATORY)
+	add_room_to_grid(conservatory_room)
+	var billiard_room = room.create(5, -2, board_tile.ROOM_TYPE.BILLIARD)
+	add_room_to_grid(billiard_room)
+	var library_room = room.create(0, 4, board_tile.ROOM_TYPE.LIBRARY)
+	add_room_to_grid(library_room)
+	var study_room = room.create(24, 4, board_tile.ROOM_TYPE.STUDY)
+	add_room_to_grid(study_room)
+	var ballroom_room = room.create(12, -4, board_tile.ROOM_TYPE.BALLROOM)
+	add_room_to_grid(ballroom_room)
+	var kitchen_room = room.create(18, 0, board_tile.ROOM_TYPE.KITCHEN)
+	add_room_to_grid(kitchen_room)
+
+
+
+
 
 
 
 func _ready() -> void:
+	
+	
 	initialize_board1()
+	place_players(4)
 	queue_redraw()
+	
+
 func _process(_delta: float) -> void:
 	
 	if (tile_size <= 0): 
@@ -142,35 +194,60 @@ func _process(_delta: float) -> void:
 	var grid_x: int = floor((local_mouse.x - offset_x) / tile_size)
 	var grid_y: int = board_height - 1 - floor((local_mouse.y - offset_y) / tile_size)
 	
-	var current_hover = Vector2i(-10, -10)
+	var current_hover= [1, -1]
 	
 	# Validate bounds
 	if (grid_x >= 0 and grid_x < board_width and grid_y >= 0 and grid_y < board_height):
-		current_hover = Vector2i(grid_x, grid_y)
+		current_hover = [grid_x, grid_y]
 		
 	#  update state and redraw if the hover location changed
 	if (current_hover != hovered_tile_coords):
-		if (hovered_tile_coords.x != -1):
-			board_grid[hovered_tile_coords.x][hovered_tile_coords.y].is_hovered = false
+		if (hovered_tile_coords[0] != -1):
+			board_grid[hovered_tile_coords[0]][hovered_tile_coords[1]].is_hovered = false
 			
-		if (current_hover.x != -1):
-			board_grid[current_hover.x][current_hover.y].is_hovered = true
+		if (current_hover[0] != -1):
+			board_grid[current_hover[0]][current_hover[1]].is_hovered = true
 			
 		hovered_tile_coords = current_hover
 		queue_redraw()
 
-func find_path():
+func find_path(die_roll: int):
 	var screen_x = hovered_tile_coords[0] * tile_size + offset_x
 	var screen_y = (board_height - 1 - hovered_tile_coords[1]) * tile_size + offset_y
-	var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
-	draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 1.0), true)
-	draw_rect(cell_rect, Color.BLACK, false, 1.0)
+	var target_tile = get_tile(hovered_tile_coords)
+	if (target_tile != null):
+		#cursor will not highlight over the staircase because players cant move to the staircase
+		if (target_tile.room_type != board_tile.ROOM_TYPE.STAIRCASE):
+			if (target_tile.room_type == board_tile.ROOM_TYPE.HALLWAY):
+				var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+				draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.635), true)
+				draw_rect(cell_rect, Color.BLACK, false, 1.0)
+			else:
+				var hovered_room: room = get_room_by_type(target_tile.room_type)
+				if (hovered_room != null):
+					var base_x = hovered_room.room_coords[0]
+					var base_y = hovered_room.room_coords[1]
+					
+					for x in range(hovered_room.room_width):
+						for y in range(hovered_room.room_height):
+							if ([x, y] not in hovered_room.hallway_tiles):
+								var grid_x = base_x + x
+								var grid_y = base_y + y
+								
+								screen_x = grid_x * tile_size + offset_x
+								screen_y = (board_height - 1 - grid_y) * tile_size + offset_y
+								
+								var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+								draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.616), true)
+								draw_rect(cell_rect, Color.BLACK, false, 1.0)
+
+
 
 func _draw() -> void:
 	var window_size: Vector2i = get_window().size
 	tile_size = (window_size.x / 2) / board_width
-	offset_x = window_size.x / 4
-	offset_y = window_size.y / 14
+	offset_x = (window_size.x / 4)- (tile_size * board_width)/16
+	offset_y = (window_size.y / 2) - (tile_size * board_height)/2
 	
 
 	for x in range(board_width):
@@ -190,9 +267,22 @@ func _draw() -> void:
 				draw_rect(cell_rect, fill_color, true)
 				draw_rect(cell_rect, Color.BLACK, false, 1.0)
 	
-	find_path()
+	find_path(6)
 	
-	
+	for i in range(len(active_players)):
+		var p_player_coords = active_players[i].player_coords
+		
+		# 1. Calculate the top-left corner of the tile
+		var tile_left = p_player_coords[0] * tile_size + offset_x
+		var tile_top = (board_height - 1 - p_player_coords[1]) * tile_size + offset_y
+		
+		# 2. Add half the tile size to find the exact center of the cell
+		var center_x = tile_left + (tile_size / 2.0)
+		var center_y = tile_top + (tile_size / 2.0)
+		
+		# 3. Draw the circle using the centered coordinates
+		draw_circle(Vector2(center_x, center_y), tile_size / 3.0, active_players[i].player_color)
+		
 	#align Labels
 	for current_room in active_rooms:
 		if (not ROOM_NAMES.has(current_room.room_type)):

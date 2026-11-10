@@ -28,7 +28,7 @@ var is_spawn_tile: bool = false
 #determines whether or not the player is able to travel on them
 var is_valid: bool = true
 # Tracks if a player/clue is standing here
-var occupied_by: Node = null 
+var occupied_by: int 
 
 func _init(p_x: int, p_y: int, p_is_spawn_tile: bool = false, p_is_valid: bool = true, p_room_type: ROOM_TYPE = ROOM_TYPE.NONE) -> void:
 	tile_x = p_x

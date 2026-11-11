@@ -11,3 +11,9 @@ func popup_suggest_accuse(guess_type_: PopupSuggestAccuse, locked_options: Array
 
 func popup_single_choice(choices: Array[Card]) -> Card:
 	return await %PopupSC.get_single_choice(choices)
+	
+func enable_card_display(cards: Array[Card]) -> void:
+	%CardDisplay.enable_card_display(cards)
+	
+func disable_card_display() -> void:
+	%CardDisplay.disable_card_display()

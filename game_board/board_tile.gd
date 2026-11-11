@@ -1,6 +1,6 @@
 
 extends RefCounted  # Inheriting RefCounted ensures automatic memory cleanup
-class_name board_tile # This registers the class globally in Godot
+class_name Board_tile # This registers the class globally in Godot
 
 enum ROOM_TYPE {
 	NONE,

@@ -1,5 +1,5 @@
 @abstract
-extends Player
+extends player
 class_name NPC
 
 

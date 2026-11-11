@@ -7,9 +7,9 @@ var board_grid: Array = []
 var board_width: int
 var board_height: int
 
-var active_rooms: Array[room] 
+var active_rooms: Array[Room] 
 var spawn_tile_coords: Array
-var active_players: Array[player]
+var active_players: Array[Player]
 
 var tile_size: float = 0.0
 var offset_x: float = 0.0
@@ -18,41 +18,40 @@ var hovered_tile_coords: Array = [-1, -1]
 
 var default_font: Font = Control.new().get_theme_font("font")
 const ROOM_COLORS = {
-	board_tile.ROOM_TYPE.NONE: Color(0.0, 0.0, 0.0, 1.0),       
-	board_tile.ROOM_TYPE.HALLWAY: Color(0.877, 0.843, 0.74, 1.0),    
-	board_tile.ROOM_TYPE.DOOR: Color(0.85, 0.35, 0.25),       
-	board_tile.ROOM_TYPE.KITCHEN: Color(0.25, 0.55, 0.75),    
-	board_tile.ROOM_TYPE.BILLIARD: Color(0.20, 0.60, 0.35),   
-	board_tile.ROOM_TYPE.BALLROOM: Color(0.65, 0.40, 0.75),   
-	board_tile.ROOM_TYPE.CONSERVATORY: Color(0.30, 0.70, 0.65),
-	board_tile.ROOM_TYPE.LIBRARY: Color(0.65, 0.50, 0.35),    
-	board_tile.ROOM_TYPE.STUDY: Color(0.45, 0.55, 0.65),      
-	board_tile.ROOM_TYPE.HALL: Color(0.80, 0.60, 0.20),       
-	board_tile.ROOM_TYPE.DINING: Color(0.70, 0.30, 0.30),     
-	board_tile.ROOM_TYPE.LOUNGE: Color(0.85, 0.55, 0.30),     
-	board_tile.ROOM_TYPE.STAIRCASE: Color(0.245, 0.245, 0.245, 1.0)   
+	Board_tile.ROOM_TYPE.NONE: Color(0.0, 0.0, 0.0, 1.0),       
+	Board_tile.ROOM_TYPE.HALLWAY: Color(0.877, 0.843, 0.74, 1.0),    
+	Board_tile.ROOM_TYPE.DOOR: Color(0.85, 0.35, 0.25),       
+	Board_tile.ROOM_TYPE.KITCHEN: Color(0.25, 0.55, 0.75),    
+	Board_tile.ROOM_TYPE.BILLIARD: Color(0.20, 0.60, 0.35),   
+	Board_tile.ROOM_TYPE.BALLROOM: Color(0.65, 0.40, 0.75),   
+	Board_tile.ROOM_TYPE.CONSERVATORY: Color(0.30, 0.70, 0.65),
+	Board_tile.ROOM_TYPE.LIBRARY: Color(0.65, 0.50, 0.35),    
+	Board_tile.ROOM_TYPE.STUDY: Color(0.45, 0.55, 0.65),      
+	Board_tile.ROOM_TYPE.HALL: Color(0.80, 0.60, 0.20),       
+	Board_tile.ROOM_TYPE.DINING: Color(0.70, 0.30, 0.30),     
+	Board_tile.ROOM_TYPE.LOUNGE: Color(0.85, 0.55, 0.30),     
+	Board_tile.ROOM_TYPE.STAIRCASE: Color(0.245, 0.245, 0.245, 1.0)   
 }
 const ROOM_NAMES = {
-	board_tile.ROOM_TYPE.KITCHEN: "KITCHEN",
-	board_tile.ROOM_TYPE.BILLIARD: "BILLIARD",
-	board_tile.ROOM_TYPE.BALLROOM: "BALLROOM",
-	board_tile.ROOM_TYPE.CONSERVATORY: "CONSERVATORY",
-	board_tile.ROOM_TYPE.LIBRARY: "LIBRARY",
-	board_tile.ROOM_TYPE.STUDY: "STUDY",
-	board_tile.ROOM_TYPE.HALL: "HALL",
-	board_tile.ROOM_TYPE.DINING: "DINING",
-	board_tile.ROOM_TYPE.LOUNGE: "LOUNGE",
-	board_tile.ROOM_TYPE.STAIRCASE: "STAIRS"
+	Board_tile.ROOM_TYPE.KITCHEN: "KITCHEN",
+	Board_tile.ROOM_TYPE.BILLIARD: "BILLIARD",
+	Board_tile.ROOM_TYPE.BALLROOM: "BALLROOM",
+	Board_tile.ROOM_TYPE.CONSERVATORY: "CONSERVATORY",
+	Board_tile.ROOM_TYPE.LIBRARY: "LIBRARY",
+	Board_tile.ROOM_TYPE.STUDY: "STUDY",
+	Board_tile.ROOM_TYPE.HALL: "HALL",
+	Board_tile.ROOM_TYPE.DINING: "DINING",
+	Board_tile.ROOM_TYPE.LOUNGE: "LOUNGE",
+	Board_tile.ROOM_TYPE.STAIRCASE: "STAIRS"
 }
 
-
-func get_room_by_type(target_type: board_tile.ROOM_TYPE) -> room:
+func get_room_by_type(target_type: Board_tile.ROOM_TYPE) -> Room:
 	for current_room in active_rooms:
 		if (current_room.room_type == target_type):
 			return current_room
 			
 	return null
-func get_tile(cords: Array) -> board_tile:
+func get_tile(cords: Array) -> Board_tile:
 	if cords[0] >= 0 and cords[0] < board_width and cords[1] >= 0 and cords[1] < board_height:
 		return board_grid[cords[0]][cords[1]]
 	return null
@@ -65,46 +64,46 @@ func move_player(p_player: int, destination: Array):
 	board_grid[destination[0]][destination[1]].occupied_by = p_player
 	active_players[p_player].player_coords = destination
 
-func change_board_tile(coords: Array, p_board_tile: board_tile ) -> void:
-	var x = coords[0] + p_board_tile.tile_x
-	var y = coords[1] + p_board_tile.tile_y
+func change_Board_tile(coords: Array, p_Board_tile: Board_tile ) -> void:
+	var x = coords[0] + p_Board_tile.tile_x
+	var y = coords[1] + p_Board_tile.tile_y
 	
 	if (x >= 0 and x < board_width and y >= 0 and y < board_height):
-			board_grid[x][y].room_type = p_board_tile.room_type
-			board_grid[x][y].is_spawn_tile =  p_board_tile.is_spawn_tile
+			board_grid[x][y].room_type = p_Board_tile.room_type
+			board_grid[x][y].is_spawn_tile =  p_Board_tile.is_spawn_tile
 			
 	
 		
 
-func add_room_to_grid(added_room: room) -> void:
+func add_room_to_grid(added_room: Room) -> void:
 	active_rooms.append(added_room)
 	for i in range(added_room.room_grid.size()):
 		for k in range(added_room.room_grid[i].size()):
-			var added_board_tile: board_tile = added_room.get_room_tile([i, k])
+			var added_Board_tile: Board_tile = added_room.get_room_tile([i, k])
 			var target_coords = [added_room.room_coords[0], added_room.room_coords[1]]
-			change_board_tile(target_coords, added_board_tile)
+			change_Board_tile(target_coords, added_Board_tile)
 	for i in range(added_room.doors.size()):
 		var door_coords: Array = added_room.doors[i]
 		if door_coords[0] >= 0 and door_coords[0] < board_width and door_coords[1] >= 0 and door_coords[1] < board_height:
-			board_grid[door_coords[0]][door_coords[1]].room_type = board_tile.ROOM_TYPE.DOOR
+			board_grid[door_coords[0]][door_coords[1]].room_type = Board_tile.ROOM_TYPE.DOOR
 
 #adds a spawn tile at the coords given. Spawn tile can 
 #be at any viable location on the board. the function takes 
-#the room type of the tile that you want to make a spawn tile, 
-#and uses that room type to construct a new spawn tile object to 
+#the Room type of the tile that you want to make a spawn tile, 
+#and uses that Room type to construct a new spawn tile object to 
 #replace the one at the coords given
 func add_spawn_tile(coords: Array) -> void :
-	var target_tile_room_type: board_tile.ROOM_TYPE = get_tile(coords).room_type
+	var target_tile_room_type: Board_tile.ROOM_TYPE = get_tile(coords).room_type
 	spawn_tile_coords.append(coords)
-	var spawn_tile = board_tile.new(0, 0, true, true, target_tile_room_type)
-	change_board_tile(coords, spawn_tile)
+	var spawn_tile = Board_tile.new(0, 0, true, true, target_tile_room_type)
+	change_Board_tile(coords, spawn_tile)
 	
 func setup_board_grid():
 	board_grid.clear()
 	for x in range(board_width):
 		var column = []
 		for y in range(board_height):
-			column.append(board_tile.new(x, y, false, true, board_tile.ROOM_TYPE.HALLWAY))
+			column.append(Board_tile.new(x, y, false, true, Board_tile.ROOM_TYPE.HALLWAY))
 		board_grid.append(column)
 
 func add_board1_spawn_tiles():
@@ -116,86 +115,95 @@ func add_board1_spawn_tiles():
 	add_spawn_tile([23, 17])
 	add_spawn_tile([16, 23])
 	add_spawn_tile([7, 23])
-func place_players(num_players):
-	for i in range(num_players):
-		active_players.append(player.new(Color(1-(i%4), 0+(i%2), 0+(i%3))))
-	for i in range(len(active_players)):
-		move_player(i, spawn_tile_coords[i])
-		
-	
-	
+
 func initialize_board1() -> void:
 	board_height = 24
 	board_width = 24
 	setup_board_grid()
 	
-	var conservatory_room = room.create(0, 0, board_tile.ROOM_TYPE.CONSERVATORY)
+	var conservatory_room = Room.create(0, 0, Board_tile.ROOM_TYPE.CONSERVATORY)
 	add_room_to_grid(conservatory_room)
-	var billiard_room = room.create(0, 7, board_tile.ROOM_TYPE.BILLIARD)
+	var billiard_room = Room.create(0, 7, Board_tile.ROOM_TYPE.BILLIARD)
 	add_room_to_grid(billiard_room)
-	var library_room = room.create(0, 13, board_tile.ROOM_TYPE.LIBRARY)
+	var library_room = Room.create(0, 13, Board_tile.ROOM_TYPE.LIBRARY)
 	add_room_to_grid(library_room)
-	var study_room = room.create(0, 20, board_tile.ROOM_TYPE.STUDY)
+	var study_room = Room.create(0, 20, Board_tile.ROOM_TYPE.STUDY)
 	add_room_to_grid(study_room)
-	var ballroom_room = room.create(8, 0, board_tile.ROOM_TYPE.BALLROOM)
+	var ballroom_room = Room.create(8, 0, Board_tile.ROOM_TYPE.BALLROOM)
 	add_room_to_grid(ballroom_room)
-	var kitchen_room = room.create(18, 0, board_tile.ROOM_TYPE.KITCHEN)
+	var kitchen_room = Room.create(18, 0, Board_tile.ROOM_TYPE.KITCHEN)
 	add_room_to_grid(kitchen_room)
-	var dining_room = room.create(16, 8, board_tile.ROOM_TYPE.DINING)
+	var dining_room = Room.create(16, 8, Board_tile.ROOM_TYPE.DINING)
 	add_room_to_grid(dining_room)
-	var lounge_room = room.create(18, 18, board_tile.ROOM_TYPE.LOUNGE)
+	var lounge_room = Room.create(18, 18, Board_tile.ROOM_TYPE.LOUNGE)
 	add_room_to_grid(lounge_room)
-	var hall_room = room.create(9, 17, board_tile.ROOM_TYPE.HALL)
+	var hall_room = Room.create(9, 17, Board_tile.ROOM_TYPE.HALL)
 	add_room_to_grid(hall_room)
-	var staircase = room.create(9, 9, board_tile.ROOM_TYPE.STAIRCASE)
+	var staircase = Room.create(9, 9, Board_tile.ROOM_TYPE.STAIRCASE)
 	add_room_to_grid(staircase)
 	add_board1_spawn_tiles()
 
 func initialize_board2() -> void:
-	board_height = 35
-	board_width = 50
+	board_height = 6
+	board_width = 30
 	setup_board_grid()
 	
-	var conservatory_room = room.create(-2, -2, board_tile.ROOM_TYPE.CONSERVATORY)
+	var conservatory_room = Room.create(-2, -2, Board_tile.ROOM_TYPE.CONSERVATORY)
 	add_room_to_grid(conservatory_room)
-	var billiard_room = room.create(5, -2, board_tile.ROOM_TYPE.BILLIARD)
+	var billiard_room = Room.create(5, -2, Board_tile.ROOM_TYPE.BILLIARD)
 	add_room_to_grid(billiard_room)
-	var library_room = room.create(0, 4, board_tile.ROOM_TYPE.LIBRARY)
+	var library_room = Room.create(0, 4, Board_tile.ROOM_TYPE.LIBRARY)
 	add_room_to_grid(library_room)
-	var study_room = room.create(24, 4, board_tile.ROOM_TYPE.STUDY)
+	var study_room = Room.create(24, 4, Board_tile.ROOM_TYPE.STUDY)
 	add_room_to_grid(study_room)
-	var ballroom_room = room.create(12, -4, board_tile.ROOM_TYPE.BALLROOM)
+	var ballroom_room = Room.create(12, -4, Board_tile.ROOM_TYPE.BALLROOM)
 	add_room_to_grid(ballroom_room)
-	var kitchen_room = room.create(18, 0, board_tile.ROOM_TYPE.KITCHEN)
+	var kitchen_room = Room.create(18, 0, Board_tile.ROOM_TYPE.KITCHEN)
 	add_room_to_grid(kitchen_room)
 
+func find_path(die_roll: int):
+		var screen_x = hovered_tile_coords[0] * tile_size + offset_x
+		var screen_y = (board_height - 1 - hovered_tile_coords[1]) * tile_size + offset_y
+		var target_tile = get_tile(hovered_tile_coords)
+		if (target_tile != null):
+			#cursor will not highlight over the staircase because players cant move to the staircase
+			if (target_tile.room_type != Board_tile.ROOM_TYPE.STAIRCASE):
+				if (target_tile.room_type == Board_tile.ROOM_TYPE.HALLWAY):
+					var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+					draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.635), true)
+					draw_rect(cell_rect, Color.BLACK, false, 1.0)
+				else:
+					var hovered_room: Room = get_room_by_type(target_tile.room_type)
+					if (hovered_room != null):
+						var base_x = hovered_room.room_coords[0]
+						var base_y = hovered_room.room_coords[1]
+						
+						for x in range(hovered_room.room_width):
+							for y in range(hovered_room.room_height):
+								if ([x, y] not in hovered_room.hallway_tiles):
+									var grid_x = base_x + x
+									var grid_y = base_y + y
+									
+									screen_x = grid_x * tile_size + offset_x
+									screen_y = (board_height - 1 - grid_y) * tile_size + offset_y
+									
+									var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+									draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.616), true)
+									draw_rect(cell_rect, Color.BLACK, false, 1.0)
 
-
-
-
-
-
-func _ready() -> void:
-	
-	
-	initialize_board1()
-	place_players(4)
-	queue_redraw()
-	
 
 func _process(_delta: float) -> void:
-	
 	if (tile_size <= 0): 
 		return 
 	
 	var local_mouse: Vector2 = get_local_mouse_position()
-	
-	
+		
+		
 	var grid_x: int = floor((local_mouse.x - offset_x) / tile_size)
 	var grid_y: int = board_height - 1 - floor((local_mouse.y - offset_y) / tile_size)
-	
+		
 	var current_hover= [1, -1]
-	
+
 	# Validate bounds
 	if (grid_x >= 0 and grid_x < board_width and grid_y >= 0 and grid_y < board_height):
 		current_hover = [grid_x, grid_y]
@@ -210,49 +218,18 @@ func _process(_delta: float) -> void:
 			
 		hovered_tile_coords = current_hover
 		queue_redraw()
-
-func find_path(die_roll: int):
-	var screen_x = hovered_tile_coords[0] * tile_size + offset_x
-	var screen_y = (board_height - 1 - hovered_tile_coords[1]) * tile_size + offset_y
-	var target_tile = get_tile(hovered_tile_coords)
-	if (target_tile != null):
-		#cursor will not highlight over the staircase because players cant move to the staircase
-		if (target_tile.room_type != board_tile.ROOM_TYPE.STAIRCASE):
-			if (target_tile.room_type == board_tile.ROOM_TYPE.HALLWAY):
-				var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
-				draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.635), true)
-				draw_rect(cell_rect, Color.BLACK, false, 1.0)
-			else:
-				var hovered_room: room = get_room_by_type(target_tile.room_type)
-				if (hovered_room != null):
-					var base_x = hovered_room.room_coords[0]
-					var base_y = hovered_room.room_coords[1]
-					
-					for x in range(hovered_room.room_width):
-						for y in range(hovered_room.room_height):
-							if ([x, y] not in hovered_room.hallway_tiles):
-								var grid_x = base_x + x
-								var grid_y = base_y + y
-								
-								screen_x = grid_x * tile_size + offset_x
-								screen_y = (board_height - 1 - grid_y) * tile_size + offset_y
-								
-								var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
-								draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.616), true)
-								draw_rect(cell_rect, Color.BLACK, false, 1.0)
-
-
-
 func _draw() -> void:
+	if board_width == 0 or board_height == 0:
+		return
 	var window_size: Vector2i = get_window().size
 	tile_size = (window_size.x / 2) / board_width
 	offset_x = (window_size.x / 4)- (tile_size * board_width)/16
 	offset_y = (window_size.y / 2) - (tile_size * board_height)/2
-	
 
+#draw board
 	for x in range(board_width):
 		for y in range(board_height):
-			var current_tile: board_tile = board_grid[x][y]
+			var current_tile: Board_tile = board_grid[x][y]
 			if (current_tile.is_valid == true):
 				var fill_color: Color
 				if (current_tile.is_spawn_tile == false):
@@ -266,9 +243,10 @@ func _draw() -> void:
 
 				draw_rect(cell_rect, fill_color, true)
 				draw_rect(cell_rect, Color.BLACK, false, 1.0)
-	
+
 	find_path(6)
-	
+
+	#draw players
 	for i in range(len(active_players)):
 		var p_player_coords = active_players[i].player_coords
 		

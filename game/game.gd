@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name Game
 
 # The game behavior wherein the gameplay loop is performed.
@@ -13,6 +13,35 @@ var dice: Dice = Dice.new()
 var last_dice_roll: Array[int] = []
 var last_roll_total: int = 0
 
+@onready var game_board: Node2D = $GameBoard 
+
+#var active_players: Array = [] 
+
+func place_players(num_players):
+	for i in range(num_players):
+		game_board.active_players.append(Player.new(Color(1-(i%4), 0+(i%2), 0+(i%3)), Card.Suspect.MissScarlett))
+	for i in range(len(game_board.active_players)):
+		game_board.move_player(i, game_board.spawn_tile_coords[i])
+		
+	
+	
+func setup_real_players(real_players: Array[Card.Suspect]) -> void:
+	self._real_player_lut.resize(Card.Suspect.size())
+
+	for idx in range(Card.Suspect.size()):
+		self._real_player_lut[idx] = idx in real_players
+
+	Card.set_all_lut()
+
+
+func _ready() -> void:
+	setup_real_players([Card.Suspect.MissScarlett, Card.Suspect.ColonelMustard])
+	
+	game_board.initialize_board1()
+	place_players(4)
+	
+	game_board.queue_redraw()
+
 #region Static functions
 
 static func advance_player(player: Card.Suspect) -> Card.Suspect:
@@ -21,7 +50,13 @@ static func advance_player(player: Card.Suspect) -> Card.Suspect:
 #endregion Static functions
 
 
-func loop():
+
+
+
+
+
+
+func game_loop():
 	while true:
 		if self.is_npc(self.current_player):
 			pass
@@ -72,29 +107,17 @@ func disprove(_suggestion: Set) -> Variant:
 #region Utility instance functions
 
 func is_in_room(player: Card.Suspect) -> bool:
-	return self.room(player) != Card.Room.size()
+	return self.room(player) != Card.Room_type.size()
 
 
-func room(_player: Card.Suspect) -> Card.Room:
+func room(_player: Card.Suspect) -> Card.Room_type:
 	# If x < Card.Room.size(), we have a room.
 	# Assume we're not in one for now.
 
-	return Card.Room.size() as Card.Room
+	return Card.Room_type.size() as Card.Room_type
 
 
 func is_npc(index: int) -> bool:
 	return not self._real_player_lut[index]
 
 #endregion
-
-
-func _init(real_players: Array[Card.Suspect]) -> void:
-	self._real_player_lut.resize(
-		Card.Suspect.size()
-	)
-
-	for idx in range(Card.Suspect.size()):
-		self._real_player_lut[idx] = idx in real_players
-
-	# Initialize card lookup tables.
-	Card.set_all_lut()

@@ -4,8 +4,12 @@
 [ext_resource type="Script" uid="uid://4wa4q3ydv4vl" path="res://ui/popup_suggest_accuse.gd" id="1_yypk8"]
 [ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://ui/popup_yn.gd" id="2_lb26h"]
 [ext_resource type="Script" uid="uid://cmp7lswt0cm74" path="res://ui/popup_single_choice.gd" id="4_lb26h"]
+[ext_resource type="Script" uid="uid://bq3cv4q4fwvst" path="res://ui/card_display.gd" id="5_b7pcm"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0r1bn"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_a7wfa"]
 font_size = 32
 
 [node name="Popups" type="Control" unique_id=942190368]
@@ -145,6 +149,7 @@ oversampling_override = 1.0
 title = "Select a Card to Reveal"
 initial_position = 1
 size = Vector2i(191, 100)
+visible = false
 wrap_controls = true
 transient = true
 exclusive = true
@@ -188,7 +193,71 @@ auto_height = true
 layout_mode = 2
 text = "Submit"
 
+[node name="CardDisplay" type="Control" parent="CanvasLayer" unique_id=2105741540]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_b7pcm")
+
+[node name="CardHand" type="ColorRect" parent="CanvasLayer/CardDisplay" unique_id=2097211291]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -300.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+color = Color(0.10021602, 1.607567e-05, 0.6685056, 1)
+
+[node name="Cards" type="VBoxContainer" parent="CanvasLayer/CardDisplay/CardHand" unique_id=1386935149]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HideBtn" type="Button" parent="CanvasLayer/CardDisplay/CardHand/Cards" unique_id=935391775]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Hide"
+
+[node name="Label" type="Label" parent="CanvasLayer/CardDisplay/CardHand/Cards" unique_id=200058645]
+layout_mode = 2
+text = "Your Cards"
+label_settings = SubResource("LabelSettings_a7wfa")
+horizontal_alignment = 1
+
+[node name="CardTxt" type="Label" parent="CanvasLayer/CardDisplay/CardHand/Cards" unique_id=1710825188]
+layout_mode = 2
+
+[node name="ShowCardsBtn" type="Button" parent="CanvasLayer/CardDisplay" unique_id=800489728]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Show Cards"
+
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/YesBtn" to="CanvasLayer/PopupYN" method="_yes_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/NoBtn" to="CanvasLayer/PopupYN" method="_no_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupSuggestAccuse/Contents/Buttons/SuggestBtn" to="CanvasLayer/PopupSuggestAccuse" method="_suggest_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupSuggestAccuse/Contents/Buttons/CancelBtn" to="CanvasLayer/PopupSuggestAccuse" method="_cancel_pressed"]
+[connection signal="pressed" from="CanvasLayer/CardDisplay/CardHand/Cards/HideBtn" to="CanvasLayer/CardDisplay" method="_hide_cards"]
+[connection signal="pressed" from="CanvasLayer/CardDisplay/ShowCardsBtn" to="CanvasLayer/CardDisplay" method="_show_cards"]

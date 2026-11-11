@@ -36,7 +36,9 @@ static func set_all_lut():
 
 func pretty() -> String:
 	var str_key
-	if type == Type.WEAPON:
+	if typeof(value) == TYPE_STRING:
+		str_key = value
+	elif type == Type.WEAPON:
 		str_key = Weapon.keys()[value]
 	elif type == Type.ROOM:
 		str_key = Room.keys()[value]

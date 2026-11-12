@@ -1,6 +1,7 @@
 @abstract
-extends player
 class_name NPC
+extends Player
+
 
 
 var character_name: String = "Unknown"
@@ -12,10 +13,10 @@ signal room_changed(npc, new_room)
 signal card_shown(npc, card)
 
 
-func _init(ident_: Card.Suspect) -> void:
-	super(ident_)
-	character_name = Card.Suspect.keys()[ident_]
 
+func _init(p_player_color: Color, ident_: Card.Suspect) -> void:
+	super(p_player_color, ident_) 
+	character_name = Card.Suspect.keys()[ident_]
 
 func set_cards(new_cards: Array[Card]) -> void:
 	cards = new_cards.duplicate()

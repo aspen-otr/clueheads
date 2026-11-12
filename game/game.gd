@@ -4,7 +4,7 @@ class_name Game
 # The game behavior wherein the gameplay loop is performed.
 # Not including the main menu, etc.
 
-signal dice_rolled(player: Card.Suspect, dice: Array[int], total: int)
+signal dice_rolled(Player: Card.Suspect, dice: Array[int], total: int)
 
 var current_player: Card.Suspect = Card.Suspect.MissScarlett
 var _real_player_lut: Array[bool] = []
@@ -44,8 +44,8 @@ func _ready() -> void:
 
 #region Static functions
 
-static func advance_player(player: Card.Suspect) -> Card.Suspect:
-	return (((player as int) + 1) % Card.Suspect.size()) as Card.Suspect
+static func advance_player(Player: Card.Suspect) -> Card.Suspect:
+	return (((Player as int) + 1) % Card.Suspect.size()) as Card.Suspect
 
 #endregion Static functions
 

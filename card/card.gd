@@ -27,6 +27,7 @@ static func set_all_lut():
 	suspect_lut.resize(Suspect.size())
 	weapon_lut.resize(Weapon.size())
 	room_lut.resize(Room_type.size())
+	
 	for key in Suspect.keys():
 		suspect_lut[Suspect[key]] = key
 	for key in Weapon.keys():

@@ -60,6 +60,10 @@ func create_game(given_port):
 	lobby_created.emit()
 	registered = true
 
+func close_game():
+	kick.rpc()
+	remove_player()
+
 func join_game(address: String = "", given_port = null):
 	if address.is_empty():
 		address = DEFAULT_IP
@@ -88,7 +92,7 @@ func register_player():
 	print_debug("Informing client they are registered")
 	set_ready.rpc_id(id)
 
-#region : RPCs
+#region : Client functions
 # functions that can be called on specific clients
 
 # sets a client's local game state
@@ -132,6 +136,10 @@ func set_ready() -> void:
 @rpc
 func get_ready() -> bool:
 	return registered
+
+@rpc
+func kick() -> void:
+	remove_player()
 
 #endregion
 #endregion

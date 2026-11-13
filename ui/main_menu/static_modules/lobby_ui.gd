@@ -52,6 +52,9 @@ func clear_all_players():
 			i.call_deferred("queue_free")
 
 func close_lobby_ui():
+	if multiplayer.is_server():
+		clear_all_players()
+		Lobby.close_game()
 	close_lobby.emit()
 
 #endregion

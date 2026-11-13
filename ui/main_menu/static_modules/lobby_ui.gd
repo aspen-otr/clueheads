@@ -1,6 +1,8 @@
 class_name LobbyUI
 extends Control
 
+signal close_lobby
+
 const DISPLAY_MODULE = preload("uid://2mrtcpc6dmkr")
 
 @export var start_button: Button
@@ -8,6 +10,17 @@ const DISPLAY_MODULE = preload("uid://2mrtcpc6dmkr")
 @export var player_display: VBoxContainer
 
 var displayed_players: Array[int]
+
+func _ready() -> void:
+	# Host signal functions
+	Lobby.player_connected.connect(on_new_connection)
+	Lobby.player_disconnected.connect(on_client_disconnect)
+
+	# Player signal functions
+	Lobby.server_disconnected.connect(on_server_disconnect)
+
+	# UI signal functions
+	back_button.pressed.connect(close_lobby_ui)
 
 #region : general functions
 @rpc("call_local")
@@ -25,19 +38,25 @@ func display_player(given):
 	new_module.player_name.set_text(player.name)
 	new_module.player_number.set_text(str(player.number))
 
-@rpc
+@rpc("call_local")
 func clear_player(id: int):
+	Lobby.message_host(str("Player ID: ", id, "has been cleared"))
 	for i in player_display.get_children():
 		if i is PlayerDisplayModule:
 			if i.peer_id == id:
-				call_deferred("queue_free", i)
+				i.call_deferred("queue_free")
+
+func clear_all_players():
+	for i in player_display.get_children():
+		if i is PlayerDisplayModule:
+			i.call_deferred("queue_free")
+
+func close_lobby_ui():
+	close_lobby.emit()
 
 #endregion
 
 #region : host functions
-func _ready() -> void:
-	Lobby.player_connected.connect(on_new_connection)
-
 func on_new_connection(id: int) -> void:
 	# new player catchup
 	for i in Lobby.local_states:
@@ -47,4 +66,13 @@ func on_new_connection(id: int) -> void:
 	var new_player_data = Lobby.local_states[id]
 	display_player.rpc(LocalGameState.encode(new_player_data))
 
+func on_client_disconnect(id: int) -> void:
+	clear_player.rpc(id)
+
+#endregion
+
+#region : client functions
+func on_server_disconnect() -> void:
+	clear_all_players()
+	close_lobby_ui()
 #endregion

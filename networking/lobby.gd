@@ -87,7 +87,6 @@ func register_player():
 	player_connected.emit(id)
 	print_debug("Informing client they are registered")
 	set_ready.rpc_id(id)
-	print_debug(local_states)
 
 #region : RPCs
 # functions that can be called on specific clients

@@ -19,7 +19,6 @@ func display_player(given):
 	else:
 		player = LocalGameState.decode(given)
 
-	print_debug(player.id)
 	var new_module: PlayerDisplayModule = DISPLAY_MODULE.instantiate()
 	player_display.add_child(new_module)
 	new_module.peer_id = player.id
@@ -41,10 +40,7 @@ func _ready() -> void:
 
 func on_new_connection(id: int) -> void:
 	# new player catchup
-	print_debug(Lobby.local_states)
 	for i in Lobby.local_states:
-		print_debug(i)
-		print_debug(LocalGameState.encode(Lobby.local_states[i]))
 		if i != id:
 			display_player.rpc_id(id, LocalGameState.encode(Lobby.local_states[i]))
 	# display new player

@@ -9,7 +9,7 @@ func _ready() -> void:
 	Lobby.player_disconnected.connect(on_player_disconnect)
 	Lobby.server_disconnected.connect(on_server_disconnect)
 	Lobby.connection_failed.connect(on_failed_connect)
-	
+
 	Lobby.client_chat_update.connect(update_label)
 
 #region : Scene specific functions
@@ -20,7 +20,7 @@ func _on_host_button_pressed() -> void:
 	if error:
 		print(error)
 		return
-	
+
 	Lobby.update_chat("Server Created", true)
 	Lobby.update_chat("You are: Player 1")
 
@@ -31,7 +31,7 @@ func _on_join_button_pressed() -> void:
 	if error:
 		print(error)
 		return
-	
+
 	Lobby.update_chat("Server Joined", true)
 
 # leaves multiplayer lobby wehn leave button is pressed
@@ -47,13 +47,13 @@ func update_label():
 
 #region : lobby/UI integration
 func on_player_connect(id: int) -> void:
-	
+
 	var data = Lobby.local_states
 	var new_player: LocalGameState = data[id]
-	
+
 	# update's connected player's text telling them their player number
 	Lobby.update_chat.rpc_id(id, str("You are: Player ", new_player.number))
-	
+
 	# update's existing player's text telling them that a new player has joined
 	for i in data.keys():
 		if i != id:
@@ -62,7 +62,7 @@ func on_player_connect(id: int) -> void:
 func on_player_disconnect(id: int) -> void:
 	var data = Lobby.dc_states
 	var player: LocalGameState = data[id]
-	
+
 	Lobby.update_chat.rpc(str("Player ", player.number, " disconnected"))
 
 func on_server_disconnect() -> void:

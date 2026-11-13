@@ -12,13 +12,13 @@ var displayed_players: Array[int]
 #region : general functions
 @rpc("call_local")
 func display_player(given):
-	Lobby.host_debug.rpc_id(1, str("Display player has been called with the argument: ", given))
+	Lobby.message_host(str("Display player has been called with the argument: ", given))
 	var player = LocalGameState.new()
 	if given is LocalGameState:
 		player = given
 	else:
 		player = LocalGameState.decode(given)
-	
+
 	print_debug(player.id)
 	var new_module: PlayerDisplayModule = DISPLAY_MODULE.instantiate()
 	player_display.add_child(new_module)

@@ -16,7 +16,7 @@ func _ready() -> void:
 # creates multiplayer lobby when the host button is pressed
 # i was too lazy to add port-forwarding support but itd be very easy
 func _on_host_button_pressed() -> void:
-	var error = Lobby.create_game()
+	var error = Lobby.create_game(null)
 	if error:
 		print(error)
 		return

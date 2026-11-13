@@ -1,6 +1,11 @@
 class_name MainMenu
 extends Control
 
+# i scrapped what i was originally going to do with these 
+# but they might be useful later, so i'm keeping them
+enum display {MAIN, HOST, JOIN, LOBBY, OPTIONS}
+var current_display
+
 @export var main_menu_buttons: MainMenuButtons
 @export var lobby_buttons: LobbyButtons
 @export var lobby_ui: LobbyUI
@@ -18,6 +23,8 @@ func _ready() -> void:
 	lobby_buttons.join_game.pressed.connect(join_lobby)
 	
 	lobby_ui.back_button.pressed.connect(leave_lobby)
+	
+	current_display = display.MAIN
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -29,11 +36,15 @@ func open_host() -> void:
 	fade.visible = true
 	lobby_buttons.visible = true
 	lobby_buttons.host_parent.visible = true
+	
+	current_display = display.HOST
 
 func open_join() -> void:
 	fade.visible = true
 	lobby_buttons.visible = true
 	lobby_buttons.join_parent.visible = true
+	
+	current_display = display.JOIN
 
 func open_options() -> void:
 	push_error("Unimplemented")
@@ -43,16 +54,22 @@ func close_lobby_buttons() -> void:
 	lobby_buttons.visible = false
 	lobby_buttons.host_parent.visible = false
 	lobby_buttons.join_parent.visible = false
+	
+	current_display = display.MAIN
 
 func open_lobby() -> void:
 	close_lobby_buttons()
 	main_menu_buttons.visible = false
 	lobby_ui.visible = true
+	
+	current_display = display.LOBBY
 
 func close_lobby() -> void:
 	lobby_ui.visible = false
 	main_menu_buttons.visible = true
 	
+	current_display = display.MAIN
+
 #endregion
 
 #region : game logic
@@ -60,18 +77,54 @@ func launch_singleplayer() -> void:
 	push_error("Unimplemented")
 
 func host_lobby() -> void:
-	var error = Lobby.create_game(lobby_buttons.host_port_input.text)
+	var port = lobby_buttons.host_port_input.text
+	if port:
+		if typeof(port) != Variant.Type.TYPE_INT:
+			printerr("Invalid port")
+			lobby_buttons.host_port_input.clear()
+			return
+	
+	var error = Lobby.create_game(port)
+	
+	if error:
+		printerr(error)
+		return
+	else:
+		open_lobby()
+		lobby_ui.start_button.disabled = false
+	
+		var player_name = lobby_buttons.host_name_input.text
+		if !player_name:
+			player_name = "Player"
+		Lobby.client_name = player_name
+		print_debug("running host display")
+		lobby_ui.display_player(Lobby.client_info)
+
+	
+func join_lobby() -> void:
+	var port = lobby_buttons.join_port_input.text
+	var address = lobby_buttons.join_address_input.text
+	if port:
+		if typeof(port) != Variant.Type.TYPE_INT:
+			printerr("Invalid port")
+			lobby_buttons.host_port_input.clear()
+			return
+	
+	var error = Lobby.join_game(address, port)
+	
 	if error:
 		printerr(error)
 		return
 	else:
 		open_lobby()
 	
-func join_lobby() -> void:
-	pass
+	var player_name = lobby_buttons.join_name_input.text
+	if !player_name:
+		player_name = "Player"
+	Lobby.client_name = player_name
 
 func leave_lobby() -> void:
-	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	Lobby.remove_player()
 	close_lobby()
 
 func quit_game() -> void:

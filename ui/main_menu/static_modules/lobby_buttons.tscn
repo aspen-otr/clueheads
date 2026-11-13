@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cfuntk6a6hq2y"]
 
-[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/themes/menu_theme.tres" id="1_fs65p"]
-[ext_resource type="Script" uid="uid://bnyfwyraqxnh1" path="res://ui/static_modules/lobby_buttons.gd" id="2_hckjc"]
-[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/themes/red_button_stylebox.tres" id="2_hh815"]
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_fs65p"]
+[ext_resource type="Script" uid="uid://bnyfwyraqxnh1" path="res://ui/main_menu/static_modules/lobby_buttons.gd" id="2_hckjc"]
+[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/main_menu/themes/red_button_stylebox.tres" id="2_hh815"]
 
 [node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_parent", "host_name_input", "host_port_input", "host_game", "host_back", "join_parent", "join_name_input", "join_address_input", "join_port_input", "join_game", "join_back")]
 layout_mode = 3

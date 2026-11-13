@@ -2,7 +2,6 @@
 
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_fs65p"]
 [ext_resource type="Script" uid="uid://bnyfwyraqxnh1" path="res://ui/main_menu/static_modules/lobby_buttons.gd" id="2_hckjc"]
-[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/main_menu/themes/red_button_stylebox.tres" id="2_hh815"]
 
 [node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_parent", "host_name_input", "host_port_input", "host_game", "host_back", "join_parent", "join_name_input", "join_address_input", "join_port_input", "join_game", "join_back")]
 layout_mode = 3
@@ -60,6 +59,7 @@ horizontal_alignment = 2
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Player"
+clear_button_enabled = true
 caret_blink = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Host" unique_id=182138372]
@@ -79,6 +79,7 @@ horizontal_alignment = 2
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = " <optional>"
+clear_button_enabled = true
 caret_blink = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Host" unique_id=1134553838]
@@ -94,8 +95,8 @@ text = "Host"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
+theme_type_variation = &"RedButton"
 theme_override_font_sizes/font_size = 18
-theme_override_styles/hover = ExtResource("2_hh815")
 text = "X"
 
 [node name="Join" type="VBoxContainer" parent="MarginContainer" unique_id=1200021180]
@@ -120,6 +121,7 @@ horizontal_alignment = 2
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Player"
+clear_button_enabled = true
 caret_blink = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1934824430]
@@ -138,6 +140,7 @@ horizontal_alignment = 2
 [node name="AddressInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer3" unique_id=698046895]
 layout_mode = 2
 size_flags_horizontal = 3
+clear_button_enabled = true
 caret_blink = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Join" unique_id=256309164]
@@ -156,6 +159,7 @@ horizontal_alignment = 2
 [node name="JoinPortInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer2" unique_id=1125261745]
 layout_mode = 2
 size_flags_horizontal = 3
+clear_button_enabled = true
 caret_blink = true
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1835805647]
@@ -171,9 +175,11 @@ text = "Join"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
+theme_type_variation = &"RedButton"
 theme_override_font_sizes/font_size = 18
-theme_override_styles/hover = ExtResource("2_hh815")
 text = "X"
 
+[connection signal="text_changed" from="MarginContainer/Host/HBoxContainer/HostNameInput" to="." method="on_name_updated"]
 [connection signal="pressed" from="MarginContainer/Host/HBoxContainer3/HostBack" to="." method="on_back_pressed"]
+[connection signal="text_changed" from="MarginContainer/Join/HBoxContainer/JoinNameInput" to="." method="on_name_updated"]
 [connection signal="pressed" from="MarginContainer/Join/HBoxContainer4/JoinBack" to="." method="on_back_pressed"]

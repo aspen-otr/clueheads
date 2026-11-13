@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://bxdvneri6y3bk"]
 
-[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/themes/menu_theme.tres" id="1_aptaj"]
-[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/themes/red_button_stylebox.tres" id="2_3xxi4"]
-[ext_resource type="Script" uid="uid://hry8rb6hs00d" path="res://ui/static_modules/main_menu_buttons.gd" id="2_n1xge"]
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_aptaj"]
+[ext_resource type="Script" uid="uid://hry8rb6hs00d" path="res://ui/main_menu/static_modules/main_menu_buttons.gd" id="2_n1xge"]
 
 [node name="MainMenuButtons" type="VBoxContainer" unique_id=393043605 node_paths=PackedStringArray("singleplayer_button", "host_button", "join_button", "options_button", "quit_button")]
 offset_right = 316.0
@@ -58,7 +57,7 @@ text = "Options
 [node name="QuitButton" type="Button" parent="HBoxContainer" unique_id=1168330850]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"RedButton"
 theme_override_font_sizes/font_size = 24
-theme_override_styles/hover = ExtResource("2_3xxi4")
 text = "Quit Game
 "

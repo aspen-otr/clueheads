@@ -16,6 +16,6 @@ signal back_pressed()
 @export var join_game: Button
 @export var join_back: Button
 
-
+# lets main_menu script connect the same function to both back buttons being pressed
 func on_back_pressed() -> void:
 	back_pressed.emit()

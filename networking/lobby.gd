@@ -1,6 +1,7 @@
 #TODO: authentication
 extends Node
 
+signal lobby_created()
 signal player_connected(peer_id)
 signal player_disconnected(peer_id)
 signal server_disconnected()
@@ -14,6 +15,9 @@ const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data
 var client_info: LocalGameState
+var client_name: String
+
+var registered: bool = false
 
 # Host's authoritative data. Not initialized on non-host clients
 var master_data: MasterGameState
@@ -36,7 +40,7 @@ func _ready():
 	client_info = LocalGameState.new()
 
 #region : Scene specific functions
-func create_game(given_port = null):
+func create_game(given_port):
 	if !given_port:
 		given_port = PORT
 	var peer = ENetMultiplayerPeer.new()
@@ -49,10 +53,16 @@ func create_game(given_port = null):
 	client_info = LocalGameState.new()
 	client_info.new_connect(1)
 	master_data.client_data[client_info.id] = client_info
+	
+	lobby_created.emit()
+	registered = true
 
-func join_game(address: String = ""):
+func join_game(address: String = "", given_port = null):
 	if address.is_empty():
 		address = DEFAULT_IP
+	if !given_port:
+		given_port = PORT
+	
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, PORT)
 	if error:
@@ -71,23 +81,25 @@ func register_player():
 	var new_data = LocalGameState.new()
 	new_data.new_connect(id)
 	master_data.client_data[id] = new_data
-	set_client_data(new_data.encode())
+	set_client_data(LocalGameState.encode(new_data))
 	
 	player_connected.emit(id)
-
+	print_debug("Informing client they are registered")
+	set_ready.rpc_id(id)
+	
 # sets a client's local game state
 @rpc
 func set_client_data(data: Dictionary):
-	client_info.decode(data)
+	client_info = LocalGameState.decode(data)
 
 # updates host's master list of game states based on client's current local game state
 @rpc("call_local")
 func get_client_data() -> void:
-	update_local_data.rpc_id(1, client_info.encode())
+	update_local_data.rpc_id(1, LocalGameState.encode(client_info))
 @rpc("call_local", "any_peer")
 func update_local_data(data: Dictionary):
 	var id = multiplayer.get_remote_sender_id()
-	local_states[id].decode(data)
+	local_states[id] = LocalGameState.decode(data)
 
 # updates a client's local_data chat string
 @rpc("call_local")
@@ -96,21 +108,38 @@ func update_chat(msg: String, reset: bool = false) -> void:
 		client_info.chat = ""
 	client_info.chat += str(msg, "\n")
 	client_chat_update.emit()
-	
+
+@rpc("any_peer", "call_local")
+func host_debug(message: String):
+	print()
+	prints("Client", multiplayer.get_remote_sender_id(), "has sent message:")
+	print(message)
+	print()
+
+@rpc
+func set_ready() -> void:
+	registered = true
+
+@rpc
+func get_ready() -> bool:
+	return registered
+
 #endregion
 #endregion
  
 #region : Signal connected functions
 func on_player_connect(id: int) -> void:
+	print_debug("Player connected")
 	register_player.rpc_id(id)
 	
 func on_player_disconnect(id: int) -> void:
+	print_debug("Player disconnected")
 	dc_states[id] = local_states[id]
 	master_data.client_data.erase(id)
 	player_disconnected.emit(id)
 
 func on_connect() -> void:
-	pass
+	host_debug.rpc_id(1, "I have connected")
 
 func on_connection_fail() -> void:
 	connection_failed.emit()

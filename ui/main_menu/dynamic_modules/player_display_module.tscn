@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://2mrtcpc6dmkr"]
+
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_gar2u"]
+[ext_resource type="Script" uid="uid://c3nbsy8ne532e" path="res://ui/main_menu/dynamic_modules/player_display_module.gd" id="1_oj68h"]
+
+[node name="PlayerDisplayModule" type="PanelContainer" unique_id=1228571935 node_paths=PackedStringArray("player_number", "player_name")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gar2u")
+theme_type_variation = &"EmptyPanel"
+script = ExtResource("1_oj68h")
+player_number = NodePath("HBoxContainer/PanelContainer/PlayerNumber")
+player_name = NodePath("HBoxContainer/PanelContainer2/PlayerName")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1768080110]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=1453686175]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.03
+
+[node name="PlayerNumber" type="Label" parent="HBoxContainer/PanelContainer" unique_id=1633803250]
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="HBoxContainer" unique_id=2018727348]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="HBoxContainer/PanelContainer2" unique_id=1757369413]
+layout_mode = 2
+text = "Player..."

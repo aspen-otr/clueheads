@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://ch8qan7ce4k3f"]
 
-[ext_resource type="PackedScene" uid="uid://bxdvneri6y3bk" path="res://ui/static_modules/main_menu_buttons.tscn" id="1_t7e0r"]
-[ext_resource type="PackedScene" uid="uid://cfuntk6a6hq2y" path="res://ui/static_modules/lobby_buttons.tscn" id="2_0dkrt"]
-[ext_resource type="Script" uid="uid://cadh3kkcqqfww" path="res://ui/main_menu.gd" id="2_rmr83"]
-[ext_resource type="PackedScene" uid="uid://c2j4h6v3t7k0d" path="res://ui/static_modules/lobby_ui.tscn" id="3_8uxxo"]
-[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/themes/menu_theme.tres" id="3_wk0pr"]
+[ext_resource type="PackedScene" uid="uid://bxdvneri6y3bk" path="res://ui/main_menu/static_modules/main_menu_buttons.tscn" id="1_t7e0r"]
+[ext_resource type="PackedScene" uid="uid://cfuntk6a6hq2y" path="res://ui/main_menu/static_modules/lobby_buttons.tscn" id="2_0dkrt"]
+[ext_resource type="Script" uid="uid://cadh3kkcqqfww" path="res://ui/main_menu/main_menu.gd" id="2_rmr83"]
+[ext_resource type="PackedScene" uid="uid://c2j4h6v3t7k0d" path="res://ui/main_menu/static_modules/lobby_ui.tscn" id="3_8uxxo"]
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="3_wk0pr"]
 
 [node name="MainMenu" type="Control" unique_id=899120849 node_paths=PackedStringArray("main_menu_buttons", "lobby_buttons", "lobby_ui", "fade")]
 layout_mode = 3

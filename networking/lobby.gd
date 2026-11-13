@@ -18,6 +18,7 @@ const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data
 var client_info: LocalGameState
+var client_name: String
 
 var registered: bool = false
 
@@ -73,11 +74,8 @@ func join_game(address: String = "", given_port = null):
 
 func remove_player():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-#region : RPCs
-# functions that can be called on specific clients
 
 # creates a local game state object and adds it to the host's master data
-@rpc("any_peer")
 func register_player():
 	var id = multiplayer.get_remote_sender_id()
 	var new_data = LocalGameState.new()
@@ -88,6 +86,9 @@ func register_player():
 	player_connected.emit(id)
 	print_debug("Informing client they are registered")
 	set_ready.rpc_id(id)
+
+#region : RPCs
+# functions that can be called on specific clients
 
 # sets a client's local game state
 @rpc
@@ -137,7 +138,8 @@ func get_ready() -> bool:
 #region : Signal connected functions
 func on_player_connect(_id) -> void:
 	print_debug("Player connected")
-	register_player.rpc_id(1)
+	if multiplayer.is_server():
+		register_player()
 
 func on_player_disconnect(id: int) -> void:
 	print_debug("Player disconnected")

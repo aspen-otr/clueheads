@@ -2,9 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_gsmdt"]
 [ext_resource type="Script" uid="uid://bqau211hnmiv" path="res://ui/main_menu/static_modules/lobby_ui.gd" id="2_yswxk"]
-[ext_resource type="StyleBox" uid="uid://d0evw5uhin31f" path="res://ui/main_menu/themes/red_button_stylebox.tres" id="3_3ext1"]
 
-[node name="LobbyUi" type="Control" unique_id=232959536 node_paths=PackedStringArray("start_button", "back_button", "player_display")]
+[node name="LobbyUi" type="Control" unique_id=232959536 node_paths=PackedStringArray("start_button", "back_button", "ready_button", "player_display", "chat_display", "chat_input")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +14,10 @@ theme = ExtResource("1_gsmdt")
 script = ExtResource("2_yswxk")
 start_button = NodePath("HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/StartButton")
 back_button = NodePath("HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/BackButton")
+ready_button = NodePath("HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/ReadyButton")
 player_display = NodePath("HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/PlayerDisplay")
+chat_display = NodePath("HBoxContainer/VBoxContainer/PanelContainer/ChatDisplay")
+chat_input = NodePath("HBoxContainer/VBoxContainer/ChatInput")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=327333946]
 layout_mode = 1
@@ -50,16 +52,24 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.07
 
+[node name="ReadyButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=457817074]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+theme_type_variation = &"Checkbox"
+toggle_mode = true
+
 [node name="StartButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=476076668]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"GreenButton"
 disabled = true
 text = "START"
 
 [node name="BackButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=1384052586]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/hover = ExtResource("3_3ext1")
+theme_type_variation = &"RedButton"
 text = "LEAVE"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=2123459708]
@@ -71,11 +81,11 @@ theme_override_constants/separation = 12
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/PanelContainer" unique_id=2003136262]
+[node name="ChatDisplay" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/PanelContainer" unique_id=2003136262]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1384077036]
+[node name="ChatInput" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1384077036]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.07

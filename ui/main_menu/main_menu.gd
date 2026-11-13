@@ -19,6 +19,7 @@ func _ready() -> void:
 	main_menu_buttons.options_button.pressed.connect(open_options)
 
 	lobby_buttons.back_pressed.connect(close_lobby_buttons)
+	lobby_buttons.name_updated.connect(update_client_name)
 	lobby_buttons.host_game.pressed.connect(host_lobby)
 	lobby_buttons.join_game.pressed.connect(join_lobby)
 
@@ -57,12 +58,20 @@ func close_lobby_buttons() -> void:
 
 	current_display = display.MAIN
 
+	var display_name = Lobby.client_name
+	if display_name == "Player":
+		display_name = ""
+	lobby_buttons.host_name_input.set_text(display_name)
+	lobby_buttons.join_name_input.set_text(display_name)
+
 func open_lobby() -> void:
 	close_lobby_buttons()
 	main_menu_buttons.visible = false
 	lobby_ui.visible = true
 
 	current_display = display.LOBBY
+	lobby_ui.lobby_open()
+
 
 func close_lobby() -> void:
 	lobby_ui.visible = false
@@ -89,16 +98,8 @@ func host_lobby() -> void:
 	if error:
 		printerr(error)
 		return
-	else:
-		open_lobby()
-		lobby_ui.start_button.disabled = false
 
-		var player_name = lobby_buttons.host_name_input.text
-		if !player_name:
-			player_name = "Player"
-		Lobby.client_name = player_name
-		print_debug("running host display")
-		lobby_ui.display_player(Lobby.client_info)
+	open_lobby()
 
 
 func join_lobby() -> void:
@@ -124,10 +125,15 @@ func join_lobby() -> void:
 	Lobby.client_name = player_name
 
 func leave_lobby() -> void:
+	if multiplayer.is_server():
+		Lobby.close_game()
 	Lobby.remove_player()
 	close_lobby()
 
 func quit_game() -> void:
 	get_tree().quit()
+
+func update_client_name(new_text: String) -> void:
+	Lobby.client_name = new_text
 
 #endregion

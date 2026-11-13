@@ -5,3 +5,4 @@ var peer_id: int
 
 @export var player_number: Label
 @export var player_name: Label
+@export var ready_status: Button

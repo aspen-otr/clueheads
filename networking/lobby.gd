@@ -18,9 +18,11 @@ const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data
 var client_info: LocalGameState
-var client_name: String
-
-var registered: bool = false
+var client_name: String = "":
+	get:
+		if client_name.is_empty():
+			return "Player"
+		return client_name
 
 # Host's authoritative data. Not initialized on non-host clients
 var master_data: MasterGameState
@@ -54,15 +56,14 @@ func create_game(given_port):
 
 	master_data = MasterGameState.new()
 	client_info = LocalGameState.new()
-	client_info.new_connect(1)
+	client_info.new_connect(1, client_name)
 	master_data.client_data[client_info.id] = client_info
 
 	lobby_created.emit()
-	registered = true
+	update_chat("Lobby created successfully")
 
 func close_game():
 	kick.rpc()
-	remove_player()
 
 func join_game(address: String = "", given_port = null):
 	if address.is_empty():
@@ -81,16 +82,14 @@ func remove_player():
 
 # creates a local game state object and adds it to the host's master data
 @rpc("any_peer")
-func register_player():
+func register_player(player_name: String = "Player"):
 	var id = multiplayer.get_remote_sender_id()
 	var new_data = LocalGameState.new()
-	new_data.new_connect(id)
+	new_data.new_connect(id, player_name)
 	master_data.client_data[id] = new_data
 	set_client_data.rpc_id(id, LocalGameState.encode(new_data))
 
 	player_connected.emit(id)
-	print_debug("Informing client they are registered")
-	set_ready.rpc_id(id)
 
 #region : Client functions
 # functions that can be called on specific clients
@@ -101,16 +100,20 @@ func set_client_data(data: Dictionary):
 	client_info = LocalGameState.decode(data)
 
 # updates host's master list of game states based on client's current local game state
-@rpc("call_local")
+@rpc
 func get_client_data() -> void:
 	update_local_data.rpc_id(1, LocalGameState.encode(client_info))
-@rpc("call_local", "any_peer")
+@rpc
 func update_local_data(data: Dictionary):
 	var id = multiplayer.get_remote_sender_id()
 	local_states[id] = LocalGameState.decode(data)
 
+@rpc
+func get_client_name() -> String:
+	return client_name
+
 # updates a client's local_data chat string
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func update_chat(msg: String, reset: bool = false) -> void:
 	if reset:
 		client_info.chat = ""
@@ -130,14 +133,6 @@ func msg_rpc(message: String):
 	print()
 
 @rpc
-func set_ready() -> void:
-	registered = true
-
-@rpc
-func get_ready() -> bool:
-	return registered
-
-@rpc
 func kick() -> void:
 	remove_player()
 
@@ -149,14 +144,15 @@ func on_player_connect(_id) -> void:
 	print_debug("Player connected")
 
 func on_player_disconnect(id: int) -> void:
-	print_debug("Player disconnected")
-	dc_states[id] = local_states[id]
-	master_data.client_data.erase(id)
-	player_disconnected.emit(id)
+	if multiplayer.is_server():
+		print_debug("Player disconnected")
+		dc_states[id] = local_states[id]
+		master_data.client_data.erase(id)
+		player_disconnected.emit(id)
 
 func on_connect() -> void:
 	message_host("I have connected")
-	register_player.rpc_id(1)
+	register_player.rpc_id(1, client_name)
 
 func on_connection_fail() -> void:
 	connection_failed.emit()

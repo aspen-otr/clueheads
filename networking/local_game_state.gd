@@ -11,10 +11,10 @@ var board_state
 var hand: Array
 var detective_sheet
 
-func new_connect(new_id: int, new_name: String = "Player") -> void:
+func new_connect(new_id: int, new_name: String) -> void:
 	name = new_name
 	id = new_id
-	
+
 	number = Lobby.local_states.size() + 1
 
 # translates resource to/from a dictionary for JSON purposes

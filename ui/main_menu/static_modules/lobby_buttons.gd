@@ -2,6 +2,7 @@ class_name LobbyButtons
 extends Control
 
 signal back_pressed()
+signal name_updated(new_name)
 
 @export var host_parent: VBoxContainer
 @export var host_name_input: LineEdit
@@ -16,6 +17,9 @@ signal back_pressed()
 @export var join_game: Button
 @export var join_back: Button
 
-# lets main_menu script connect the same function to both back buttons being pressed
+# allows main_menu to connect the same function to equivilant host/join nodes
 func on_back_pressed() -> void:
 	back_pressed.emit()
+
+func on_name_updated(new_name) -> void:
+	name_updated.emit(new_name)

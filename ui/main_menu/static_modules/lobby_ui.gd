@@ -110,6 +110,8 @@ func on_new_connection(id: int) -> void:
 	for i in Lobby.local_states:
 		if i != id:
 			Lobby.update_chat.rpc_id(i, str("(", new_player_data.number, ") ", new_player_data.name, " has joined the lobby"))
+	player_ready[id] = false
+	check_ready()
 	display_ready.rpc_id(id, player_ready)
 
 func on_client_disconnect(id: int) -> void:
@@ -117,12 +119,22 @@ func on_client_disconnect(id: int) -> void:
 	var dc_data = Lobby.dc_states[id]
 	Lobby.update_chat(str("(", dc_data.number, ") ", dc_data.name, " has left the lobby"))
 	player_ready.erase(id)
+	check_ready()
 
 @rpc("any_peer")
 func update_ready(new_state: bool) -> void:
 	var id = multiplayer.get_remote_sender_id()
 	player_ready[id] = new_state
+	check_ready()
 	display_ready.rpc(player_ready)
+
+func check_ready() -> void:
+	print_debug("checking ready")
+	if player_ready.size() > 1:
+		if !player_ready.values().has(false):
+			start_button.disabled = false
+			return
+	start_button.disabled = true
 
 #endregion
 

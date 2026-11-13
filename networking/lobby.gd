@@ -76,6 +76,7 @@ func remove_player():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 # creates a local game state object and adds it to the host's master data
+@rpc("any_peer")
 func register_player():
 	var id = multiplayer.get_remote_sender_id()
 	var new_data = LocalGameState.new()
@@ -86,6 +87,7 @@ func register_player():
 	player_connected.emit(id)
 	print_debug("Informing client they are registered")
 	set_ready.rpc_id(id)
+	print_debug(local_states)
 
 #region : RPCs
 # functions that can be called on specific clients
@@ -138,8 +140,6 @@ func get_ready() -> bool:
 #region : Signal connected functions
 func on_player_connect(_id) -> void:
 	print_debug("Player connected")
-	if multiplayer.is_server():
-		register_player()
 
 func on_player_disconnect(id: int) -> void:
 	print_debug("Player disconnected")
@@ -149,6 +149,7 @@ func on_player_disconnect(id: int) -> void:
 
 func on_connect() -> void:
 	message_host("I have connected")
+	register_player.rpc_id(1)
 
 func on_connection_fail() -> void:
 	connection_failed.emit()

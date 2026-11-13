@@ -9,8 +9,11 @@ signal connection_failed()
 
 signal client_chat_update()
 
+# TEMP : local ip for testing LAN hosting
+const DEFAULT_IP: String = "192.168.1.88"
+
 const PORT: int = 7000
-const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
+#const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
 const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data
@@ -36,7 +39,7 @@ func _ready():
 	multiplayer.connected_to_server.connect(on_connect)
 	multiplayer.connection_failed.connect(on_connection_fail)
 	multiplayer.server_disconnected.connect(on_server_disconnect)
-	
+
 	client_info = LocalGameState.new()
 
 #region : Scene specific functions
@@ -53,7 +56,7 @@ func create_game(given_port):
 	client_info = LocalGameState.new()
 	client_info.new_connect(1)
 	master_data.client_data[client_info.id] = client_info
-	
+
 	lobby_created.emit()
 	registered = true
 
@@ -62,7 +65,7 @@ func join_game(address: String = "", given_port = null):
 		address = DEFAULT_IP
 	if !given_port:
 		given_port = PORT
-	
+
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, PORT)
 	if error:
@@ -82,11 +85,11 @@ func register_player():
 	new_data.new_connect(id)
 	master_data.client_data[id] = new_data
 	set_client_data(LocalGameState.encode(new_data))
-	
+
 	player_connected.emit(id)
 	print_debug("Informing client they are registered")
 	set_ready.rpc_id(id)
-	
+
 # sets a client's local game state
 @rpc
 func set_client_data(data: Dictionary):
@@ -109,8 +112,10 @@ func update_chat(msg: String, reset: bool = false) -> void:
 	client_info.chat += str(msg, "\n")
 	client_chat_update.emit()
 
+func message_host(message: String):
+	msg_rpc.rpc_id(1, message)
 @rpc("any_peer", "call_local")
-func host_debug(message: String):
+func msg_rpc(message: String):
 	print()
 	prints("Client", multiplayer.get_remote_sender_id(), "has sent message:")
 	print(message)
@@ -126,12 +131,12 @@ func get_ready() -> bool:
 
 #endregion
 #endregion
- 
+
 #region : Signal connected functions
 func on_player_connect(id: int) -> void:
 	print_debug("Player connected")
 	register_player.rpc_id(id)
-	
+
 func on_player_disconnect(id: int) -> void:
 	print_debug("Player disconnected")
 	dc_states[id] = local_states[id]
@@ -139,7 +144,7 @@ func on_player_disconnect(id: int) -> void:
 	player_disconnected.emit(id)
 
 func on_connect() -> void:
-	host_debug.rpc_id(1, "I have connected")
+	message_host("I have connected")
 
 func on_connection_fail() -> void:
 	connection_failed.emit()

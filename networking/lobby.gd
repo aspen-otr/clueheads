@@ -18,7 +18,6 @@ const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data
 var client_info: LocalGameState
-var client_name: String
 
 var registered: bool = false
 
@@ -84,7 +83,7 @@ func register_player():
 	var new_data = LocalGameState.new()
 	new_data.new_connect(id)
 	master_data.client_data[id] = new_data
-	set_client_data(LocalGameState.encode(new_data))
+	set_client_data.rpc_id(id, LocalGameState.encode(new_data))
 
 	player_connected.emit(id)
 	print_debug("Informing client they are registered")
@@ -113,7 +112,10 @@ func update_chat(msg: String, reset: bool = false) -> void:
 	client_chat_update.emit()
 
 func message_host(message: String):
-	msg_rpc.rpc_id(1, message)
+	if !multiplayer.is_server():
+		msg_rpc.rpc_id(1, message)
+	else:
+		print_debug(str("Message sent to self: ", message))
 @rpc("any_peer", "call_local")
 func msg_rpc(message: String):
 	print()
@@ -133,9 +135,9 @@ func get_ready() -> bool:
 #endregion
 
 #region : Signal connected functions
-func on_player_connect(id: int) -> void:
+func on_player_connect(_id) -> void:
 	print_debug("Player connected")
-	register_player.rpc_id(id)
+	register_player.rpc_id(1)
 
 func on_player_disconnect(id: int) -> void:
 	print_debug("Player disconnected")

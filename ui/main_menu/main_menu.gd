@@ -22,7 +22,7 @@ func _ready() -> void:
 	lobby_buttons.host_game.pressed.connect(host_lobby)
 	lobby_buttons.join_game.pressed.connect(join_lobby)
 
-	lobby_ui.back_button.pressed.connect(leave_lobby)
+	lobby_ui.close_lobby.connect(leave_lobby)
 
 	current_display = display.MAIN
 

@@ -9,11 +9,9 @@ signal connection_failed()
 
 signal client_chat_update()
 
-# TEMP : local ip for testing LAN hosting
-const DEFAULT_IP: String = "192.168.1.88"
 
 const PORT: int = 7000
-#const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
+const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
 const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data

@@ -25,6 +25,7 @@ func _init(ident_: Card.Suspect):
 	self.ident = ident_
 	self.character_name = Card.Suspect.keys()[ident_]
 
+
 class HumanPlayer extends Player:
 	func pick_from_cards(cards_available: Array[Card]) -> Card:
 		return await Popups.popup_single_choice(cards_available)
@@ -38,5 +39,5 @@ class HumanPlayer extends Player:
 		return null
 
 	func pick_square_to_move_to(possible_squares):
-		# allow clicking on board
+		# Allow clicking on board.
 		pass

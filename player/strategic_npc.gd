@@ -8,19 +8,15 @@ func _init(ident_: Card.Suspect) -> void:
 	super(ident_)
 
 
-func pick_card_to_show(suggestion: Set) -> int:
-	var matching_indices = get_matching_card_indices(suggestion)
-
-	if matching_indices.is_empty():
-		return -1
-
+func pick_card_to_show(suggestion: Set) -> Card:
+	var matching = get_matching_cards(suggestion)
+	if matching.is_empty():
+		return null
 	# Prefer showing a card already revealed
-	for index in matching_indices:
-		if cards[index] in previously_shown_cards:
-			return index
-
-  
-	return matching_indices[0]
+	for card in matching:
+		if card in previously_shown_cards:
+			return card
+	return matching[0]
 
 
 func show_card(suggestion: Set) -> Card:

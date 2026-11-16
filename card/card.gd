@@ -14,9 +14,10 @@ const 	TYPE_VALS: Dictionary = {
 	Type.ROOM: Room
 }
 
-static var suspect_lut: Array[Suspect] = []
-static var weapon_lut: Array[Weapon] = []
-static var room_lut: Array[Room] = []
+static var type_lut: Dictionary
+static var suspect_lut: Dictionary
+static var weapon_lut: Dictionary
+static var room_lut: Dictionary
 
 @export var type: Type
 @export var image: Texture2D
@@ -24,12 +25,31 @@ static var room_lut: Array[Room] = []
 var value
 
 static func set_all_lut():
+	for key in Type.keys():
+		type_lut.set(Type[key], key)
 	for key in Suspect.keys():
-		suspect_lut[Suspect[key]] = key
+		suspect_lut.set(Suspect[key], key)
 	for key in Weapon.keys():
-		weapon_lut[Weapon[key]] = key
+		weapon_lut.set(Weapon[key], key)
 	for key in Room.keys():
-		room_lut[Room[key]] = key
+		room_lut.set(Room[key], key)
+
+func pretty() -> String:
+	var str_key
+	if type == Type.WEAPON:
+		str_key = Weapon.keys()[value]
+	elif type == Type.ROOM:
+		str_key = Room.keys()[value]
+	elif type == Type.SUSPECT:
+		str_key = Suspect.keys()[value]
+	return str_key.capitalize()
+
+static func from_string(string: String) -> Card:
+	for ty in Type.values():
+		for key in TYPE_VALS[ty].keys():
+			if key.capitalize() == string:
+				return Card.new(ty, TYPE_VALS[ty][key])
+	return null
 
 func _init(type_: Type, value_):
 	type = type_

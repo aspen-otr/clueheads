@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://w1c2dejsoa7q"]
+
+[ext_resource type="Script" uid="uid://dqfbqks1fwhuj" path="res://ui/test_popup_accuse.gd" id="1_pnybq"]
+[ext_resource type="Script" uid="uid://bxk5ti8bwj0xh" path="res://ui/test_popup_suggest.gd" id="2_ra3hc"]
+
+[node name="Control" type="Control" unique_id=1298302683]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=541275637]
+
+[node name="Accuse" type="Button" parent="UI" unique_id=1536550123]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -214.0
+offset_top = -66.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Accuse"
+script = ExtResource("1_pnybq")
+
+[node name="Suggest" type="Button" parent="UI" unique_id=875210086]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -66.0
+offset_right = 214.0
+grow_vertical = 0
+text = "Suggest"
+script = ExtResource("2_ra3hc")
+
+[connection signal="pressed" from="UI/Accuse" to="UI/Accuse" method="_on_pressed"]
+[connection signal="pressed" from="UI/Suggest" to="UI/Suggest" method="_on_pressed"]

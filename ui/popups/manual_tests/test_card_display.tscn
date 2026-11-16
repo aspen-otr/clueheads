@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://wjnlimjn4nef"]
 
-[ext_resource type="Script" uid="uid://b0tcf6ua36uao" path="res://ui/test_card_display.gd" id="1_fg2n5"]
+[ext_resource type="Script" uid="uid://b0tcf6ua36uao" path="res://ui/popups/manual_tests/test_card_display.gd" id="1_fg2n5"]
 
 [node name="TestCardDisplay" type="Control" unique_id=338835660]
 layout_mode = 3

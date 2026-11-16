@@ -18,7 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 Lobby="*uid://dv2xy2vetyon7"
-Popups="*uid://ihynpbig6t2e"
+Popups="*uid://db3g28h4y1he"
+SavedData="*uid://dor08ifl4rycw"
 
 [display]
 

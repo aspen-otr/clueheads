@@ -9,6 +9,7 @@ var current_display
 @export var main_menu_buttons: MainMenuButtons
 @export var lobby_buttons: LobbyButtons
 @export var lobby_ui: LobbyUI
+@export var multiplayer_info: MultiplayerInfo
 @export var fade: Panel
 
 func _ready() -> void:
@@ -19,13 +20,15 @@ func _ready() -> void:
 	main_menu_buttons.options_button.pressed.connect(open_options)
 
 	lobby_buttons.back_pressed.connect(close_lobby_buttons)
-	lobby_buttons.name_updated.connect(update_client_name)
 	lobby_buttons.host_game.pressed.connect(host_lobby)
 	lobby_buttons.join_game.pressed.connect(join_lobby)
 
 	lobby_ui.close_lobby.connect(leave_lobby)
-
+	
+	multiplayer_info.name_input.text_changed.connect(update_client_name)
+	
 	current_display = display.MAIN
+	multiplayer_info.name_input.set_text(SavedData.player_name)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -61,10 +64,14 @@ func close_lobby_buttons() -> void:
 	var display_name = Lobby.client_name
 	if display_name == "Player":
 		display_name = ""
-	lobby_buttons.host_name_input.set_text(display_name)
-	lobby_buttons.join_name_input.set_text(display_name)
 
 func open_lobby() -> void:
+	if SavedData.can_chat == null:
+		var age_ask = await Popups.popup_yn("Are you over 13?")
+		if age_ask == Popups.PopupYN.YES:
+			SavedData.can_chat = true
+		else:
+			SavedData.can_chat = false
 	close_lobby_buttons()
 	main_menu_buttons.visible = false
 	lobby_ui.visible = true
@@ -134,6 +141,6 @@ func quit_game() -> void:
 	get_tree().quit()
 
 func update_client_name(new_text: String) -> void:
-	Lobby.client_name = new_text
+	SavedData.player_name = new_text
 
 #endregion

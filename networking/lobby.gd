@@ -1,6 +1,8 @@
 #TODO: authentication
 extends Node
 
+enum ChatType {INFO, MSG}
+
 signal lobby_created()
 signal player_connected(peer_id)
 signal player_disconnected(peer_id)
@@ -9,7 +11,6 @@ signal connection_failed()
 
 signal client_chat_update()
 
-
 const PORT: int = 7000
 const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
 const MAX_CLIENTS: int = 6 # According to Clue rules
@@ -17,10 +18,10 @@ const MAX_CLIENTS: int = 6 # According to Clue rules
 # Player's game state data
 var client_info: LocalGameState
 var client_name: String = "":
-	get:
-		if client_name.is_empty():
+	get: 
+		if SavedData.player_name.is_empty():
 			return "Player"
-		return client_name
+		return SavedData.player_name
 
 # Host's authoritative data. Not initialized on non-host clients
 var master_data: MasterGameState
@@ -111,8 +112,11 @@ func get_client_name() -> String:
 	return client_name
 
 # updates a client's local_data chat string
+# TODO : separate into "send_info" and "send_chat"
 @rpc("call_local", "any_peer")
-func update_chat(msg: String, reset: bool = false) -> void:
+func update_chat(msg: String, reset: bool = false, type: int = 0) -> void:
+	if type == ChatType.MSG and SavedData.can_chat == false:
+		return
 	if reset:
 		client_info.chat = ""
 	client_info.chat += str(msg, "\n")

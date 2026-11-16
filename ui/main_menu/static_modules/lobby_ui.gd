@@ -42,6 +42,10 @@ func lobby_open() -> void:
 	else:
 		ready_button.visible = true
 	update_chat_log()
+	if SavedData.can_chat == false:
+		chat_input.visible = false
+	else:
+		chat_input.visible = true
 
 @rpc("call_local")
 func display_player(given):
@@ -83,7 +87,7 @@ func update_chat_log():
 	chat_display.set_text(Lobby.client_info.chat)
 
 func send_msg(new_message):
-	Lobby.update_chat.rpc(str(" - (", Lobby.client_info.number, ") ", Lobby.client_name, ": ", new_message))
+	Lobby.update_chat.rpc(str(" - (", Lobby.client_info.number, ") ", Lobby.client_name, ": ", new_message), false, 1)
 	chat_input.clear()
 
 @rpc("call_local")

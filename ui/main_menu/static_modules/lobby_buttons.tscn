@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_fs65p"]
 [ext_resource type="Script" uid="uid://bnyfwyraqxnh1" path="res://ui/main_menu/static_modules/lobby_buttons.gd" id="2_hckjc"]
 
-[node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_parent", "host_name_input", "host_port_input", "host_game", "host_back", "join_parent", "join_name_input", "join_address_input", "join_port_input", "join_game", "join_back")]
+[node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_parent", "host_port_input", "host_game", "host_back", "join_parent", "join_address_input", "join_port_input", "join_game", "join_back")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,12 +16,10 @@ mouse_filter = 2
 theme = ExtResource("1_fs65p")
 script = ExtResource("2_hckjc")
 host_parent = NodePath("MarginContainer/Host")
-host_name_input = NodePath("MarginContainer/Host/HBoxContainer/HostNameInput")
 host_port_input = NodePath("MarginContainer/Host/HBoxContainer2/HostPortInput")
 host_game = NodePath("MarginContainer/Host/HBoxContainer3/HostGame")
 host_back = NodePath("MarginContainer/Join/HBoxContainer4/JoinBack")
 join_parent = NodePath("MarginContainer/Join")
-join_name_input = NodePath("MarginContainer/Join/HBoxContainer/JoinNameInput")
 join_address_input = NodePath("MarginContainer/Join/HBoxContainer3/AddressInput")
 join_port_input = NodePath("MarginContainer/Join/HBoxContainer2/JoinPortInput")
 join_game = NodePath("MarginContainer/Join/HBoxContainer4/JoinGame")
@@ -41,26 +39,6 @@ theme_override_constants/margin_right = 450
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Host" unique_id=305390225]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Host/HBoxContainer" unique_id=1504617487]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.45
-
-[node name="Label" type="Label" parent="MarginContainer/Host/HBoxContainer/PanelContainer" unique_id=833131179]
-layout_mode = 2
-text = "Name:"
-horizontal_alignment = 2
-
-[node name="HostNameInput" type="LineEdit" parent="MarginContainer/Host/HBoxContainer" unique_id=1023492109]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Player"
-clear_button_enabled = true
-caret_blink = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Host" unique_id=182138372]
 layout_mode = 2
@@ -103,26 +81,6 @@ text = "X"
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Join" unique_id=2009987595]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/HBoxContainer" unique_id=1172057234]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.45
-
-[node name="Label" type="Label" parent="MarginContainer/Join/HBoxContainer/PanelContainer" unique_id=2086649869]
-layout_mode = 2
-text = "Name:"
-horizontal_alignment = 2
-
-[node name="JoinNameInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer" unique_id=279197620]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Player"
-clear_button_enabled = true
-caret_blink = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1934824430]
 layout_mode = 2
@@ -179,7 +137,5 @@ theme_type_variation = &"RedButton"
 theme_override_font_sizes/font_size = 18
 text = "X"
 
-[connection signal="text_changed" from="MarginContainer/Host/HBoxContainer/HostNameInput" to="." method="on_name_updated"]
 [connection signal="pressed" from="MarginContainer/Host/HBoxContainer3/HostBack" to="." method="on_back_pressed"]
-[connection signal="text_changed" from="MarginContainer/Join/HBoxContainer/JoinNameInput" to="." method="on_name_updated"]
 [connection signal="pressed" from="MarginContainer/Join/HBoxContainer4/JoinBack" to="." method="on_back_pressed"]

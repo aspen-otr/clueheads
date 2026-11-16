@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b3ti3xqdbgpex"]
+
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_dwyyd"]
+[ext_resource type="Script" uid="uid://bgvlk5gbq8s88" path="res://ui/main_menu/static_modules/multiplayer_info.gd" id="2_51w03"]
+
+[node name="MultiplayerInfo" type="HBoxContainer" unique_id=737100354 node_paths=PackedStringArray("name_input")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_dwyyd")
+script = ExtResource("2_51w03")
+name_input = NodePath("NameInput")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=575833741]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="PanelContainer" unique_id=1095445462]
+layout_mode = 2
+text = "My Name is..."
+
+[node name="NameInput" type="LineEdit" parent="." unique_id=1974138957]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+placeholder_text = "Player"
+clear_button_enabled = true
+caret_blink = true

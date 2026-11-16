@@ -4,9 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://cfuntk6a6hq2y" path="res://ui/main_menu/static_modules/lobby_buttons.tscn" id="2_0dkrt"]
 [ext_resource type="Script" uid="uid://cadh3kkcqqfww" path="res://ui/main_menu/main_menu.gd" id="2_rmr83"]
 [ext_resource type="PackedScene" uid="uid://c2j4h6v3t7k0d" path="res://ui/main_menu/static_modules/lobby_ui.tscn" id="3_8uxxo"]
+[ext_resource type="PackedScene" uid="uid://b3ti3xqdbgpex" path="res://ui/main_menu/static_modules/multiplayer_info.tscn" id="3_joh67"]
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="3_wk0pr"]
 
-[node name="MainMenu" type="Control" unique_id=899120849 node_paths=PackedStringArray("main_menu_buttons", "lobby_buttons", "lobby_ui", "fade")]
+[node name="MainMenu" type="Control" unique_id=899120849 node_paths=PackedStringArray("main_menu_buttons", "lobby_buttons", "lobby_ui", "multiplayer_info", "fade")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,6 +21,7 @@ script = ExtResource("2_rmr83")
 main_menu_buttons = NodePath("MarginContainer/MainMenuButtons")
 lobby_buttons = NodePath("LobbyButtons")
 lobby_ui = NodePath("MarginContainer/LobbyUi")
+multiplayer_info = NodePath("MarginContainer/HBoxContainer/MultiplayerInfo")
 fade = NodePath("Fade")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1182435805]
@@ -33,6 +35,21 @@ theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1706949941]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=5575376]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+theme_type_variation = &"EmptyPanel"
+
+[node name="MultiplayerInfo" parent="MarginContainer/HBoxContainer" unique_id=737100354 instance=ExtResource("3_joh67")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
 
 [node name="MainMenuButtons" parent="MarginContainer" unique_id=393043605 instance=ExtResource("1_t7e0r")]
 layout_mode = 2

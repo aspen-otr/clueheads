@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://djcwtfxwabdl" path="res://ui/popups.gd" id="1_y7xdp"]
 [ext_resource type="Script" uid="uid://4wa4q3ydv4vl" path="res://ui/popup_suggest_accuse.gd" id="1_yypk8"]
 [ext_resource type="Script" uid="uid://4m5lldx88fb" path="res://ui/popup_yn.gd" id="2_lb26h"]
+[ext_resource type="Script" uid="uid://c814cmtcq5fcy" path="res://ui/popups/popup_info.gd" id="3_b7pcm"]
 [ext_resource type="Script" uid="uid://cmp7lswt0cm74" path="res://ui/popup_single_choice.gd" id="4_lb26h"]
 [ext_resource type="Script" uid="uid://bq3cv4q4fwvst" path="res://ui/card_display.gd" id="5_b7pcm"]
 
@@ -11,6 +12,11 @@ font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_a7wfa"]
 font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b7pcm"]
+font_size = 18
+font_color = Color(0, 0, 0, 1)
 
 [node name="Popups" type="Control" unique_id=942190368]
 layout_mode = 3
@@ -81,6 +87,61 @@ text = "Btn1"
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Btn2"
+
+[node name="PopupInfo" type="Window" parent="CanvasLayer" unique_id=1800485540]
+unique_name_in_owner = true
+transparent_bg = true
+canvas_item_default_texture_filter = 4
+canvas_item_default_texture_repeat = 3
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(500, 200)
+visible = false
+wrap_controls = true
+transient = true
+exclusive = true
+unresizable = true
+borderless = true
+transparent = true
+popup_wm_hint = true
+minimize_disabled = true
+maximize_disabled = true
+script = ExtResource("3_b7pcm")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PopupInfo" unique_id=582001903]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.7490196, 0.7490196, 0.7490196, 1)
+
+[node name="Contents" type="VBoxContainer" parent="CanvasLayer/PopupInfo" unique_id=1128550574]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleText" type="Label" parent="CanvasLayer/PopupInfo/Contents" unique_id=1707280650]
+layout_mode = 2
+text = "Title"
+label_settings = SubResource("LabelSettings_a7wfa")
+horizontal_alignment = 1
+
+[node name="BodyText" type="Label" parent="CanvasLayer/PopupInfo/Contents" unique_id=444943974]
+custom_minimum_size = Vector2(1, 1)
+custom_maximum_size = Vector2(500, -1)
+layout_mode = 2
+text = "Title"
+label_settings = SubResource("LabelSettings_b7pcm")
+autowrap_mode = 2
+
+[node name="OkBtn" type="Button" parent="CanvasLayer/PopupInfo/Contents" unique_id=1114239247]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Okay"
 
 [node name="PopupSuggestAccuse" type="Window" parent="CanvasLayer" unique_id=1745163875]
 unique_name_in_owner = true
@@ -257,6 +318,7 @@ text = "Show Cards"
 
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/YesBtn" to="CanvasLayer/PopupYN" method="_yes_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupYN/Contents/Buttons/NoBtn" to="CanvasLayer/PopupYN" method="_no_pressed"]
+[connection signal="pressed" from="CanvasLayer/PopupInfo/Contents/OkBtn" to="CanvasLayer/PopupInfo" method="_on_ok_btn_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupSuggestAccuse/Contents/Buttons/SuggestBtn" to="CanvasLayer/PopupSuggestAccuse" method="_suggest_pressed"]
 [connection signal="pressed" from="CanvasLayer/PopupSuggestAccuse/Contents/Buttons/CancelBtn" to="CanvasLayer/PopupSuggestAccuse" method="_cancel_pressed"]
 [connection signal="pressed" from="CanvasLayer/CardDisplay/CardHand/Cards/HideBtn" to="CanvasLayer/CardDisplay" method="_hide_cards"]

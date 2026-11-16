@@ -3,6 +3,9 @@ extends Control
 enum PopupYN {YES, NO}
 enum PopupSuggestAccuse {ACCUSATION, SUGGESTION}
 
+func popup_info(title_txt, body_txt) -> void:
+	%PopupInfo.popup_info(title_txt, body_txt)
+
 func popup_yn(title_txt, yes_txt = PopupYN.keys()[PopupYN.YES], no_txt = PopupYN.keys()[PopupYN.NO]) -> PopupYN:
 	return await %PopupYN.popup_yn(title_txt, yes_txt, no_txt)
 	

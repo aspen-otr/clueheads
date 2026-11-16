@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ihynpbig6t2e"]
+[gd_scene format=3 uid="uid://db3g28h4y1he"]
 
 [ext_resource type="Script" uid="uid://djcwtfxwabdl" path="res://ui/popups.gd" id="1_y7xdp"]
 [ext_resource type="Script" uid="uid://4wa4q3ydv4vl" path="res://ui/popup_suggest_accuse.gd" id="1_yypk8"]

@@ -11,20 +11,23 @@ var board_state
 var hand: Array
 var detective_sheet
 
-func new_connect(new_id: int, new_name: String = "Player") -> void:
+func new_connect(new_id: int, new_name: String) -> void:
 	name = new_name
 	id = new_id
-	
+
 	number = Lobby.local_states.size() + 1
 
 # translates resource to/from a dictionary for JSON purposes
-func encode() -> Dictionary:
+static func encode(dict) -> Dictionary:
 	return {
-		"name" : name,
-		"number" : number,
-		"id" : id,
+		"name" : dict.name,
+		"number" : dict.number,
+		"id" : dict.id,
 	}
-func decode(data: Dictionary) -> void:
-	name = data["name"]
-	number = data["number"]
-	id = data["id"]
+
+static func decode(data: Dictionary) -> LocalGameState:
+	var new_state = LocalGameState.new()
+	new_state.name = data["name"]
+	new_state.number = data["number"]
+	new_state.id = data["id"]
+	return new_state

@@ -1,6 +1,7 @@
 #TODO: authentication
 extends Node
 
+signal lobby_created()
 signal player_connected(peer_id)
 signal player_disconnected(peer_id)
 signal server_disconnected()
@@ -8,12 +9,18 @@ signal connection_failed()
 
 signal client_chat_update()
 
+
 const PORT: int = 7000
 const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
 const MAX_CLIENTS: int = 6 # According to Clue rules
 
 # Player's game state data
 var client_info: LocalGameState
+var client_name: String = "":
+	get:
+		if client_name.is_empty():
+			return "Player"
+		return client_name
 
 # Host's authoritative data. Not initialized on non-host clients
 var master_data: MasterGameState
@@ -32,25 +39,36 @@ func _ready():
 	multiplayer.connected_to_server.connect(on_connect)
 	multiplayer.connection_failed.connect(on_connection_fail)
 	multiplayer.server_disconnected.connect(on_server_disconnect)
-	
+
 	client_info = LocalGameState.new()
 
 #region : Scene specific functions
-func create_game():
+func create_game(given_port):
+	if !given_port:
+		given_port = PORT
 	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_server(PORT, MAX_CLIENTS)
+	var error = peer.create_server(given_port, MAX_CLIENTS)
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
 
 	master_data = MasterGameState.new()
 	client_info = LocalGameState.new()
-	client_info.new_connect(1)
+	client_info.new_connect(1, client_name)
 	master_data.client_data[client_info.id] = client_info
 
-func join_game(address: String = ""):
+	lobby_created.emit()
+	update_chat("Lobby created successfully")
+
+func close_game():
+	kick.rpc()
+
+func join_game(address: String = "", given_port = null):
 	if address.is_empty():
 		address = DEFAULT_IP
+	if !given_port:
+		given_port = PORT
+
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, PORT)
 	if error:
@@ -59,56 +77,80 @@ func join_game(address: String = ""):
 
 func remove_player():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-#region : RPCs
-# functions that can be called on specific clients
 
 # creates a local game state object and adds it to the host's master data
 @rpc("any_peer")
-func register_player():
+func register_player(player_name: String = "Player"):
 	var id = multiplayer.get_remote_sender_id()
 	var new_data = LocalGameState.new()
-	new_data.new_connect(id)
+	new_data.new_connect(id, player_name)
 	master_data.client_data[id] = new_data
-	set_client_data(new_data.encode())
-	
+	set_client_data.rpc_id(id, LocalGameState.encode(new_data))
+
 	player_connected.emit(id)
+
+#region : Client functions
+# functions that can be called on specific clients
 
 # sets a client's local game state
 @rpc
 func set_client_data(data: Dictionary):
-	client_info.decode(data)
+	client_info = LocalGameState.decode(data)
 
 # updates host's master list of game states based on client's current local game state
-@rpc("call_local")
+@rpc
 func get_client_data() -> void:
-	update_local_data.rpc_id(1, client_info.encode())
-@rpc("call_local", "any_peer")
+	update_local_data.rpc_id(1, LocalGameState.encode(client_info))
+@rpc
 func update_local_data(data: Dictionary):
 	var id = multiplayer.get_remote_sender_id()
-	local_states[id].decode(data)
+	local_states[id] = LocalGameState.decode(data)
+
+@rpc
+func get_client_name() -> String:
+	return client_name
 
 # updates a client's local_data chat string
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func update_chat(msg: String, reset: bool = false) -> void:
 	if reset:
 		client_info.chat = ""
 	client_info.chat += str(msg, "\n")
 	client_chat_update.emit()
-	
+
+func message_host(message: String):
+	if !multiplayer.is_server():
+		msg_rpc.rpc_id(1, message)
+	else:
+		print_debug(str("Message sent to self: ", message))
+@rpc("any_peer", "call_local")
+func msg_rpc(message: String):
+	print()
+	prints("Client", multiplayer.get_remote_sender_id(), "has sent message:")
+	print(message)
+	print()
+
+@rpc
+func kick() -> void:
+	remove_player()
+
 #endregion
 #endregion
- 
+
 #region : Signal connected functions
-func on_player_connect(id: int) -> void:
-	register_player.rpc_id(id)
-	
+func on_player_connect(_id) -> void:
+	print_debug("Player connected")
+
 func on_player_disconnect(id: int) -> void:
-	dc_states[id] = local_states[id]
-	master_data.client_data.erase(id)
-	player_disconnected.emit(id)
+	if multiplayer.is_server():
+		print_debug("Player disconnected")
+		dc_states[id] = local_states[id]
+		master_data.client_data.erase(id)
+		player_disconnected.emit(id)
 
 func on_connect() -> void:
-	pass
+	message_host("I have connected")
+	register_player.rpc_id(1, client_name)
 
 func on_connection_fail() -> void:
 	connection_failed.emit()

@@ -18,7 +18,6 @@ func popup_suggest_accuse(guess_type_: Popups.PopupSuggestAccuse, locked_options
 		child.queue_free()
 	%PopupSuggestAccuse.hide()
 	return result
-
 func _set_text():
 	if guess_type == Popups.PopupSuggestAccuse.ACCUSATION:
 		%PopupSuggestAccuse/Contents/Text.text = "Who are you accusing?"
@@ -27,14 +26,12 @@ func _set_text():
 		%PopupSuggestAccuse/Contents/Text.text = "Who are you suggesting?"
 		%PopupSuggestAccuse/Contents/Buttons/SuggestBtn.text = "Suggest"
 
-
 func _type_labels():
 	%PopupSuggestAccuse/Contents/Selections.columns = Set.types.size()
 	for type in Set.types:
 		var new_label = Label.new()
 		new_label.text = Card.type_lut[type]
 		%PopupSuggestAccuse/Contents/Selections.add_child(new_label)
-
 func _selection_menus(locked_options: Array[Card]):
 	item_lists.clear()
 	for type in Set.types:

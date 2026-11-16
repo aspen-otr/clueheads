@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cqpo2bvul07dw"]
 
-[ext_resource type="Script" uid="uid://bv0u3aviqaj2s" path="res://ui/test_popup_yn.gd" id="1_sk0y0"]
+[ext_resource type="Script" uid="uid://daeeddhgghxv" path="res://ui/popups/manual_tests/test_popup_yn.gd" id="1_jmcdt"]
 
 [node name="Control" type="Control" unique_id=1298302683]
 layout_mode = 3
@@ -23,6 +23,6 @@ offset_top = -66.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Show Popup"
-script = ExtResource("1_sk0y0")
+script = ExtResource("1_jmcdt")
 
 [connection signal="pressed" from="UI/Button" to="UI/Button" method="_on_pressed"]

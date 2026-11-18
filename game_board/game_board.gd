@@ -11,13 +11,16 @@ var active_rooms: Array[Room]
 var spawn_tile_coords: Array
 var active_players: Array[Player]
 var current_player: int = 0
+var current_player_path_length = 0
 
 var tile_size: float = 0.0
 var offset_x: float = 0.0
 var offset_y: float = 0.0
 var hovered_tile_coords: Array = [-1, -1]
 
+@onready var game: Node2D = get_parent()
 var default_font: Font = Control.new().get_theme_font("font")
+
 const ROOM_COLORS = {
 	Board_tile.ROOM_TYPE.NONE: Color(0.0, 0.0, 0.0, 1.0),       
 	Board_tile.ROOM_TYPE.HALLWAY: Color(0.877, 0.843, 0.74, 1.0),    
@@ -57,13 +60,17 @@ func get_tile(cords: Array) -> Board_tile:
 		return board_grid[cords[0]][cords[1]]
 	return null
 
+
+
 func move_player(p_player: int, destination: Array):
-	var p_player_coords
-	if (active_players[p_player].player_coords != [-1,-1]):
-		p_player_coords = active_players[p_player].player_coords
-		board_grid[p_player_coords[0]][p_player_coords[1]].occupied_by = -1
-	board_grid[destination[0]][destination[1]].occupied_by = p_player
-	active_players[p_player].player_coords = destination
+	
+	if (game.last_roll_total+1 >= current_player_path_length):
+		var p_player_coords
+		if (active_players[p_player].player_coords != [-1,-1]):
+			p_player_coords = active_players[p_player].player_coords
+			board_grid[p_player_coords[0]][p_player_coords[1]].occupied_by = -1
+		board_grid[destination[0]][destination[1]].occupied_by = p_player
+		active_players[p_player].player_coords = destination
 
 func change_Board_tile(coords: Array, p_Board_tile: Board_tile ) -> void:
 	var x = coords[0] + p_Board_tile.tile_x
@@ -111,7 +118,7 @@ func add_board1_spawn_tiles():
 	add_spawn_tile([9, 0])
 	add_spawn_tile([14, 0])
 	add_spawn_tile([0, 5])
-	add_spawn_tile([0, 19])
+	add_spawn_tile([0, 18])
 	add_spawn_tile([23, 6])
 	add_spawn_tile([23, 17])
 	add_spawn_tile([16, 23])
@@ -169,17 +176,65 @@ func is_path_valid(die_roll: int, path: Vector2) -> bool:
 	var is_path_valid
 	return is_path_valid
 
+func return_euclidian_dist(x1:int, y1:int, x2:int, y2:int):
+	return sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
 func find_path(start_coords: Array, target_coords: Array) -> Array:
-	#returs a vector of the tiles traversed to get 
-	#to the target tile
-	if start_coords == target_coords: 
-		return []
+	if (start_coords == target_coords): 
+		return [start_coords]
 	var target_tile = get_tile(target_coords)
+	var start_tile = get_tile(start_coords)
+	if (target_tile.room_type == Board_tile.ROOM_TYPE.STAIRCASE):
+		return [start_coords]
+	if (start_tile.room_type != Board_tile.ROOM_TYPE.HALLWAY and start_tile.room_type != Board_tile.ROOM_TYPE.DOOR):
+		var starting_room: Room = null
+		for room in active_rooms:
+			if (room.room_type == start_tile.room_type):
+				starting_room = room
+				break
+		if (starting_room != null and starting_room.doors.size() > 0):
+			var closest_door: Array = []
+			var min_distance: float = INF
+			for i in range(len(starting_room.doors)):
+				var door_tile = get_tile(starting_room.doors[i])
+				if (door_tile != null and door_tile.is_valid and (door_tile.occupied_by == -1 or starting_room.doors[i] == start_coords)):
+					var distance_sq = return_euclidian_dist(starting_room.doors[i][0], starting_room.doors[i][1], target_coords[0], target_coords[1])
+					if (distance_sq < min_distance):
+						min_distance = distance_sq
+						closest_door = starting_room.doors[i]
+			if (closest_door.is_empty()):
+				return []
+			start_coords = closest_door
+			start_tile = get_tile(target_coords)
+	if (target_tile.room_type != Board_tile.ROOM_TYPE.HALLWAY ):
+		var target_room: Room = null
+		for room in active_rooms:
+			if (room.room_type == target_tile.room_type):
+				target_room = room
+				break
+		
+		if (target_room != null and target_room.doors.size() > 0):
+			var closest_door: Array = []
+			var min_distance: float = INF
+			for i in range(len(target_room.doors)):
+				var door_tile = get_tile(target_room.doors[i])
+				if (door_tile != null and door_tile.is_valid and (door_tile.occupied_by == -1 or target_room.doors[i] == start_coords)):
+					var distance_sq = return_euclidian_dist(start_coords[0], start_coords[1], target_room.doors[i][0], target_room.doors[i][1])
+					if (distance_sq < min_distance):
+						min_distance = distance_sq
+						closest_door = target_room.doors[i]
+			
+			if (closest_door.is_empty()):
+				return []
+			target_coords = closest_door
+			target_tile = get_tile(target_coords)
+		
+	
+		
 	if (target_tile == null or not target_tile.is_valid): 
 		return []
 	if (target_tile.room_type == Board_tile.ROOM_TYPE.STAIRCASE): 
-		return []
+		return [start_coords]
 		
 	var queue: Array = [{"coords": start_coords, "path": []}]
 	var visited: Dictionary = {}
@@ -190,6 +245,7 @@ func find_path(start_coords: Array, target_coords: Array) -> Array:
 		var current_coords = current["coords"]
 		var current_path = current["path"]
 		if (current_coords[0] == target_coords[0] and current_coords[1] == target_coords[1]):
+			current_path.append(start_coords)
 			return current_path
 			
 		if (current_path.size() > 24): 
@@ -210,45 +266,59 @@ func find_path(start_coords: Array, target_coords: Array) -> Array:
 						queue.append({"coords": next_coords, "path": new_path})
 	return []
 
-func highlight_path(die_roll: int):
-		var screen_x = hovered_tile_coords[0] * tile_size + offset_x
-		var screen_y = (board_height - 1 - hovered_tile_coords[1]) * tile_size + offset_y
-		var target_tile = get_tile(hovered_tile_coords)
-		if (target_tile != null):
-			#cursor will not highlight over the staircase because players cant move to the staircase
-			if (target_tile.room_type != Board_tile.ROOM_TYPE.STAIRCASE):
-				if (hovered_tile_coords != active_players[current_player].player_coords):
-					var start_coords = active_players[current_player].player_coords
-					var path = find_path(start_coords, hovered_tile_coords)
-					for i in range(len(path)):
+func highlight_path():
+	var screen_x = hovered_tile_coords[0] * tile_size + offset_x
+	var screen_y = (board_height - 1 - hovered_tile_coords[1]) * tile_size + offset_y
+	var target_tile = get_tile(hovered_tile_coords)
+	if (target_tile != null):
+		#cursor will not highlight over the staircase because players cant move to the staircase
+		if (target_tile.room_type != Board_tile.ROOM_TYPE.STAIRCASE):
+			if (hovered_tile_coords != active_players[current_player].player_coords):
+				var start_coords = active_players[current_player].player_coords
+				var path = find_path(start_coords, hovered_tile_coords)
+				if !(path.is_empty()):
+					current_player_path_length = len(path)
+				else:
+					current_player_path_length = 1000
+				
+				if (game.last_roll_total+1 >= current_player_path_length):
+					for i in range(current_player_path_length):
 						var path_coords = path[i]
 						var path_screen_x = path_coords[0] * tile_size + offset_x
 						var path_screen_y = (board_height - 1 - path_coords[1]) * tile_size + offset_y
 						var cell_rect = Rect2(path_screen_x, path_screen_y, tile_size, tile_size)
-						draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.635), true)
+						draw_rect(cell_rect, Color(0.0, 1.0, 0.0, 0.494), true)
 						draw_rect(cell_rect, Color.BLACK, false, 1.0)
-				if (target_tile.room_type == Board_tile.ROOM_TYPE.HALLWAY):
-					var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
-					draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.635), true)
-					draw_rect(cell_rect, Color.BLACK, false, 1.0)
-				else:
-					var hovered_room: Room = get_room_by_type(target_tile.room_type)
-					if (hovered_room != null):
-						var base_x = hovered_room.room_coords[0]
-						var base_y = hovered_room.room_coords[1]
+					if (target_tile.room_type == Board_tile.ROOM_TYPE.HALLWAY):
+						var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+						draw_rect(cell_rect, Color(0.0, 1.0, 0.0, 1.0), true)
+						draw_rect(cell_rect, Color.BLACK, false, 1.0)
 						
-						for x in range(hovered_room.room_width):
-							for y in range(hovered_room.room_height):
-								if ([x, y] not in hovered_room.hallway_tiles):
-									var grid_x = base_x + x
-									var grid_y = base_y + y
-									
-									screen_x = grid_x * tile_size + offset_x
-									screen_y = (board_height - 1 - grid_y) * tile_size + offset_y
-									
-									var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
-									draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 0.616), true)
-									draw_rect(cell_rect, Color.BLACK, false, 1.0)
+					else:
+						var hovered_room: Room = get_room_by_type(target_tile.room_type)
+						if (hovered_room != null):
+							var base_x = hovered_room.room_coords[0]
+							var base_y = hovered_room.room_coords[1]
+							
+							for x in range(hovered_room.room_width):
+								for y in range(hovered_room.room_height):
+									if ([x, y] not in hovered_room.hallway_tiles):
+										var grid_x = base_x + x
+										var grid_y = base_y + y
+										
+										screen_x = grid_x * tile_size + offset_x
+										screen_y = (board_height - 1 - grid_y) * tile_size + offset_y
+										
+										var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+										draw_rect(cell_rect, Color(0.165, 1.0, 0.027, 1.0), true)
+										draw_rect(cell_rect, Color.BLACK, false, 1.0)
+				else:
+					var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+					draw_rect(cell_rect, Color(0.992, 0.0, 0.0, 1.0), true)
+					draw_rect(cell_rect, Color.BLACK, false, 1.0)
+				
+				
+				
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
@@ -257,9 +327,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			if (clicked_tile != null and clicked_tile.is_valid):
 				if (clicked_tile.room_type != Board_tile.ROOM_TYPE.STAIRCASE):
 					if (clicked_tile.occupied_by == -1):
-						
 						move_player(current_player, hovered_tile_coords)
 						queue_redraw()
+						game.complete_current_move()
 
 func _process(_delta: float) -> void:
 	if (tile_size <= 0): 
@@ -313,7 +383,7 @@ func _draw() -> void:
 				draw_rect(cell_rect, fill_color, true)
 				draw_rect(cell_rect, Color.BLACK, false, 1.0)
 
-	highlight_path(6)
+	highlight_path()
 
 	#draw players
 	for i in range(len(active_players)):
@@ -350,3 +420,6 @@ func _draw() -> void:
 		var label_position = Vector2(global_pixel_x - (text_size.x / 2.0), global_pixel_y + (text_size.y / 4.0))
 
 		draw_string(default_font, label_position, room_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
+
+func _ready():
+	initialize_board1()

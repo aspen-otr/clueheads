@@ -88,7 +88,7 @@ func is_npc(index: int) -> bool:
 #endregion
 
 
-func _init(real_players: Array[Card.Suspect]) -> void:
+func setup(real_players: Array[Card.Suspect]) -> void:
 	self._real_player_lut.resize(
 		Card.Suspect.size()
 	)

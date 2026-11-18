@@ -1,6 +1,9 @@
 class_name MainMenu
 extends Control
 
+var game_scene = preload("res://game/game.tscn")
+var game: Node2D
+
 # i scrapped what i was originally going to do with these
 # but they might be useful later, so i'm keeping them
 enum display {MAIN, HOST, JOIN, LOBBY, OPTIONS}
@@ -82,8 +85,15 @@ func close_lobby() -> void:
 #endregion
 
 #region : game logic
+func start_game(real_players: Array[Card.Suspect]) -> void:
+	visible = false
+	game = game_scene.instantiate()
+	get_tree().root.add_child(game)
+	game.setup(real_players)
+
 func launch_singleplayer() -> void:
-	push_error("Unimplemented")
+	var selected_character: Array[Card.Suspect] = [Card.Suspect.MissScarlett]
+	start_game(selected_character)
 
 func host_lobby() -> void:
 	var port = lobby_buttons.host_port_input.text

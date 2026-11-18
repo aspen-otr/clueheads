@@ -11,12 +11,12 @@ enum Room { Library, Kitchen, Conservatory, Billiard, Lounge, Ballroom, Dining, 
 const 	TYPE_VALS: Dictionary = {
 	Type.SUSPECT: Suspect,
 	Type.WEAPON: Weapon,
-	self.Type.ROOM: Room
+	self.Type.ROOM: self.Room
 }
 
-static var suspect_lut: Array[String] = []
-static var weapon_lut: Array[String] = []
-static var room_lut: Array[String] = []
+static var suspect_lut: Array[Suspect] = []
+static var weapon_lut: Array[Weapon] = []
+var room_lut: Array[Room] = []
 
 @export var type: Type
 @export var image: Texture2D

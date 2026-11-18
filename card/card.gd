@@ -11,29 +11,29 @@ enum Room { Library, Kitchen, Conservatory, Billiard, Lounge, Ballroom, Dining, 
 const 	TYPE_VALS: Dictionary = {
 	Type.SUSPECT: Suspect,
 	Type.WEAPON: Weapon,
-	self.Type.ROOM: self.Room
+	Type.ROOM: Room
 }
 
 static var suspect_lut: Array[Suspect] = []
 static var weapon_lut: Array[Weapon] = []
-var room_lut: Array[Room] = []
+static var room_lut: Array[Room] = []
 
 @export var type: Type
 @export var image: Texture2D
 
 var value
 
-func set_all_lut():
+static func set_all_lut():
 	suspect_lut.resize(Suspect.size())
 	weapon_lut.resize(Weapon.size())
-	room_lut.resize(self.Room.size())
+	room_lut.resize(Room.size())
 	
 	for key in Suspect.keys():
 		suspect_lut[Suspect[key]] = key
 	for key in Weapon.keys():
 		weapon_lut[Weapon[key]] = key
 	for key in Room.keys():
-		room_lut[self.Room[key]] = key
+		room_lut[Room[key]] = key
 
 func _init(type_: Type, value_):
 	type = type_

@@ -5,17 +5,10 @@ class_name Game
 # Not including the main menu, etc.
 
 signal move_completed
-signal turn_started(player: Card.Suspect)
+signal turn_started(Player: Card.Suspect)
 signal dice_rolled(Player: Card.Suspect, dice: Array[int], total: int)
 var awaiting_player_move: bool = false
 
-var suspects: Array[Card.Suspect] = [
-Card.Suspect.MissScarlett, 
-Card.Suspect.ColonelMustard, 
-Card.Suspect.ProfessorPlum, 
-Card.Suspect.MrGreen, 
-Card.Suspect.MrsPeacock, 
-Card.Suspect.DrOrchid]
 
 var current_player: Card.Suspect = Card.Suspect.MissScarlett
 var _real_player_lut: Array[bool] = []
@@ -37,7 +30,7 @@ func place_players(num_players):
 		
 	
 	
-func setup_real_players(real_players: Array[Card.Suspect]) -> void:
+func setup_real_players(real_players: Array) -> void:
 	self._real_player_lut.resize(Card.Suspect.size())
 
 	for idx in range(Card.Suspect.size()):
@@ -46,7 +39,7 @@ func setup_real_players(real_players: Array[Card.Suspect]) -> void:
 
 
 func _ready() -> void:
-	setup_real_players(suspects)
+	setup_real_players(Card.Suspect.values())
 	
 	
 	place_players(4)

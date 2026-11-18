@@ -3,6 +3,8 @@ extends Control
 
 # Connect to this signal to create the actual game scene after NPC selection.
 signal game_setup_selected(human_player_count: int, npc_behaviors: Array[int])
+var game_scene = preload("res://game/game.tscn")
+var game: Node2D
 
 # i scrapped what i was originally going to do with these
 # but they might be useful later, so i'm keeping them
@@ -88,6 +90,12 @@ func close_lobby() -> void:
 #endregion
 
 #region : game logic
+func start_game(real_players: Array[Card.Suspect]) -> void:
+	visible = false
+	game = game_scene.instantiate()
+	get_tree().root.add_child(game)
+	game.setup(real_players)
+
 func launch_singleplayer() -> void:
 	# Singleplayer has one human; the popup permits 1-5 NPCs.
 	var npc_behaviors: Array[int] = await npc_setup_popup.choose_npcs(1)
@@ -98,6 +106,8 @@ func launch_singleplayer() -> void:
 	game_setup_selected.emit(1, selected_npc_behaviors)
 	# Game scene creation / NPC decision-making is outside the supplied UI ZIP.
 	# Have your game controller connect to game_setup_selected to start the game.
+	var selected_character: Array[Card.Suspect] = [Card.Suspect.MissScarlett]
+	start_game(selected_character)
 
 func host_lobby() -> void:
 	var port = lobby_buttons.host_port_input.text

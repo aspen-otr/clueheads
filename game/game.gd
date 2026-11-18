@@ -142,3 +142,15 @@ func is_npc(index: int) -> bool:
 	return not self._real_player_lut[index]
 
 #endregion
+
+
+func setup(real_players: Array[Card.Suspect]) -> void:
+	self._real_player_lut.resize(
+		Card.Suspect.size()
+	)
+
+	for idx in range(Card.Suspect.size()):
+		self._real_player_lut[idx] = idx in real_players
+
+	# Initialize card lookup tables.
+	Card.set_all_lut()

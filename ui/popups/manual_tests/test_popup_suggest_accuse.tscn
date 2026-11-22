@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://w1c2dejsoa7q"]
 
-[ext_resource type="Script" uid="uid://dqfbqks1fwhuj" path="res://ui/test_popup_accuse.gd" id="1_pnybq"]
-[ext_resource type="Script" uid="uid://bxk5ti8bwj0xh" path="res://ui/test_popup_suggest.gd" id="2_ra3hc"]
+[ext_resource type="Script" uid="uid://dqfbqks1fwhuj" path="res://ui/popups/manual_tests/test_popup_accuse.gd" id="1_pnybq"]
+[ext_resource type="Script" uid="uid://bxk5ti8bwj0xh" path="res://ui/popups/manual_tests/test_popup_suggest.gd" id="2_ra3hc"]
 
 [node name="Control" type="Control" unique_id=1298302683]
 layout_mode = 3

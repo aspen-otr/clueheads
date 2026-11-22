@@ -153,6 +153,7 @@ func check_ready() -> void:
 func on_server_disconnect() -> void:
 	clear_all_players()
 	close_lobby_ui()
+	Popups.popup_info("Disconnected", "You have been disconnected from the lobby")
 
 func set_ready(new_state: bool):
 	update_ready.rpc_id(1, new_state)

@@ -12,6 +12,8 @@ var current_display
 @export var multiplayer_info: MultiplayerInfo
 @export var fade: Panel
 
+var connecting: bool = false
+
 func _ready() -> void:
 	main_menu_buttons.host_button.pressed.connect(open_host)
 	main_menu_buttons.join_button.pressed.connect(open_join)
@@ -32,7 +34,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		if lobby_buttons.visible:
+		if lobby_buttons.visible and !connecting:
 			close_lobby_buttons()
 
 #region : ui display
@@ -119,13 +121,27 @@ func join_lobby() -> void:
 			return
 
 	var error = Lobby.join_game(address, port)
-
+	
 	if error:
 		printerr(error)
+		Popups.popup_info("Something went wrong", "")
 		return
-	else:
-		open_lobby()
-
+	
+	connecting = true
+	lobby_buttons.join_game.disabled = true
+	lobby_buttons.join_back.disabled = true
+	lobby_buttons.start_join_loading()
+	var result = await Lobby.connection_result
+	connecting = false
+	lobby_buttons.join_game.disabled = false
+	lobby_buttons.join_back.disabled = false
+	lobby_buttons.stop_join_loading()
+	if !result:
+		Popups.popup_info("Connection failed", "Could not connect to server")
+		return
+	
+	open_lobby()
+	
 	var player_name = lobby_buttons.join_name_input.text
 	if !player_name:
 		player_name = "Player"

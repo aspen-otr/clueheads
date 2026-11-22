@@ -8,6 +8,7 @@ signal player_connected(peer_id)
 signal player_disconnected(peer_id)
 signal server_disconnected()
 signal connection_failed()
+signal connection_result(result)
 
 signal client_chat_update()
 
@@ -69,11 +70,12 @@ func join_game(address: String = "", given_port = null):
 		address = DEFAULT_IP
 	if !given_port:
 		given_port = PORT
-
+	
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, PORT)
 	if error:
 		return error
+
 	multiplayer.multiplayer_peer = peer
 
 func remove_player():
@@ -164,9 +166,12 @@ func on_player_disconnect(id: int) -> void:
 func on_connect() -> void:
 	message_host("I have connected")
 	register_player.rpc_id(1, client_name)
+	connection_result.emit(true)
 
 func on_connection_fail() -> void:
+	print_debug("Connection failed")
 	connection_failed.emit()
+	connection_result.emit(false)
 
 func on_server_disconnect() -> void:
 	server_disconnected.emit()

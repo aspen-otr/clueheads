@@ -4,7 +4,7 @@ extends Resource
 var name: String
 var number: int
 var id: int
-var chat: String
+var chat: Array[Array] # String of text followed by color
 
 #TODO: update
 var board_state

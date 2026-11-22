@@ -14,6 +14,7 @@ const DISPLAY_MODULE = preload("uid://2mrtcpc6dmkr")
 @export var chat_input: LineEdit
 
 var player_ready: Dictionary[int, bool]
+var chat_display_index: int = 0
 
 func _ready() -> void:
 	# misc signal functions
@@ -77,17 +78,23 @@ func clear_all_players():
 
 func close_lobby_ui():
 	clear_all_players()
-	Lobby.update_chat("", true)
+	Lobby.clear_chat()
 	player_ready.clear()
 	ready_button.button_pressed = false
 	close_lobby.emit()
 
 @rpc
 func update_chat_log():
-	chat_display.set_text(Lobby.client_info.chat)
+	while chat_display_index < Lobby.client_info.chat.size():
+		var i = Lobby.client_info.chat[chat_display_index]
+		if i[1]:
+			chat_display.push_color(i[1])
+		chat_display.append_text(i[0])
+		chat_display.pop_all()
+		chat_display_index += 1
 
 func send_msg(new_message):
-	Lobby.update_chat.rpc(str(" - (", Lobby.client_info.number, ") ", Lobby.client_name, ": ", new_message), false, 1)
+	Lobby.send_msg.rpc(str("(", Lobby.client_info.number, ") ", Lobby.client_name, ": ", new_message))
 	chat_input.clear()
 
 @rpc("call_local")
@@ -104,7 +111,7 @@ func display_ready(states: Dictionary[int, bool]):
 #region : host functions
 func on_new_connection(id: int) -> void:
 	# new player catchup
-	Lobby.update_chat.rpc_id(id, "Connection Successful")
+	Lobby.send_info.rpc_id(id, "Connection Successful")
 	for i in Lobby.local_states:
 		if i != id:
 			display_player.rpc_id(id, LocalGameState.encode(Lobby.local_states[i]))
@@ -113,7 +120,7 @@ func on_new_connection(id: int) -> void:
 	display_player.rpc(LocalGameState.encode(new_player_data))
 	for i in Lobby.local_states:
 		if i != id:
-			Lobby.update_chat.rpc_id(i, str("(", new_player_data.number, ") ", new_player_data.name, " has joined the lobby"))
+			Lobby.send_info.rpc_id(i, str("(", new_player_data.number, ") ", new_player_data.name, " has joined the lobby"))
 	player_ready[id] = false
 	check_ready()
 	display_ready.rpc_id(id, player_ready)
@@ -121,7 +128,7 @@ func on_new_connection(id: int) -> void:
 func on_client_disconnect(id: int) -> void:
 	clear_player.rpc(id)
 	var dc_data = Lobby.dc_states[id]
-	Lobby.update_chat(str("(", dc_data.number, ") ", dc_data.name, " has left the lobby"))
+	Lobby.send_info(str("(", dc_data.number, ") ", dc_data.name, " has left the lobby"), Color.WEB_MAROON)
 	player_ready.erase(id)
 	check_ready()
 

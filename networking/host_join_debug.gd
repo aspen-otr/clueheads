@@ -41,7 +41,7 @@ func _on_leave_button_pressed() -> void:
 
 # updates return_text node when a player's local chat data is updated
 func update_label():
-	return_text.text = Lobby.client_info.chat
+	push_error("This broke a while ago sorry")
 
 #endregion
 

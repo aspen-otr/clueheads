@@ -59,7 +59,7 @@ func create_game(given_port):
 	master_data.client_data[client_info.id] = client_info
 
 	lobby_created.emit()
-	update_chat("Lobby created successfully")
+	send_info("Lobby created successfully")
 
 func close_game():
 	kick.rpc()
@@ -112,14 +112,23 @@ func get_client_name() -> String:
 	return client_name
 
 # updates a client's local_data chat string
-# TODO : separate into "send_info" and "send_chat"
 @rpc("call_local", "any_peer")
-func update_chat(msg: String, reset: bool = false, type: int = 0) -> void:
-	if type == ChatType.MSG and SavedData.can_chat == false:
+func send_info(msg: String, col = Color.WEB_GRAY) -> void:
+	client_info.chat.append([msg, col])
+	client_info.chat.append(["\n", null])
+	client_chat_update.emit()
+
+@rpc("call_local", "any_peer")
+func send_msg(msg: String) -> void:
+	if !SavedData.can_chat:
 		return
-	if reset:
-		client_info.chat = ""
-	client_info.chat += str(msg, "\n")
+	client_info.chat.append([msg, Color.WHITE])
+	client_info.chat.append(["\n", null])
+	client_chat_update.emit()
+
+@rpc("call_local", "any_peer")
+func clear_chat() -> void:
+	client_info.chat = []
 	client_chat_update.emit()
 
 func message_host(message: String):

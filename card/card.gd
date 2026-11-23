@@ -24,6 +24,31 @@ static var room_lut: Dictionary
 
 var value
 
+static func generate_room_card(tile_type: Board_tile.ROOM_TYPE) -> Card:
+	var room: Card.Room
+	match tile_type:
+		Board_tile.ROOM_TYPE.LIBRARY:
+			room = Card.Room.Library
+		Board_tile.ROOM_TYPE.KITCHEN:
+			room = Card.Room.Kitchen
+		Board_tile.ROOM_TYPE.CONSERVATORY:
+			room = Card.Room.Conservatory
+		Board_tile.ROOM_TYPE.BILLIARD:
+			room = Card.Room.Billiard
+		Board_tile.ROOM_TYPE.LOUNGE:
+			room = Card.Room.Lounge
+		Board_tile.ROOM_TYPE.BALLROOM:
+			room = Card.Room.Ballroom
+		Board_tile.ROOM_TYPE.DINING:
+			room = Card.Room.Dining
+		Board_tile.ROOM_TYPE.STUDY:
+			room = Card.Room.Study
+		Board_tile.ROOM_TYPE.HALL:
+			room = Card.Room.Hall
+		_:
+			return null
+	return Card.new(Card.Type.ROOM, room)
+
 static func set_all_lut():
 	for key in Type.keys():
 		type_lut.set(Type[key], key)

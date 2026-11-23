@@ -71,6 +71,7 @@ func move_player(p_player: int, destination: Array):
 			board_grid[p_player_coords[0]][p_player_coords[1]].occupied_by = -1
 		board_grid[destination[0]][destination[1]].occupied_by = p_player
 		active_players[p_player].player_coords = destination
+		active_players[p_player].current_room = Card.generate_room_card(get_tile(destination).room_type)
 
 func change_Board_tile(coords: Array, p_Board_tile: Board_tile ) -> void:
 	var x = coords[0] + p_Board_tile.tile_x
@@ -320,7 +321,7 @@ func highlight_path():
 				
 				
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
 		if (hovered_tile_coords[0] != -1 and hovered_tile_coords[1] != -1):
 			var clicked_tile = get_tile(hovered_tile_coords)

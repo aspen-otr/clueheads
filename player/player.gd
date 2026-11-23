@@ -11,7 +11,7 @@ signal card_shown(player, card)
 var ident: Card.Suspect
 
 var character_name: String = "Unknown"
-var current_room: String = "Hallway"
+var current_room: Card = null
 
 func _init(p_player_color, ident_: Card.Suspect):
 	self.ident = ident_

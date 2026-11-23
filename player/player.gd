@@ -1,4 +1,5 @@
-class_name Player
+
+@abstract class_name Player
 extends Node2D
 
 var player_coords: Array
@@ -11,8 +12,6 @@ var ident: Card.Suspect
 
 var character_name: String = "Unknown"
 var current_room: String = "Hallway"
-
-var ident: Card.Suspect
 
 func _init(p_player_color, ident_: Card.Suspect):
 	self.ident = ident_

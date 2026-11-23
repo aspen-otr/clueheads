@@ -1,9 +1,38 @@
 @abstract
-extends Player
 class_name NPC
+extends Player
 
-func _init(ident_: Card.Suspect) -> void:
-	super(ident_)
+
+
+var character_name: String = "Unknown"
+var current_room: String = "Hallway"
+
+var cards: Array[Card] = []
+
+signal room_changed(npc, new_room)
+signal card_shown(npc, card)
+
+
+
+func _init(p_player_color: Color, ident_: Card.Suspect) -> void:
+	super(p_player_color, ident_) 
+	character_name = Card.Suspect.keys()[ident_]
+
+func set_cards(new_cards: Array[Card]) -> void:
+	cards = new_cards.duplicate()
+
+
+func get_matching_card_indices(suggestion: Set) -> Array[int]:
+	var matching_indices: Array[int] = []
+
+	for i in range(cards.size()):
+		if suggestion.has(cards[i]):
+			matching_indices.append(i)
+
+	return matching_indices
+
+
+@abstract func pick_card_to_show(suggestion: Set) -> int
 
 @abstract func pick_card_to_show(suggestion: Set) -> Card
 

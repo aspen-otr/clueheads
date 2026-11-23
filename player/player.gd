@@ -1,7 +1,9 @@
-@abstract
 class_name Player
-extends Node
+extends Node2D
 
+var player_coords: Array
+var player_hand: Vector2
+var player_color: Color
 signal room_changed(player, new_room)
 signal card_shown(player, card)
 
@@ -9,6 +11,14 @@ var ident: Card.Suspect
 
 var character_name: String = "Unknown"
 var current_room: String = "Hallway"
+
+var ident: Card.Suspect
+
+func _init(p_player_color, ident_: Card.Suspect):
+	self.ident = ident_
+	player_color = p_player_color
+	player_coords = [-1,-1]
+	
 
 var cards: Array[Card] = []
 
@@ -20,10 +30,6 @@ func get_matching_cards(suggestion: Set) -> Array[Card]:
 
 @abstract func pick_card_to_show(suggestion: Set) -> Card # Index of card returned.
 @abstract func pick_square_to_move_to(possible_squares) # TODO: Square type?
-
-func _init(ident_: Card.Suspect):
-	self.ident = ident_
-	self.character_name = Card.Suspect.keys()[ident_]
 
 
 class HumanPlayer extends Player:

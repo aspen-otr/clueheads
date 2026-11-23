@@ -6,7 +6,7 @@ const DEFAULT_TYPES: Array[Type] = [Type.SUSPECT, Type.ROOM, Type.WEAPON]
 
 enum Suspect { MissScarlett, ColonelMustard, ProfessorPlum, MrGreen, MrsPeacock, DrOrchid }
 enum Weapon { Revolver, Candlestick, Knife, Rope, LeadPipe, Wrench }
-enum Room { Library, Kitchen, Conservatory, BilliardsRoom, Lounge, Ballroom, DiningRoom, Study, Hall }
+enum Room { Library, Kitchen, Conservatory, Billiard, Lounge, Ballroom, Dining, Study, Hall }
 
 const 	TYPE_VALS: Dictionary = {
 	Type.SUSPECT: Suspect,

@@ -1,10 +1,14 @@
-extends Node
+extends Node2D
 class_name Game
 
 # The game behavior wherein the gameplay loop is performed.
 # Not including the main menu, etc.
 
-signal dice_rolled(player: Card.Suspect, dice: Array[int], total: int)
+signal move_completed
+signal turn_started(Player: Card.Suspect)
+signal dice_rolled(Player: Card.Suspect, dice: Array[int], total: int)
+var awaiting_player_move: bool = false
+
 
 var current_player: Card.Suspect = Card.Suspect.MissScarlett
 var _real_player_lut: Array[bool] = []
@@ -13,22 +17,74 @@ var dice: Dice = Dice.new()
 var last_dice_roll: Array[int] = []
 var last_roll_total: int = 0
 
+@onready var game_board: Node2D = $GameBoard 
+
+#var active_players: Array = [] 
+
+func place_players(num_players):
+	for i in range(num_players):
+		var suspect: Card.Suspect = i as Card.Suspect
+		game_board.active_players.append(Player.new(Color(1-(i%4), 0+(i%2), 0+(i%3)), suspect))
+	for i in range(len(game_board.active_players)):
+		game_board.move_player(i, game_board.spawn_tile_coords[i])
+		
+	
+	
+func setup_real_players(real_players: Array) -> void:
+	self._real_player_lut.resize(Card.Suspect.size())
+
+	for idx in range(Card.Suspect.size()):
+		self._real_player_lut[idx] = idx in real_players
+	
+
+
+func _ready() -> void:
+	setup_real_players(Card.Suspect.values())
+	
+	
+	place_players(4)
+	game_loop()
+	
+	
+
 #region Static functions
 
-static func advance_player(player: Card.Suspect) -> Card.Suspect:
-	return (((player as int) + 1) % Card.Suspect.size()) as Card.Suspect
 
+	
+func complete_current_move() -> void:
+	if (awaiting_player_move):
+		move_completed.emit()
 #endregion Static functions
 
 
-func loop():
+func advance_player(Player: Card.Suspect) -> Card.Suspect:
+	#return (((Player as int) + 1) % Card.Suspect.size()) as Card.Suspect
+	
+	if (game_board.current_player+1 >= len(game_board.active_players)):
+		game_board.current_player = 0
+		
+	else:
+		game_board.current_player+=1
+	return game_board.active_players[game_board.current_player].ident
+
+
+
+
+
+func game_loop():
 	while true:
+		
+		turn_started.emit(current_player)
+		roll_dice()
+		game_board.queue_redraw()
 		if self.is_npc(self.current_player):
 			pass
 		else:
-			pass
-
-		self.current_player = self.advance_player(self.current_player)
+			awaiting_player_move = true
+			await move_completed
+			awaiting_player_move = false
+			
+		self.current_player = advance_player(self.current_player)
 
 
 func roll_dice() -> int:
@@ -57,12 +113,12 @@ func disprove(_suggestion: Set) -> Variant:
 
 	assert(false, "unimplemented")
 
-	var current_disprover: Card.Suspect = Game.advance_player(
+	var current_disprover: Card.Suspect = game_board.advance_player(
 		self.current_player
 	)
 
 	while current_disprover != self.current_player:
-		current_disprover = Game.advance_player(
+		current_disprover = game_board.advance_player(
 			current_disprover
 		)
 
@@ -86,15 +142,3 @@ func is_npc(index: int) -> bool:
 	return not self._real_player_lut[index]
 
 #endregion
-
-
-func _init(real_players: Array[Card.Suspect]) -> void:
-	self._real_player_lut.resize(
-		Card.Suspect.size()
-	)
-
-	for idx in range(Card.Suspect.size()):
-		self._real_player_lut[idx] = idx in real_players
-
-	# Initialize card lookup tables.
-	Card.set_all_lut()

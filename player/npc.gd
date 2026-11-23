@@ -34,26 +34,26 @@ func get_matching_card_indices(suggestion: Set) -> Array[int]:
 
 @abstract func pick_card_to_show(suggestion: Set) -> int
 
+@abstract func pick_card_to_show(suggestion: Set) -> Card
 
 @abstract func pick_square_to_move_to(possible_squares)
 
-
 func show_card(suggestion: Set) -> Card:
-	var matching_indices = get_matching_card_indices(suggestion)
+	var matching = get_matching_cards(suggestion)
 
-	if matching_indices.is_empty():
+	if matching.is_empty():
+		card_shown.emit(self, null)
 		return null
 
-	var selected_index = pick_card_to_show(suggestion)
+	var selected = pick_card_to_show(suggestion)
 
-	if not selected_index in matching_indices:
+	if not selected in matching:
 		push_error("NPC selected an invalid card")
+		card_shown.emit(self, null)
 		return null
 
-	var selected_card = cards[selected_index]
-	card_shown.emit(self, selected_card)
-
-	return selected_card
+	card_shown.emit(self, selected)
+	return selected
 
 
 func choose_destination(possible_squares):

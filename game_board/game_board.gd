@@ -361,9 +361,9 @@ func _draw() -> void:
 	if board_width == 0 or board_height == 0:
 		return
 	var window_size: Vector2i = get_window().size
-	tile_size = (window_size.x / 2) / board_width
-	offset_x = (window_size.x / 4)- (tile_size * board_width)/16
-	offset_y = (window_size.y / 2) - (tile_size * board_height)/2
+	tile_size = (window_size.x / 5) / board_width
+	offset_x = (window_size.x / 10)- (tile_size * board_width)/16
+	offset_y = (window_size.y / 5) - (tile_size * board_height)/2
 
 #draw board
 	for x in range(board_width):
@@ -378,7 +378,7 @@ func _draw() -> void:
 				# flip y axis
 				var screen_x = x * tile_size + offset_x
 				var screen_y = (board_height - 1 - y) * tile_size + offset_y
-				var cell_rect = Rect2(screen_x, screen_y, tile_size, tile_size)
+				var cell_rect = Rect2i(screen_x, screen_y, tile_size, tile_size)
 
 				draw_rect(cell_rect, fill_color, true)
 				draw_rect(cell_rect, Color.BLACK, false, 1.0)

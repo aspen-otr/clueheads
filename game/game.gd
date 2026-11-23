@@ -24,7 +24,7 @@ var last_roll_total: int = 0
 func place_players(num_players):
 	for i in range(num_players):
 		var suspect: Card.Suspect = i as Card.Suspect
-		game_board.active_players.append(Player.new(Color(1-(i%4), 0+(i%2), 0+(i%3)), suspect))
+		game_board.active_players.append(Player.HumanPlayer.new(Color(1-(i%4), 0+(i%2), 0+(i%3)), suspect))
 	for i in range(len(game_board.active_players)):
 		game_board.move_player(i, game_board.spawn_tile_coords[i])
 		
@@ -37,13 +37,6 @@ func setup_real_players(real_players: Array) -> void:
 		self._real_player_lut[idx] = idx in real_players
 	
 
-
-func _ready() -> void:
-	setup_real_players(Card.Suspect.values())
-	
-	
-	place_players(4)
-	game_loop()
 	
 	
 
@@ -154,3 +147,8 @@ func setup(real_players: Array[Card.Suspect]) -> void:
 
 	# Initialize card lookup tables.
 	Card.set_all_lut()
+	
+	# gameboard stuff
+	setup_real_players(Card.Suspect.values())
+	place_players(4)
+	game_loop()

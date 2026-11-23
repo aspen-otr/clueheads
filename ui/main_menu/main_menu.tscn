@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://c2j4h6v3t7k0d" path="res://ui/main_menu/static_modules/lobby_ui.tscn" id="3_8uxxo"]
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="3_wk0pr"]
 
+[ext_resource type="PackedScene" path="res://ui/popups/popup_npc_setup.tscn" id="4_npc"]
+
 [node name="MainMenu" type="Control" unique_id=899120849 node_paths=PackedStringArray("main_menu_buttons", "lobby_buttons", "lobby_ui", "fade")]
 layout_mode = 3
 anchors_preset = 15
@@ -55,3 +57,5 @@ mouse_filter = 2
 [node name="LobbyButtons" parent="." unique_id=1341457850 instance=ExtResource("2_0dkrt")]
 visible = false
 layout_mode = 1
+
+[node name="PopupNPCSetup" parent="." instance=ExtResource("4_npc")]

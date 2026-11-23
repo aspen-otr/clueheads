@@ -20,3 +20,7 @@ func enable_card_display(cards: Array[Card]) -> void:
 	
 func disable_card_display() -> void:
 	%CardDisplay.disable_card_display()
+
+# Optional convenience accessor for any screen using the shared Popups scene.
+func popup_npc_setup(human_player_count: int = 1) -> Array[int]:
+	return await %PopupNPCSetup.choose_npcs(human_player_count)

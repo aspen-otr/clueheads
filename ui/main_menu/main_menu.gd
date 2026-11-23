@@ -1,6 +1,9 @@
 class_name MainMenu
 extends Control
 
+# Connect to this signal to create the actual game scene after NPC selection.
+signal game_setup_selected(human_player_count: int, npc_behaviors: Array[int])
+
 # i scrapped what i was originally going to do with these
 # but they might be useful later, so i'm keeping them
 enum display {MAIN, HOST, JOIN, LOBBY, OPTIONS}
@@ -10,6 +13,9 @@ var current_display
 @export var lobby_buttons: LobbyButtons
 @export var lobby_ui: LobbyUI
 @export var fade: Panel
+@onready var npc_setup_popup: PopupNPCSetup = $PopupNPCSetup
+
+var selected_npc_behaviors: Array[int] = []
 
 func _ready() -> void:
 	main_menu_buttons.host_button.pressed.connect(open_host)
@@ -83,7 +89,15 @@ func close_lobby() -> void:
 
 #region : game logic
 func launch_singleplayer() -> void:
-	push_error("Unimplemented")
+	# Singleplayer has one human; the popup permits 1-5 NPCs.
+	var npc_behaviors: Array[int] = await npc_setup_popup.choose_npcs(1)
+	if npc_behaviors.is_empty():
+		return # User cancelled.
+
+	selected_npc_behaviors = npc_behaviors.duplicate()
+	game_setup_selected.emit(1, selected_npc_behaviors)
+	# Game scene creation / NPC decision-making is outside the supplied UI ZIP.
+	# Have your game controller connect to game_setup_selected to start the game.
 
 func host_lobby() -> void:
 	var port = lobby_buttons.host_port_input.text

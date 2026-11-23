@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://cmp7lswt0cm74" path="res://ui/popups/popup_single_choice.gd" id="4_lb26h"]
 [ext_resource type="Script" uid="uid://bq3cv4q4fwvst" path="res://ui/popups/card_display.gd" id="5_b7pcm"]
 
+[ext_resource type="PackedScene" path="res://ui/popups/popup_npc_setup.tscn" id="6_npc"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_0r1bn"]
 font_size = 32
 
@@ -33,6 +35,9 @@ size_flags_vertical = 3
 script = ExtResource("1_y7xdp")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=266537817]
+
+[node name="PopupNPCSetup" parent="CanvasLayer" instance=ExtResource("6_npc")]
+unique_name_in_owner = true
 
 [node name="PopupYN" type="Window" parent="CanvasLayer" unique_id=1195537575]
 unique_name_in_owner = true

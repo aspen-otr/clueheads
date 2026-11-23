@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://ch8t86af2df7t"]
+
+[ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_2d15c"]
+[ext_resource type="Script" uid="uid://p3khh76ai14r" path="res://ui/main_menu/static_modules/options.gd" id="2_hqyei"]
+
+[node name="Options" type="CenterContainer" unique_id=2054732314 node_paths=PackedStringArray("back_button", "reset_data_button")]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_2d15c")
+script = ExtResource("2_hqyei")
+back_button = NodePath("MainOptions/BackButton")
+reset_data_button = NodePath("MainOptions/ResetDataButton")
+
+[node name="MainOptions" type="VBoxContainer" parent="." unique_id=710978640]
+layout_mode = 2
+
+[node name="ResetDataButton" type="Button" parent="MainOptions" unique_id=2144787649]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Reset Data"
+
+[node name="AccountButton" type="Button" parent="MainOptions" unique_id=1981197504]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Account"
+
+[node name="BackButton" type="Button" parent="MainOptions" unique_id=1762087652]
+layout_mode = 2
+theme_type_variation = &"RedButton"
+theme_override_font_sizes/font_size = 24
+text = "Back"
+
+[node name="AccountOptions" type="VBoxContainer" parent="." unique_id=1447398378]
+visible = false
+layout_mode = 2

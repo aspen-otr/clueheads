@@ -19,7 +19,8 @@ var chat_display_index: int = 0
 func _ready() -> void:
 	# misc signal functions
 	Lobby.client_chat_update.connect(update_chat_log)
-
+	Lobby.client_chat_clear.connect(clear_chat)
+	
 	# Host signal functions
 	Lobby.player_connected.connect(on_new_connection)
 	Lobby.player_disconnected.connect(on_client_disconnect)
@@ -65,7 +66,7 @@ func display_player(given):
 
 @rpc("call_local")
 func clear_player(id: int):
-	Lobby.message_host(str("Player ID: ", id, "has been cleared"))
+	Lobby.message_host(str("Player ID: ", id, " has been cleared"))
 	for i in player_display.get_children():
 		if i is PlayerDisplayModule:
 			if i.peer_id == id:
@@ -92,6 +93,10 @@ func update_chat_log():
 		chat_display.append_text(i[0])
 		chat_display.pop_all()
 		chat_display_index += 1
+
+func clear_chat():
+	chat_display.clear()
+	chat_display_index = 0
 
 func send_msg(new_message):
 	Lobby.send_msg.rpc(str("(", Lobby.client_info.number, ") ", Lobby.client_name, ": ", new_message))
@@ -128,7 +133,7 @@ func on_new_connection(id: int) -> void:
 func on_client_disconnect(id: int) -> void:
 	clear_player.rpc(id)
 	var dc_data = Lobby.dc_states[id]
-	Lobby.send_info(str("(", dc_data.number, ") ", dc_data.name, " has left the lobby"), Color.WEB_MAROON)
+	Lobby.send_info(str("(", dc_data.number, ") ", dc_data.name, " has left the lobby"), Color.CRIMSON)
 	player_ready.erase(id)
 	check_ready()
 
@@ -140,7 +145,6 @@ func update_ready(new_state: bool) -> void:
 	display_ready.rpc(player_ready)
 
 func check_ready() -> void:
-	print_debug("checking ready")
 	if player_ready.size() > 1:
 		if !player_ready.values().has(false):
 			start_button.disabled = false

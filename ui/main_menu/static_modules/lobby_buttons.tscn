@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="1_fs65p"]
 [ext_resource type="Script" uid="uid://bnyfwyraqxnh1" path="res://ui/main_menu/static_modules/lobby_buttons.gd" id="2_hckjc"]
 
-[node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_parent", "host_port_input", "host_game", "host_back", "join_parent", "join_address_input", "join_port_input", "join_game", "join_back")]
+[node name="LobbyButtons" type="Control" unique_id=1647246942 node_paths=PackedStringArray("host_parent", "host_port_input", "host_game", "host_back", "join_parent", "join_address_input", "join_port_input", "join_game", "join_back", "address_box", "port_box")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,10 +20,12 @@ host_port_input = NodePath("MarginContainer/Host/HBoxContainer2/HostPortInput")
 host_game = NodePath("MarginContainer/Host/HBoxContainer3/HostGame")
 host_back = NodePath("MarginContainer/Join/HBoxContainer4/JoinBack")
 join_parent = NodePath("MarginContainer/Join")
-join_address_input = NodePath("MarginContainer/Join/HBoxContainer3/AddressInput")
-join_port_input = NodePath("MarginContainer/Join/HBoxContainer2/JoinPortInput")
+join_address_input = NodePath("MarginContainer/Join/AddressBox/AddressInput")
+join_port_input = NodePath("MarginContainer/Join/PortBox/JoinPortInput")
 join_game = NodePath("MarginContainer/Join/HBoxContainer4/JoinGame")
 join_back = NodePath("MarginContainer/Join/HBoxContainer4/JoinBack")
+address_box = NodePath("MarginContainer/Join/AddressBox")
+port_box = NodePath("MarginContainer/Join/PortBox")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1464676030]
 layout_mode = 1
@@ -82,39 +84,39 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1934824430]
+[node name="AddressBox" type="HBoxContainer" parent="MarginContainer/Join" unique_id=1934824430]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/HBoxContainer3" unique_id=1595241679]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/AddressBox" unique_id=1595241679]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.45
 
-[node name="Label" type="Label" parent="MarginContainer/Join/HBoxContainer3/PanelContainer" unique_id=1087175125]
+[node name="Label" type="Label" parent="MarginContainer/Join/AddressBox/PanelContainer" unique_id=1087175125]
 layout_mode = 2
 text = "IP:"
 horizontal_alignment = 2
 
-[node name="AddressInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer3" unique_id=698046895]
+[node name="AddressInput" type="LineEdit" parent="MarginContainer/Join/AddressBox" unique_id=698046895]
 layout_mode = 2
 size_flags_horizontal = 3
 clear_button_enabled = true
 caret_blink = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Join" unique_id=256309164]
+[node name="PortBox" type="HBoxContainer" parent="MarginContainer/Join" unique_id=256309164]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/HBoxContainer2" unique_id=1115629793]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Join/PortBox" unique_id=1115629793]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.45
 
-[node name="Label" type="Label" parent="MarginContainer/Join/HBoxContainer2/PanelContainer" unique_id=2055641091]
+[node name="Label" type="Label" parent="MarginContainer/Join/PortBox/PanelContainer" unique_id=2055641091]
 layout_mode = 2
 text = "Port:"
 horizontal_alignment = 2
 
-[node name="JoinPortInput" type="LineEdit" parent="MarginContainer/Join/HBoxContainer2" unique_id=1125261745]
+[node name="JoinPortInput" type="LineEdit" parent="MarginContainer/Join/PortBox" unique_id=1125261745]
 layout_mode = 2
 size_flags_horizontal = 3
 clear_button_enabled = true

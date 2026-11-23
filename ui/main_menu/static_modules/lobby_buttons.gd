@@ -21,6 +21,8 @@ signal back_pressed()
 @export var join_port_input: LineEdit
 @export var join_game: Button
 @export var join_back: Button
+@export var address_box: HBoxContainer
+@export var port_box: HBoxContainer
 
 var connecting: bool = false
 
@@ -30,6 +32,13 @@ func on_back_pressed() -> void:
 
 func start_join_loading() -> void:
 	connecting = true
+	
+	join_game.disabled = true
+	join_back.visible = false
+	address_box.visible = false
+	port_box.visible = false
+	
+	# i could probably do this better but whatever
 	var i = 0
 	while connecting:
 		join_game.set_text(str(JOIN_TEXT, LOAD_CHARS[i%3]))
@@ -38,5 +47,11 @@ func start_join_loading() -> void:
 
 func stop_join_loading() -> void:
 	connecting = false
+	
+	join_game.disabled = false
+	join_back.visible = true
+	address_box.visible = true
+	port_box.visible = true
+	
 	join_game.set_text(JOIN_TEXT)
 	

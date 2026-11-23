@@ -9,6 +9,7 @@ var current_display
 @export var main_menu_buttons: MainMenuButtons
 @export var lobby_buttons: LobbyButtons
 @export var lobby_ui: LobbyUI
+@export var options: Options
 @export var multiplayer_info: MultiplayerInfo
 @export var fade: Panel
 
@@ -24,7 +25,9 @@ func _ready() -> void:
 	lobby_buttons.back_pressed.connect(close_lobby_buttons)
 	lobby_buttons.host_game.pressed.connect(host_lobby)
 	lobby_buttons.join_game.pressed.connect(join_lobby)
-
+	
+	options.back_button.pressed.connect(close_options)
+	
 	lobby_ui.close_lobby.connect(leave_lobby)
 	
 	multiplayer_info.name_input.text_changed.connect(update_client_name)
@@ -36,6 +39,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if lobby_buttons.visible and !connecting:
 			close_lobby_buttons()
+		elif options.visible:
+			close_options()
 
 #region : ui display
 func open_host() -> void:
@@ -53,7 +58,13 @@ func open_join() -> void:
 	current_display = display.JOIN
 
 func open_options() -> void:
-	push_error("Unimplemented")
+	fade.visible = true
+	options.visible = true
+
+func close_options() -> void:
+	fade.visible = false
+	options.visible = false
+	
 
 func close_lobby_buttons() -> void:
 	fade.visible = false
@@ -128,13 +139,9 @@ func join_lobby() -> void:
 		return
 	
 	connecting = true
-	lobby_buttons.join_game.disabled = true
-	lobby_buttons.join_back.disabled = true
 	lobby_buttons.start_join_loading()
 	var result = await Lobby.connection_result
 	connecting = false
-	lobby_buttons.join_game.disabled = false
-	lobby_buttons.join_back.disabled = false
 	lobby_buttons.stop_join_loading()
 	if !result:
 		Popups.popup_info("Connection failed", "Could not connect to server")
@@ -157,6 +164,7 @@ func quit_game() -> void:
 	get_tree().quit()
 
 func update_client_name(new_text: String) -> void:
+	print_debug("Test")
 	SavedData.player_name = new_text
 
 #endregion

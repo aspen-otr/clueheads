@@ -7,7 +7,7 @@ var player_name:
 	set(val): 
 		data["Name"] = val
 		update_file()
-var can_chat::
+var can_chat:
 	get:
 		var ret = data["Chat"]
 		if typeof(ret) == TYPE_BOOL:
@@ -33,13 +33,16 @@ func _ready() -> void:
 	while save.get_position() < save.get_length():
 		var line = []
 		line = save.get_line().split(" ")
-		print(line)
 		data[line[0]] = line[2]
 	save.close()
 
 func update_file() -> void:
-	print_debug("writing")
 	save = FileAccess.open(FILEPATH, FileAccess.WRITE)
 	for i in data:
 		save.store_line(str(i, " : ", data[i]))
 	save.close()
+
+func reset() -> void:
+	player_name = ""
+	can_chat = null
+	

@@ -6,8 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://c2j4h6v3t7k0d" path="res://ui/main_menu/static_modules/lobby_ui.tscn" id="3_8uxxo"]
 [ext_resource type="PackedScene" uid="uid://b3ti3xqdbgpex" path="res://ui/main_menu/static_modules/multiplayer_info.tscn" id="3_joh67"]
 [ext_resource type="Theme" uid="uid://dwwkxidyppeaj" path="res://ui/main_menu/themes/menu_theme.tres" id="3_wk0pr"]
+[ext_resource type="PackedScene" uid="uid://ch8t86af2df7t" path="res://ui/main_menu/static_modules/options.tscn" id="7_u184e"]
 
-[node name="MainMenu" type="Control" unique_id=899120849 node_paths=PackedStringArray("main_menu_buttons", "lobby_buttons", "lobby_ui", "multiplayer_info", "fade")]
+[node name="MainMenu" type="Control" unique_id=899120849 node_paths=PackedStringArray("main_menu_buttons", "lobby_buttons", "lobby_ui", "options", "multiplayer_info", "fade")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,6 +22,7 @@ script = ExtResource("2_rmr83")
 main_menu_buttons = NodePath("MarginContainer/MainMenuButtons")
 lobby_buttons = NodePath("LobbyButtons")
 lobby_ui = NodePath("MarginContainer/LobbyUi")
+options = NodePath("Options")
 multiplayer_info = NodePath("MarginContainer/HBoxContainer/MultiplayerInfo")
 fade = NodePath("Fade")
 
@@ -71,4 +73,7 @@ mouse_filter = 2
 
 [node name="LobbyButtons" parent="." unique_id=1341457850 instance=ExtResource("2_0dkrt")]
 visible = false
+layout_mode = 1
+
+[node name="Options" parent="." unique_id=2054732314 instance=ExtResource("7_u184e")]
 layout_mode = 1

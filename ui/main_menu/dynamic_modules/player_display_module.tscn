@@ -45,6 +45,7 @@ theme_type_variation = &"EmptyPanel"
 [node name="PlayerName" type="Label" parent="HBoxContainer/PanelContainer2/HBoxContainer/PanelContainer" unique_id=1757369413]
 layout_mode = 2
 text = "Player..."
+text_overrun_behavior = 3
 
 [node name="ReadyStatus" type="Button" parent="HBoxContainer/PanelContainer2/HBoxContainer" unique_id=1188868288]
 layout_mode = 2

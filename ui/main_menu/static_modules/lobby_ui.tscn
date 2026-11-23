@@ -57,7 +57,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 theme_type_variation = &"Checkbox"
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
+text = "READY"
 
 [node name="StartButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=476076668]
 layout_mode = 2
@@ -89,3 +91,4 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.07
+keep_editing_on_text_submit = true

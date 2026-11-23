@@ -1,4 +1,3 @@
-#TODO: authentication
 extends Node
 
 enum ChatType {INFO, MSG}
@@ -11,6 +10,7 @@ signal connection_failed()
 signal connection_result(result)
 
 signal client_chat_update()
+signal client_chat_clear()
 
 const PORT: int = 7000
 const DEFAULT_IP: String = "127.0.0.1" # IP defaults to local host
@@ -120,7 +120,7 @@ func send_info(msg: String, col = Color.WEB_GRAY) -> void:
 	client_info.chat.append(["\n", null])
 	client_chat_update.emit()
 
-@rpc("call_local", "any_peer")
+@rpc("call_local", "any_peer", "unreliable", 1)
 func send_msg(msg: String) -> void:
 	if !SavedData.can_chat:
 		return
@@ -130,15 +130,15 @@ func send_msg(msg: String) -> void:
 
 @rpc("call_local", "any_peer")
 func clear_chat() -> void:
-	client_info.chat = []
-	client_chat_update.emit()
+	client_info.chat.clear()
+	client_chat_clear.emit()
 
 func message_host(message: String):
 	if !multiplayer.is_server():
 		msg_rpc.rpc_id(1, message)
 	else:
 		print_debug(str("Message sent to self: ", message))
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "unreliable", 1)
 func msg_rpc(message: String):
 	print()
 	prints("Client", multiplayer.get_remote_sender_id(), "has sent message:")

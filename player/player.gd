@@ -13,7 +13,7 @@ var ident: Card.Suspect
 var character_name: String = "Unknown"
 var current_room: Card = null
 
-func _init(p_player_color, ident_: Card.Suspect):
+func _init(p_player_color: Color, ident_: Card.Suspect):
 	self.ident = ident_
 	player_color = p_player_color
 	player_coords = [-1,-1]

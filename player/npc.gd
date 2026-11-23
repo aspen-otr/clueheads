@@ -4,13 +4,7 @@ extends Player
 
 
 
-var character_name: String = "Unknown"
-var current_room: String = "Hallway"
 
-var cards: Array[Card] = []
-
-signal room_changed(npc, new_room)
-signal card_shown(npc, card)
 
 
 
@@ -32,9 +26,7 @@ func get_matching_card_indices(suggestion: Set) -> Array[int]:
 	return matching_indices
 
 
-@abstract func pick_card_to_show(suggestion: Set) -> int
 
-@abstract func pick_card_to_show(suggestion: Set) -> Card
 
 @abstract func pick_square_to_move_to(possible_squares)
 
@@ -69,7 +61,7 @@ func choose_destination(possible_squares):
 	return selected_square
 
 
-func move_to_room(room_name: String) -> void:
+func move_to_room(room_name: Card) -> void:
 	current_room = room_name
 	room_changed.emit(self, room_name)
 

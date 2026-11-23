@@ -4,8 +4,8 @@ class_name StrategicNPC
 var previously_shown_cards: Array[Card] = []
 
 
-func _init(ident_: Card.Suspect) -> void:
-	super(ident_)
+func _init(p_player_color: Color, ident_: Card.Suspect) -> void:
+	super(p_player_color, ident_)
 
 
 func pick_card_to_show(suggestion: Set) -> Card:
